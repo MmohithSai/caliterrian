@@ -1,0 +1,58 @@
+/* Cali Terrain - App Styles */
+.App { min-height: 100vh; background-color: #0A0A0A; }
+
+.text-volt { color: #2EC4B6; }
+.bg-volt { background-color: #2EC4B6; }
+.border-volt { border-color: #2EC4B6; }
+
+.btn-primary {
+  background-color: #2EC4B6;
+  color: white;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 14px 32px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 20px rgba(46,196,182,0.3);
+}
+.btn-primary:hover {
+  background-color: #25A599;
+  box-shadow: 0 0 30px rgba(46,196,182,0.5);
+}
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-secondary {
+  background-color: transparent;
+  color: white;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 32px;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.btn-secondary:hover {
+  border-color: white;
+  background-color: rgba(255,255,255,0.05);
+}
+
+.section-tag {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #2EC4B6;
+  margin-bottom: 12px;
+}
