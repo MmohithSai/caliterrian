@@ -77,6 +77,62 @@
 
 .card-glow:hover { box-shadow: none; }
 
+.program-parallax-wave {
+  background:
+    linear-gradient(112deg, transparent 4%, rgba(46,196,182,0.08) 28%, transparent 54%),
+    linear-gradient(18deg, transparent 18%, rgba(255,255,255,0.035) 44%, transparent 68%);
+  filter: blur(18px);
+  opacity: 0.9;
+  transform: skewY(-4deg);
+}
+
+.premium-program-card {
+  position: relative;
+  min-height: 236px;
+  overflow: hidden;
+  will-change: transform;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.premium-program-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(46,196,182,0.1), transparent 36%),
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 42%);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+.premium-program-card::after {
+  content: '';
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(46,196,182,0.85), transparent);
+  opacity: 0;
+  transform: scaleX(0.6);
+  transition: opacity 300ms ease, transform 300ms ease;
+  pointer-events: none;
+}
+
+.premium-program-card:hover {
+  background-color: rgba(18,18,18,0.98);
+}
+
+.premium-program-card:hover::before,
+.premium-program-card:hover::after {
+  opacity: 1;
+}
+
+.premium-program-card:hover::after {
+  transform: scaleX(1);
+}
+
 .interactive-card {
   position: relative;
   overflow: hidden;
@@ -223,11 +279,171 @@
   animation: hero-copy-in 700ms ease-out 180ms both;
 }
 
+/* ── Transformations section cinematic background ── */
+.transformations-section {
+  position: relative;
+  overflow: hidden;
+  background: url('/transform-bg.webp') center / cover no-repeat;
+}
+
+.transformations-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.transformations-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 60% 40%,
+    rgba(0, 255, 200, 0.08),
+    transparent 50%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.transformations-section > * {
+  position: relative;
+  z-index: 3;
+}
+
+/* Transformation card enhanced hover */
+.transform-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 280ms ease, border-color 280ms ease, box-shadow 280ms ease;
+}
+
+.transform-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(46,196,182,0.06), transparent 50%);
+  opacity: 0;
+  transition: opacity 280ms ease;
+  pointer-events: none;
+}
+
+.transform-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #2EC4B6, transparent);
+  transform: scaleX(0);
+  transition: transform 350ms ease;
+  pointer-events: none;
+}
+
+.transform-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(46, 196, 182, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(46, 196, 182, 0.1);
+}
+
+.transform-card:hover::before {
+  opacity: 1;
+}
+
+.transform-card:hover::after {
+  transform: scaleX(1);
+}
+
+/* Profile avatar glow */
+.profile-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2EC4B6, #0A0A0A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.25rem;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 0 16px rgba(46, 196, 182, 0.2);
+  transition: box-shadow 280ms ease;
+}
+
+.transform-card:hover .profile-avatar {
+  box-shadow: 0 0 24px rgba(46, 196, 182, 0.35);
+}
+
+/* ── Floating button pulse ── */
+.floating-pulse {
+  animation: float-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.55); opacity: 0; }
+}
+
+.floating-social-btn {
+  will-change: transform;
+}
+
+/* ── Contact page link cards ── */
+.contact-link-card {
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.contact-link-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 0%, rgba(46,196,182,0.06) 45%, transparent 70%);
+  opacity: 0;
+  transform: translateX(-35%);
+  transition: opacity 220ms ease, transform 420ms ease;
+  pointer-events: none;
+}
+
+.contact-link-card:hover::before {
+  opacity: 1;
+  transform: translateX(35%);
+}
+
+/* ── Contact form input glow ── */
+.contact-input {
+  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.contact-input:hover {
+  border-color: rgba(255,255,255,0.2);
+  background-color: #1e1e1e;
+}
+
+/* ── Footer social buttons ── */
+.footer-social-btn {
+  will-change: transform;
+}
+
+/* ── Footer links hover slide ── */
+.footer-link {
+  transition: color 200ms ease, transform 200ms ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-cinematic-media,
   .hero-cinematic-copy,
   .scroll-fade,
-  .stat-sheen {
+  .stat-sheen,
+  .floating-pulse {
     animation: none;
     transition: none;
     transform: none;
@@ -235,7 +451,12 @@
 
   .interactive-card,
   .step-card,
-  .stat-tile {
+  .premium-program-card,
+  .stat-tile,
+  .transform-card,
+  .contact-link-card,
+  .footer-social-btn,
+  .floating-social-btn {
     transition: none;
   }
 

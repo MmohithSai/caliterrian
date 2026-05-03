@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { X } from "lucide-react";
+import { WhatsAppIcon as WhatsApp } from "@/components/icons";
 
 const SEGMENTS = [
   { num: 1, label: "10% OFF Membership", color: "#2EC4B6", text: "white" },
@@ -139,7 +140,7 @@ export default function SpinWheel({ open, onClose }) {
               onClick={shareOnWhatsApp}
               className="w-full bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold text-sm uppercase tracking-wider py-3 px-6 transition-colors duration-200 flex items-center justify-center gap-2"
             >
-              Claim on WhatsApp
+              <WhatsApp className="w-4 h-4" /> Claim on WhatsApp
             </button>
             <button
               onClick={() => setResult(null)}

@@ -10,7 +10,16 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+build
+out
+.vercel
+.cache
 *.local
+.env
+.env.*
+
+# OS
+Thumbs.db
 
 # Editor directories and files
 .vscode/*
