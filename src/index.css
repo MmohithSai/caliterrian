@@ -261,22 +261,274 @@
 .prose-dark strong { color: white; font-weight: 600; }
 .prose-dark a { color: #2EC4B6; text-decoration: underline; }
 
-@keyframes hero-media-settle {
-  from { opacity: 0; filter: saturate(0.9) brightness(0.9); }
-  to { opacity: 1; filter: saturate(1) brightness(1); }
+/* ══════════════════════════════════════════════════════════
+   CINEMATIC HERO SYSTEM
+   Premium immersive scroll-driven hero section
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Canvas ── */
+.hero-cinematic-canvas {
+  will-change: transform, opacity;
+  transform-origin: center center;
 }
 
-@keyframes hero-copy-in {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ──────────────────────────────────────────────
+   Hero Cinematic HUD typography
+   A single centered stack per scroll phase, composed
+   above the muscle-up so meta + headline + subtitle
+   read as one broadcast caption complementing the
+   athlete instead of competing in the corners.
+   ────────────────────────────────────────────── */
+
+.hero-phase {
+  will-change: opacity, transform;
 }
 
-.hero-cinematic-media {
-  animation: hero-media-settle 900ms ease-out both;
+/* Center stack: meta-line + headline + underline + subtitle */
+.hero-phase-center {
+  width: min(92vw, 64rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(0.75rem, 1.6vh, 1.5rem);
+  /* Slight upward bias keeps stack from colliding with bottom CTA layer */
+  transform: translateY(-2vh);
 }
 
-.hero-cinematic-copy {
-  animation: hero-copy-in 700ms ease-out 180ms both;
+/* Broadcast meta-line: 01 / 04 ─── DEAD HANG */
+.hero-phase-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(0.55rem, 1vw, 0.85rem);
+  font-family: 'Manrope', sans-serif;
+  color: rgba(255, 255, 255, 0.85);
+  user-select: none;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+/* Chapter number (01, 02…) — tabular figures, athletic display */
+.hero-phase-chapter {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  font-feature-settings: 'tnum';
+}
+.hero-phase-counter {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  font-feature-settings: 'tnum';
+}
+
+/* Teal tick between chapter and label */
+.hero-phase-tick {
+  width: clamp(1.5rem, 3vw, 2.5rem);
+  height: 2px;
+  background: #2EC4B6;
+  display: inline-block;
+  border-radius: 1px;
+  transform-origin: 0 50%;
+  box-shadow: 0 0 12px rgba(46, 196, 182, 0.55);
+  will-change: transform;
+}
+
+/* Phase label (DEAD HANG, EXPLOSIVE PULL…) */
+.hero-phase-label {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(0.72rem, 0.95vw, 0.88rem);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+  will-change: transform;
+}
+
+/* Headline holds split letters */
+.hero-phase-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4rem, 12vw, 11rem);
+  line-height: 0.85;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  user-select: none;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  text-shadow:
+    0 0 80px rgba(46, 196, 182, 0.10),
+    0 6px 36px rgba(0, 0, 0, 0.55);
+  margin: 0;
+}
+
+/* Each letter sits inside a clip so it rises from below */
+.hero-letter-clip {
+  display: inline-block;
+  overflow: hidden;
+  line-height: 0.85;
+  /* Tiny vertical breathing room so descenders aren't clipped */
+  padding-bottom: 0.05em;
+}
+.hero-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+.hero-letter-space {
+  display: inline-block;
+  width: 0.32em;
+}
+
+/* Teal underline accent under the headline — centered hairline that
+   grows symmetrically out from the middle. */
+.hero-phase-underline {
+  display: block;
+  height: 2px;
+  width: clamp(4rem, 12vw, 9rem);
+  background: linear-gradient(
+    90deg,
+    rgba(46, 196, 182, 0.2) 0%,
+    rgba(46, 196, 182, 1) 50%,
+    rgba(46, 196, 182, 0.2) 100%
+  );
+  border-radius: 2px;
+  box-shadow: 0 0 18px rgba(46, 196, 182, 0.55);
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* Subtitle */
+.hero-phase-subtitle {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(0.82rem, 1.05vw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  will-change: transform, opacity;
+}
+
+/* ── Mobile tuning ── */
+@media (max-width: 640px) {
+  .hero-phase-headline {
+    letter-spacing: 0.01em;
+    font-size: clamp(3rem, 14vw, 5rem);
+  }
+  .hero-phase-meta {
+    gap: 0.5rem;
+  }
+}
+
+/* ── EVOLUTION intro illustration ── */
+.hero-evolution-mark {
+  /* subtle teal glow so the wordmark feels lit, not pasted on */
+  filter: drop-shadow(0 0 32px rgba(46, 196, 182, 0.18))
+          drop-shadow(0 4px 24px rgba(0, 0, 0, 0.55));
+  image-rendering: -webkit-optimize-contrast;
+  will-change: transform, opacity;
+}
+
+/* ── Brand text at final reveal ── */
+.hero-brand-text {
+  font-size: clamp(4rem, 12vw, 11rem);
+  line-height: 0.9;
+  letter-spacing: 0.06em;
+  text-shadow:
+    0 0 100px rgba(46, 196, 182, 0.18),
+    0 6px 40px rgba(0, 0, 0, 0.5);
+  will-change: transform, opacity;
+}
+
+/* ── Subtitle ── */
+.hero-subtitle {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+/* ── CTA Buttons ── */
+.hero-cta-primary {
+  box-shadow: 0 0 40px rgba(46, 196, 182, 0.25);
+  transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+.hero-cta-primary:hover {
+  box-shadow: 0 0 60px rgba(46, 196, 182, 0.4);
+}
+.hero-cta-secondary {
+  background: rgba(10, 10, 10, 0.3);
+}
+
+/* ── Film grain overlay ── */
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+}
+
+/* ── Scroll indicator ── */
+.hero-scroll-indicator {
+  width: 24px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  position: relative;
+}
+.hero-scroll-indicator::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 8px;
+  border-radius: 2px;
+  background: rgba(46, 196, 182, 0.7);
+  animation: hero-scroll-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hero-scroll-pulse {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+  50% { transform: translateX(-50%) translateY(12px); opacity: 0.3; }
+}
+
+/* ── Loading state ── */
+.hero-loading {
+  transition: opacity 800ms ease;
+}
+.hero-loading-bar {
+  width: 160px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.hero-loading-bar-fill {
+  height: 100%;
+  background: #2EC4B6;
+  border-radius: 1px;
+  transition: width 300ms ease;
+}
+.hero-loading-text {
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Smooth scroll for cinematic experience ── */
+html {
+  scroll-behavior: smooth;
 }
 
 /* ── Transformations section cinematic background ── */
@@ -439,14 +691,26 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-cinematic-media,
-  .hero-cinematic-copy,
+  .hero-cinematic-canvas,
+  .hero-phase,
+  .hero-phase-corner,
+  .hero-letter,
+  .hero-phase-underline,
+  .hero-phase-subtitle,
   .scroll-fade,
   .stat-sheen,
   .floating-pulse {
     animation: none;
     transition: none;
     transform: none;
+  }
+
+  .hero-scroll-indicator::after {
+    animation: none;
+  }
+
+  .hero-grain {
+    display: none;
   }
 
   .interactive-card,
