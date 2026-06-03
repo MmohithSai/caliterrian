@@ -33,6 +33,21 @@ React 19).
 npm run dev     # http://localhost:3333
 ```
 
+## Seed (Phase 2)
+
+Ports all the app's hardcoded content (`mockData.js` + the Home/Programs/Coaches/
+Pricing consts + contact details) into Sanity — no manual re-entry. Remote images
+are fetched and uploaded as Sanity assets. The script is idempotent (deterministic
+`_id`s + `createOrReplace`), so re-running overwrites only the seeded docs.
+
+It needs a **write token** (the project id comes from `.env`). The token is never
+stored — pass it inline:
+
+```bash
+# create one at https://www.sanity.io/manage → project → API → Tokens → Editor
+SANITY_WRITE_TOKEN=sk... npm run seed
+```
+
 ## Deploy
 
 ```bash
@@ -54,5 +69,5 @@ cutover (Phase 3) is a near-1:1 swap.
 
 ## Next steps (per `../backend plan.md`)
 
-- Phase 2 — seed: `scripts/seed-sanity.mjs` ports `mockData.js` + page consts.
+- Phase 2 — seed: `scripts/seed-sanity.mjs` ports `mockData.js` + page consts. ✅ Done — see **Seed** above.
 - Phase 3 — frontend reads via `@sanity/client` + GROQ, Portable Text for blog.
