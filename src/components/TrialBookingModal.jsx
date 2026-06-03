@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
+import { submitForm } from "@/lib/supabase";
 
 const PROGRAMS = [
   "Adult Calisthenics", "Kids Calisthenics", "Weight Loss", "Bodyweight Strength",
@@ -12,7 +13,7 @@ const TIME_SLOTS = ["Morning (5AM - 11AM)", "Evening (5PM - 10PM)", "Flexible"];
 
 export default function TrialBookingModal({ open, onClose }) {
   const [form, setForm] = useState({
-    name: "", phone: "", age: "", program: "", goal: "", preferred_time: "",
+    name: "", phone: "", age: "", program: "", goal: "", preferred_time: "", company: "",
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -26,15 +27,20 @@ export default function TrialBookingModal({ open, onClose }) {
     }
     setSubmitting(true);
 
-    // Phase 1: No API, direct WhatsApp redirect
-    setTimeout(() => {
-      const msg = `Hi Cali Terrain! I'd like to book a free trial.\n\nName: ${form.name}\nPhone: ${form.phone}\nAge: ${form.age || "Not specified"}\nProgram: ${form.program || "Not specified"}\nGoal: ${form.goal || "Not specified"}\nPreferred Time: ${form.preferred_time || "Flexible"}`;
-      window.open(`https://wa.me/918688458907?text=${encodeURIComponent(msg)}`, "_blank");
-      toast.success("Redirecting to WhatsApp!");
-      setForm({ name: "", phone: "", age: "", program: "", goal: "", preferred_time: "" });
+    // Persist the booking first (the lead must never be lost), then redirect to WhatsApp as a bonus.
+    const { ok, error } = await submitForm("submit-booking", form);
+    if (!ok) {
+      toast.error(error || "Could not book. Please try WhatsApp or call us.");
       setSubmitting(false);
-      onClose();
-    }, 500);
+      return;
+    }
+
+    const msg = `Hi Cali Terrain! I'd like to book a free trial.\n\nName: ${form.name}\nPhone: ${form.phone}\nAge: ${form.age || "Not specified"}\nProgram: ${form.program || "Not specified"}\nGoal: ${form.goal || "Not specified"}\nPreferred Time: ${form.preferred_time || "Flexible"}`;
+    window.open(`https://wa.me/918688458907?text=${encodeURIComponent(msg)}`, "_blank");
+    toast.success("Trial booked! Redirecting to WhatsApp...");
+    setForm({ name: "", phone: "", age: "", program: "", goal: "", preferred_time: "", company: "" });
+    setSubmitting(false);
+    onClose();
   };
 
   if (!open) return null;
@@ -56,6 +62,11 @@ export default function TrialBookingModal({ open, onClose }) {
         <h2 className="font-heading text-3xl text-white mb-6">BOOK YOUR FREE TRIAL</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Honeypot: bots fill it → silently rejected server-side */}
+          <input
+            type="text" name="company" value={form.company} onChange={handleChange}
+            tabIndex={-1} autoComplete="off" aria-hidden="true"
+            className="absolute -left-[9999px] h-0 w-0 opacity-0" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Name *</label>
