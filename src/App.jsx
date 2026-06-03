@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
@@ -18,8 +18,24 @@ import Gallery from "@/pages/Gallery";
 import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
 
+// Admin is code-split out of the public bundle.
+const AdminApp = lazy(() => import("@/admin/AdminApp"));
+
 function AppContent({ bookingOpen, setBookingOpen }) {
   const location = useLocation();
+
+  // The /admin area is a self-contained app: no public Navbar/Footer/ChatBot.
+  if (location.pathname.startsWith("/admin")) {
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-[#0A0A0A]" />}>
+        <Routes>
+          <Route path="/admin/*" element={<AdminApp />} />
+        </Routes>
+        <Toaster position="top-right" />
+      </Suspense>
+    );
+  }
+
   return (
     <>
       <Navbar onBookTrial={() => setBookingOpen(true)} />
