@@ -17,6 +17,8 @@ import BlogPost from "@/pages/BlogPost";
 import Gallery from "@/pages/Gallery";
 import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
+import NotFound from "@/pages/NotFound";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 // Admin is code-split out of the public bundle.
 const AdminApp = lazy(() => import("@/admin/AdminApp"));
@@ -49,6 +51,7 @@ function AppContent({ bookingOpen, setBookingOpen }) {
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/pricing" element={<Pricing onBookTrial={() => setBookingOpen(true)} />} />
         <Route path="/contact" element={<Contact onBookTrial={() => setBookingOpen(true)} />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
       <FloatingButtons onBookTrial={() => setBookingOpen(true)} />
@@ -65,7 +68,9 @@ function App() {
     <div className="App min-h-screen bg-obsidian text-white">
       <HelmetProvider>
         <BrowserRouter>
-          <AppContent bookingOpen={bookingOpen} setBookingOpen={setBookingOpen} />
+          <ErrorBoundary>
+            <AppContent bookingOpen={bookingOpen} setBookingOpen={setBookingOpen} />
+          </ErrorBoundary>
         </BrowserRouter>
       </HelmetProvider>
     </div>

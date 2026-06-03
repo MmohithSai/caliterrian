@@ -21,6 +21,12 @@ const BOT_RESPONSES = {
   "default": "Thanks for reaching out! For specific questions, please call us at 8688458907 or visit us at Cali Terrain, Bowenpally. We're always happy to help!",
 };
 
+const WELCOME_MESSAGE = {
+  role: "assistant",
+  content: "Hi! Welcome to Cali Terrain.\n\nHow can we help you today? Choose an option below or type your question.",
+  id: "welcome",
+};
+
 function getBotResponse(text) {
   const lower = text.toLowerCase();
   if (lower.includes("trial") || lower.includes("book")) return BOT_RESPONSES.trial;
@@ -39,27 +45,26 @@ export default function ChatBot() {
   const [loading, setLoading] = useState(false);
   const [showOptions, setShowOptions] = useState(true);
   const messagesEndRef = useRef(null);
+  const idCounter = useRef(0);
+  const nextId = () => `m${++idCounter.current}`;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    if (open && messages.length === 0) {
-      setMessages([{
-        role: "assistant",
-        content: "Hi! Welcome to Cali Terrain.\n\nHow can we help you today? Choose an option below or type your question.",
-        id: "welcome",
-      }]);
-    }
-  }, [open, messages.length]);
+  // Seed the welcome message the first time the panel opens (no effect needed).
+  const toggleOpen = () => {
+    const next = !open;
+    setOpen(next);
+    if (next && messages.length === 0) setMessages([WELCOME_MESSAGE]);
+  };
 
   useEffect(() => { scrollToBottom(); }, [messages]);
 
   const sendMessage = async (text) => {
     if (!text.trim() || loading) return;
     setShowOptions(false);
-    const userMsg = { role: "user", content: text, id: Date.now().toString() };
+    const userMsg = { role: "user", content: text, id: nextId() };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
@@ -69,7 +74,7 @@ export default function ChatBot() {
       const response = getBotResponse(text);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: response, id: `resp-${Date.now()}` },
+        { role: "assistant", content: response, id: nextId() },
       ]);
       setLoading(false);
     }, 800);
@@ -85,7 +90,7 @@ export default function ChatBot() {
       {/* Chat Toggle Button */}
       <button
         data-testid="chatbot-toggle-btn"
-        onClick={() => setOpen(!open)}
+        onClick={toggleOpen}
         className={`fixed bottom-4 left-4 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-md shadow-black/25 transition-all duration-300 ${
           open ? "bg-[#1A1A1A] border border-white/20" : "bg-[#2EC4B6]"
         }`}

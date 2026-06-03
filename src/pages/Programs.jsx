@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { ChevronRight, Check, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 
 const PROGRAMS_DATA = [

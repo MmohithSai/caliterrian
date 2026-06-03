@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Calendar, ArrowLeft, ChevronRight } from "lucide-react";
 import SEO from "@/components/SEO";

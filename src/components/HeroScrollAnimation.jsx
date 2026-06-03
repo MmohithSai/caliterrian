@@ -78,6 +78,65 @@ const HERO_PHASES = [
 ];
 
 export default function HeroScrollAnimation({ onBookTrial }) {
+  const reduceMotion = useReducedMotion();
+  // Reduced-motion users get a static, single-screen hero. This also avoids
+  // mounting the canvas engine / loading 66 frames, and prevents the animated
+  // path's scroll-gated layers from rendering stacked at full opacity.
+  if (reduceMotion) return <HeroStatic onBookTrial={onBookTrial} />;
+  return <HeroAnimated onBookTrial={onBookTrial} />;
+}
+
+/* ──────────────────────────────────────────────────────────
+   HeroStatic — reduced-motion fallback. One poster frame, one
+   visible <h1>, one CTA pair. No scroll choreography.
+   ────────────────────────────────────────────────────────── */
+function HeroStatic({ onBookTrial }) {
+  return (
+    <section
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-obsidian"
+      aria-label="Cali Terrain hero"
+    >
+      <img
+        src="/muscleup-cinematic/frame00001.jpg"
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full object-cover opacity-60"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/75 via-[#0A0A0A]/45 to-[#0A0A0A]" />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 55% at 50% 45%, rgba(46,196,182,0.14), transparent 70%)",
+        }}
+      />
+      <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
+        <h1 className="hero-brand-text font-heading text-white">
+          CALI<span className="text-[#2EC4B6]">TERRAIN</span>
+        </h1>
+        <p className="hero-subtitle max-w-lg text-zinc-300">
+          Master your body. Redefine your limits.
+        </p>
+        <div className="mt-2 flex flex-col items-center gap-4 sm:flex-row">
+          <button
+            onClick={onBookTrial}
+            className="hero-cta-primary kinetic-button inline-flex items-center gap-2 bg-[#2EC4B6] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#25A599]"
+          >
+            Book Free Trial <ChevronRight className="h-4 w-4" />
+          </button>
+          <Link
+            to="/programs"
+            className="hero-cta-secondary inline-flex items-center gap-2 border border-white/50 px-8 py-4 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-sm transition-colors duration-200 hover:bg-white/10"
+          >
+            Explore Programs
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HeroAnimated({ onBookTrial }) {
   const sectionRef = useRef(null);
   const reduceMotion = useReducedMotion();
 

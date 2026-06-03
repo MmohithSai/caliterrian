@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Phone, ChevronRight, Send } from "lucide-react";
 import { InstagramIcon as Instagram, WhatsAppIcon as WhatsApp } from "@/components/icons";

@@ -251,9 +251,6 @@ export function useImageSequenceCanvas({
   framePath,
   springConfig,
   renderMode = "source",
-  foregroundScale = 0.94,
-  foregroundX = 0.66,
-  foregroundY = 0.5,
   // Optional peak-hold: if peakFrameIndex is set, scroll progresses 0 -> 1,
   // but the frame stops advancing at peakFrameIndex once scroll reaches
   // peakAtScroll. Useful for cinematic holds where the body movement
@@ -465,7 +462,7 @@ export function useImageSequenceCanvas({
       ctx.drawImage(nextImg, 0, 0);
       ctx.globalAlpha = 1;
     }
-  }, [frameCount, renderMode]);
+  }, [frameCount, renderMode, peakFrameIndex, peakAtScroll]);
 
   const schedule = useCallback((v) => {
     pendingRef.current = v;
@@ -510,6 +507,8 @@ export function useImageSequenceCanvas({
       }
 
       if (i === 0 && img.complete && img.naturalWidth > 0) {
+        // Cached first frame is already decoded — sync external image state on mount.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setReady(true);
         drawAt(smoothed.get());
       }
@@ -541,22 +540,6 @@ export function useImageSequenceCanvas({
     return () => window.removeEventListener("resize", onResize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [smoothed]);
-
-  // Camera drift animation loop
-  useEffect(() => {
-    if (!ready || renderMode !== "hero-cinematic") return;
-    let driftRaf;
-    const driftLoop = () => {
-      drawAt(smoothed.get());
-      driftRaf = requestAnimationFrame(driftLoop);
-    };
-    // Don't start continuous drift loop — too expensive.
-    // Camera drift is applied during scroll-driven redraws via driftRef.
-    return () => {
-      if (driftRaf) cancelAnimationFrame(driftRaf);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, renderMode]);
 
   return { canvasRef, smoothed, ready, loadProgress };
 }

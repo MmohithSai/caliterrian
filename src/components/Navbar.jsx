@@ -26,6 +26,9 @@ export default function Navbar({ onBookTrial }) {
   }, []);
 
   useEffect(() => {
+    // Reset transient nav UI on navigation. Intentional state sync to an
+    // external change (the URL), not a render-derived value.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
     window.scrollTo(0, 0);
   }, [location.pathname]);

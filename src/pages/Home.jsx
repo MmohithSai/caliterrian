@@ -28,7 +28,6 @@ import {
   fadeUp,
   staggerContainer,
   scaleIn,
-  imageReveal,
   viewportOnce,
   useSectionScroll,
 } from "@/lib/animations";
@@ -695,7 +694,7 @@ function TestimonialsSection() {
   );
 }
 
-function PricingSection({ onBookTrial: _ignored }) {
+function PricingSection() {
   const sectionRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
