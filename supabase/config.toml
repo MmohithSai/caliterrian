@@ -1,0 +1,9 @@
+project_id = "dbbpykwhmlcjywnokysy"
+
+# Public form endpoints: unauthenticated visitors POST here. Protected by
+# honeypot + per-IP rate limit + strict server-side validation, not JWT.
+[functions.submit-lead]
+verify_jwt = false
+
+[functions.submit-booking]
+verify_jwt = false

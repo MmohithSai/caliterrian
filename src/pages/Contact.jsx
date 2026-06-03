@@ -4,6 +4,7 @@ import { MapPin, Phone, ChevronRight, Send } from "lucide-react";
 import { InstagramIcon as Instagram, WhatsAppIcon as WhatsApp } from "@/components/icons";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
+import { submitForm } from "@/lib/supabase";
 
 const WA_LINK = "https://wa.me/918688458907?text=Hi%2C%20I%20would%20like%20to%20know%20more%20about%20Cali%20Terrain.";
 const PROGRAMS = ["Adult Calisthenics", "Kids Calisthenics", "Weight Loss", "Bodyweight Strength", "Functional Fitness", "Mobility & Flexibility", "Beginner Program", "Handstand & Skill Training", "Personal Coaching", "Group Training", "Other"];
@@ -19,7 +20,7 @@ const stagger = {
 };
 
 export default function Contact({ onBookTrial }) {
-  const [form, setForm] = useState({ name: "", phone: "", age: "", fitness_goal: "", interested_program: "", message: "" });
+  const [form, setForm] = useState({ name: "", phone: "", age: "", fitness_goal: "", interested_program: "", message: "", company: "" });
   const [submitting, setSubmitting] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
 
@@ -29,11 +30,14 @@ export default function Contact({ onBookTrial }) {
     e.preventDefault();
     if (!form.name || !form.phone) { toast.error("Please fill your name and phone"); return; }
     setSubmitting(true);
-    setTimeout(() => {
+    const { ok, error } = await submitForm("submit-lead", form);
+    if (ok) {
       toast.success("Message sent! We'll contact you shortly.");
-      setForm({ name: "", phone: "", age: "", fitness_goal: "", interested_program: "", message: "" });
-      setSubmitting(false);
-    }, 800);
+      setForm({ name: "", phone: "", age: "", fitness_goal: "", interested_program: "", message: "", company: "" });
+    } else {
+      toast.error(error || "Could not send. Please try WhatsApp or call us.");
+    }
+    setSubmitting(false);
   };
 
   const contactCards = [
@@ -172,6 +176,11 @@ export default function Contact({ onBookTrial }) {
           >
             <h2 className="font-heading text-3xl text-white tracking-wide mb-8">SEND US A MESSAGE</h2>
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Honeypot: hidden from humans, bots fill it → silently rejected server-side */}
+              <input
+                type="text" name="company" value={form.company} onChange={handleChange}
+                tabIndex={-1} autoComplete="off" aria-hidden="true"
+                className="absolute -left-[9999px] h-0 w-0 opacity-0" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="form-field-group">
                   <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Name *</label>
