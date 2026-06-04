@@ -5,8 +5,10 @@ import { InstagramIcon as Instagram, WhatsAppIcon as WhatsApp } from "@/componen
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import { submitForm } from "@/lib/supabase";
+import { NAP, SOCIAL, telLink, waLink } from "@/data/site";
+import { trackFormSubmit, trackWhatsApp, trackCall } from "@/lib/analytics";
 
-const WA_LINK = "https://wa.me/918688458907?text=Hi%2C%20I%20would%20like%20to%20know%20more%20about%20Cali%20Terrain.";
+const WA_LINK = waLink("Hi, I would like to know more about Cali Terrain.");
 const PROGRAMS = ["Adult Calisthenics", "Kids Calisthenics", "Weight Loss", "Bodyweight Strength", "Functional Fitness", "Mobility & Flexibility", "Beginner Program", "Handstand & Skill Training", "Personal Coaching", "Group Training", "Other"];
 
 const fadeUp = {
@@ -32,6 +34,7 @@ export default function Contact({ onBookTrial }) {
     setSubmitting(true);
     const { ok, error } = await submitForm("submit-lead", form);
     if (ok) {
+      trackFormSubmit("contact");
       toast.success("Message sent! We'll contact you shortly.");
       setForm({ name: "", phone: "", age: "", fitness_goal: "", interested_program: "", message: "", company: "" });
     } else {
@@ -51,27 +54,29 @@ export default function Contact({ onBookTrial }) {
       title: "Chat on WhatsApp",
       subtitle: "Fastest response — we reply within minutes",
       glow: "rgba(37,211,102,0.15)",
+      onTrack: () => trackWhatsApp("contact"),
     },
     {
       id: "phone",
-      href: "tel:+918688458907",
+      href: telLink(),
       icon: <Phone className="w-5 h-5 text-white" />,
       iconBg: "bg-[#2EC4B6]",
       borderColor: "border-[#2EC4B6]/30 hover:border-[#2EC4B6]",
       bgStyle: { background: "linear-gradient(135deg, rgba(46,196,182,0.08), rgba(46,196,182,0.02))" },
-      title: "+91 86884 58907",
+      title: NAP.phoneDisplay,
       subtitle: "Call us directly during training hours",
       glow: "rgba(46,196,182,0.15)",
+      onTrack: () => trackCall("contact"),
     },
     {
       id: "instagram",
-      href: "https://instagram.com/caliterrain",
+      href: SOCIAL.instagram,
       icon: <Instagram className="w-5 h-5 text-white" />,
       iconBg: "",
       iconGradient: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)",
       borderColor: "border-white/10 hover:border-[#e6683c]/50",
       bgStyle: { background: "linear-gradient(135deg, rgba(240,148,51,0.06), rgba(188,24,136,0.06))" },
-      title: "@caliterrain",
+      title: SOCIAL.instagramHandle,
       subtitle: "Follow for daily training content",
       glow: "rgba(225,48,108,0.12)",
     },
@@ -79,7 +84,7 @@ export default function Contact({ onBookTrial }) {
 
   return (
     <div className="pt-24 min-h-screen bg-obsidian">
-      <SEO title="Contact Us" description="Contact Cali Terrain calisthenics gym at Bowenpally, Secunderabad. Call 8688458907." />
+      <SEO title="Contact Us" description="Contact Cali Terrain calisthenics gym at Bowenpally, Secunderabad. Call 8688458907." path="/contact" />
 
       {/* Hero Header */}
       <div className="relative bg-[#0D0D0D] border-b border-white/5 py-20 px-6 overflow-hidden">
@@ -112,6 +117,7 @@ export default function Contact({ onBookTrial }) {
                   key={card.id}
                   variants={fadeUp}
                   href={card.href}
+                  onClick={card.onTrack}
                   target={card.id !== "phone" ? "_blank" : undefined}
                   rel={card.id !== "phone" ? "noopener noreferrer" : undefined}
                   className={`contact-link-card group flex items-center gap-4 border ${card.borderColor} p-4 transition-all duration-280`}
@@ -142,8 +148,12 @@ export default function Contact({ onBookTrial }) {
             >
               <MapPin className="w-5 h-5 text-[#2EC4B6] mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-white font-bold text-sm mb-1">Cali Terrain</p>
-                <p className="text-zinc-400 text-sm leading-relaxed">SS Complex, 156/2, Sikh Rd,<br />near DPS School, Diamond Point,<br />Radha Swamy Colony, Bowenpally,<br />Secunderabad, Telangana 500009</p>
+                <p className="text-white font-bold text-sm mb-1">{NAP.name}</p>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  {NAP.addressLines.map((line, i) => (
+                    <span key={i}>{line}{i < NAP.addressLines.length - 1 && <br />}</span>
+                  ))}
+                </p>
               </div>
             </motion.div>
 
@@ -163,7 +173,7 @@ export default function Contact({ onBookTrial }) {
               variants={fadeUp}
               className="mt-8 border border-white/10 overflow-hidden hover:border-white/20 transition-colors duration-300"
             >
-              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15223.636890171589!2d78.48165189088192!3d17.46405843617763!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9ba4c0920139%3A0x802664c3d60b7e12!2sCali%20Terrain!5e0!3m2!1sen!2sin!4v1772995355729!5m2!1sen!2sin" width="100%" height="280" style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Cali Terrain Location" />
+              <iframe src={NAP.mapEmbed} width="100%" height="280" style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Cali Terrain Location" />
             </motion.div>
           </motion.div>
 

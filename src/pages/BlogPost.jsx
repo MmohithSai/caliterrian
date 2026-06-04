@@ -35,7 +35,7 @@ export default function BlogPost() {
 
   return (
     <div className="pt-24 min-h-screen bg-obsidian">
-      <SEO title={post.title} description={post.excerpt} />
+      <SEO title={post.title} description={post.excerpt} path={`/blog/${post.slug}`} image={post.cover_image} />
       <div className="max-w-4xl mx-auto px-6 pt-8">
         <Link to="/blog" className="flex items-center gap-2 text-zinc-400 hover:text-white text-sm transition-colors duration-200 mb-8">
           <ArrowLeft className="w-4 h-4" /> Back to Blog

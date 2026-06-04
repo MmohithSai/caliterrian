@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { ChevronRight, Award, Users, Star } from "lucide-react";
 import SEO from "@/components/SEO";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const COACHES = [
   {
@@ -23,22 +23,11 @@ const COACHES = [
   },
 ];
 
-function useScrollReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".scroll-fade");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in-view"); });
-    }, { threshold: 0.1 });
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  });
-}
-
 export default function Coaches({ onBookTrial }) {
   useScrollReveal();
   return (
     <div className="pt-24 min-h-screen bg-obsidian">
-      <SEO title="Our Coaches" description="Meet the expert calisthenics coaches at Cali Terrain, Secunderabad." />
+      <SEO title="Our Coaches" description="Meet the expert calisthenics coaches at Cali Terrain, Secunderabad." path="/coaches" />
       <div className="bg-[#0D0D0D] border-b border-white/5 py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <p className="section-tag mb-2">The Team</p>

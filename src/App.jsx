@@ -8,23 +8,37 @@ import Footer from "@/components/Footer";
 import FloatingButtons from "@/components/FloatingButtons";
 import ChatBot from "@/components/ChatBot";
 import TrialBookingModal from "@/components/TrialBookingModal";
-import Home from "@/pages/Home";
-import Programs from "@/pages/Programs";
-import Coaches from "@/pages/Coaches";
-import Transformations from "@/pages/Transformations";
-import Blog from "@/pages/Blog";
-import BlogPost from "@/pages/BlogPost";
-import Gallery from "@/pages/Gallery";
-import Contact from "@/pages/Contact";
-import Pricing from "@/pages/Pricing";
-import NotFound from "@/pages/NotFound";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { trackBookTrial } from "@/lib/analytics";
+
+// Each public page is code-split into its own chunk so the initial load only
+// ships the shell + the landing route, not all 10 pages at once.
+const Home = lazy(() => import("@/pages/Home"));
+const Programs = lazy(() => import("@/pages/Programs"));
+const Coaches = lazy(() => import("@/pages/Coaches"));
+const Transformations = lazy(() => import("@/pages/Transformations"));
+const Blog = lazy(() => import("@/pages/Blog"));
+const BlogPost = lazy(() => import("@/pages/BlogPost"));
+const Gallery = lazy(() => import("@/pages/Gallery"));
+const Contact = lazy(() => import("@/pages/Contact"));
+const Pricing = lazy(() => import("@/pages/Pricing"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
 
 // Admin is code-split out of the public bundle.
 const AdminApp = lazy(() => import("@/admin/AdminApp"));
 
+// Shown while a route chunk loads — a quiet brand-colored screen, no flash.
+const PageSkeleton = () => <div className="min-h-screen bg-obsidian" />;
+
 function AppContent({ bookingOpen, setBookingOpen }) {
   const location = useLocation();
+
+  // Single entry point for every "Book Trial" CTA — tracks the click (tagged
+  // with the page it fired from) before opening the modal.
+  const openBooking = () => {
+    trackBookTrial(location.pathname);
+    setBookingOpen(true);
+  };
 
   // The /admin area is a self-contained app: no public Navbar/Footer/ChatBot.
   if (location.pathname.startsWith("/admin")) {
@@ -40,21 +54,23 @@ function AppContent({ bookingOpen, setBookingOpen }) {
 
   return (
     <>
-      <Navbar onBookTrial={() => setBookingOpen(true)} />
-      <Routes>
-        <Route path="/" element={<Home onBookTrial={() => setBookingOpen(true)} />} />
-        <Route path="/programs" element={<Programs onBookTrial={() => setBookingOpen(true)} />} />
-        <Route path="/coaches" element={<Coaches onBookTrial={() => setBookingOpen(true)} />} />
-        <Route path="/transformations" element={<Transformations onBookTrial={() => setBookingOpen(true)} />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:id" element={<BlogPost />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/pricing" element={<Pricing onBookTrial={() => setBookingOpen(true)} />} />
-        <Route path="/contact" element={<Contact onBookTrial={() => setBookingOpen(true)} />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Navbar onBookTrial={openBooking} />
+      <Suspense fallback={<PageSkeleton />}>
+        <Routes>
+          <Route path="/" element={<Home onBookTrial={openBooking} />} />
+          <Route path="/programs" element={<Programs onBookTrial={openBooking} />} />
+          <Route path="/coaches" element={<Coaches onBookTrial={openBooking} />} />
+          <Route path="/transformations" element={<Transformations onBookTrial={openBooking} />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/pricing" element={<Pricing onBookTrial={openBooking} />} />
+          <Route path="/contact" element={<Contact onBookTrial={openBooking} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
       <Footer />
-      <FloatingButtons onBookTrial={() => setBookingOpen(true)} />
+      <FloatingButtons onBookTrial={openBooking} />
       <ChatBot />
       <TrialBookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
       <Toaster position="top-right" />

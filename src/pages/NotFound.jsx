@@ -5,7 +5,7 @@ import SEO from "@/components/SEO";
 export default function NotFound() {
   return (
     <div className="pt-24 min-h-screen bg-obsidian flex flex-col items-center justify-center px-6 text-center">
-      <SEO title="Page Not Found" />
+      <SEO title="Page Not Found" noindex />
       <p className="section-tag">Error 404</p>
       <h1 className="font-heading text-7xl sm:text-8xl text-white leading-none mb-4">
         LOST YOUR <span className="text-[#2EC4B6]">GRIP?</span>

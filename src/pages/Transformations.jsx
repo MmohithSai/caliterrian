@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronRight, Trophy, Zap, Users } from "lucide-react";
 import SEO from "@/components/SEO";
 import { TRANSFORMATIONS } from "@/data/mockData";
+import { useScrollReveal } from "@/lib/useScrollReveal";
+import { MEMBERS_TRAINED } from "@/data/site";
 
 const TYPES = ["All", "Weight Loss", "First Pull-Up", "Handstand", "Kids Achievement", "Athletic Conditioning"];
-
-function useScrollReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".scroll-fade");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in-view"); });
-    }, { threshold: 0.1 });
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  });
-}
 
 export default function Transformations({ onBookTrial }) {
   const [filter, setFilter] = useState("All");
@@ -23,7 +14,7 @@ export default function Transformations({ onBookTrial }) {
 
   return (
     <div className="pt-24 min-h-screen bg-obsidian">
-      <SEO title="Member Transformations" description="Real success stories from Cali Terrain members in Secunderabad." />
+      <SEO title="Member Transformations" description="Real success stories from Cali Terrain members in Secunderabad." path="/transformations" />
       <div className="bg-[#0D0D0D] border-b border-white/5 py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <p className="section-tag mb-2">Real Results</p>
@@ -34,7 +25,7 @@ export default function Transformations({ onBookTrial }) {
 
       <div className="bg-[#2EC4B6] py-12 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-3 gap-8 text-center">
-          {[{ icon: Trophy, value: "500+", label: "Members Transformed" }, { icon: Zap, value: "90%", label: "Achieve First Pull-Up" }, { icon: Users, value: "15kg", label: "Avg Weight Lost" }].map(({ icon: Icon, value, label }, i) => (
+          {[{ icon: Trophy, value: MEMBERS_TRAINED, label: "Members Transformed" }, { icon: Zap, value: "90%", label: "Achieve First Pull-Up" }, { icon: Users, value: "15kg", label: "Avg Weight Lost" }].map(({ icon: Icon, value, label }, i) => (
             <div key={i}>
               <Icon className="w-5 h-5 text-white/70 mx-auto mb-2" />
               <div className="font-heading text-3xl md:text-4xl text-white mb-1">{value}</div>

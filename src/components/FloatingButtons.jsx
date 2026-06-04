@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { InstagramIcon as Instagram, WhatsAppIcon as WhatsApp } from "@/components/icons";
 import { Phone } from "lucide-react";
+import { SOCIAL, telLink, waLink } from "@/data/site";
+import { trackWhatsApp, trackCall } from "@/lib/analytics";
 
-const WA_LINK = "https://wa.me/918688458907?text=Hi%2C%20I%20would%20like%20to%20know%20more%20about%20Cali%20Terrain%20and%20book%20a%20free%20trial.";
-const CALL_LINK = "tel:+918688458907";
-const IG_LINK = "https://instagram.com/caliterrain";
+const WA_LINK = waLink("Hi, I would like to know more about Cali Terrain and book a free trial.");
+const CALL_LINK = telLink();
+const IG_LINK = SOCIAL.instagram;
 
 const buttonVariants = {
   hidden: { opacity: 0, scale: 0.5, y: 20 },
@@ -43,6 +45,7 @@ export default function FloatingButtons({ onBookTrial }) {
       shadow: "shadow-[0_4px_20px_rgba(37,211,102,0.35)]",
       pulse: true,
       testId: "floating-whatsapp-btn",
+      onTrack: () => trackWhatsApp("floating"),
     },
     {
       id: "call",
@@ -55,6 +58,7 @@ export default function FloatingButtons({ onBookTrial }) {
       border: "border border-white/15",
       shadow: "shadow-[0_4px_20px_rgba(0,0,0,0.4)]",
       testId: "floating-call-btn",
+      onTrack: () => trackCall("floating"),
     },
     {
       id: "instagram",
@@ -118,6 +122,7 @@ export default function FloatingButtons({ onBookTrial }) {
                   animate="visible"
                   whileHover={{ scale: 1.12, y: -2 }}
                   whileTap={{ scale: 0.9 }}
+                  onClick={btn.onTrack}
                   onMouseEnter={() => setHoveredBtn(btn.id)}
                   onMouseLeave={() => setHoveredBtn(null)}
                   className={`floating-social-btn relative flex h-12 w-12 items-center justify-center rounded-full ${btn.bg || ""} ${btn.border || ""} ${btn.shadow || ""} transition-all duration-200`}

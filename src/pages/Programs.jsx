@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { ChevronRight, Check, ArrowRight } from "lucide-react";
 import SEO from "@/components/SEO";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const PROGRAMS_DATA = [
   { id: "adult-calisthenics", title: "Adult Calisthenics", emoji: "🏋️", description: "Build strength, control and athletic movement using only your bodyweight. Master the fundamentals and progress to advanced skills.", benefits: ["Pull-up & dip strength", "Core and grip stability", "Body composition improvement", "Skill-based progression"], level: "Beginner to Advanced", ageGroup: "16+ years", outcome: "A strong, athletic body with complete bodyweight mastery", image: "https://images.unsplash.com/photo-1626807020058-30eb4ef93c84?w=800&q=80" },
@@ -17,23 +17,12 @@ const PROGRAMS_DATA = [
   { id: "athletic-conditioning", title: "Athletic Conditioning", emoji: "⚡", description: "High-performance conditioning for athletes and fitness enthusiasts who want to push their limits.", benefits: ["VO2 max improvement", "Explosive power", "Sport-specific conditioning", "Elite fitness baseline"], level: "Advanced", ageGroup: "16+ years", outcome: "Elite athletic performance and conditioning", image: "https://images.unsplash.com/photo-1758520705368-bbd8830dda35?w=800&q=80" },
 ];
 
-function useScrollReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".scroll-fade");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in-view"); });
-    }, { threshold: 0.1 });
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  });
-}
-
 export default function Programs({ onBookTrial }) {
   useScrollReveal();
 
   return (
     <div className="pt-24 min-h-screen bg-obsidian">
-      <SEO title="Training Programs" description="12 calisthenics and bodyweight training programs at Cali Terrain, Secunderabad. Adult, kids, weight loss, handstand, personal coaching and more." />
+      <SEO title="Training Programs" description="12 calisthenics and bodyweight training programs at Cali Terrain, Secunderabad. Adult, kids, weight loss, handstand, personal coaching and more." path="/programs" />
 
       {/* Header */}
       <div className="bg-[#0D0D0D] border-b border-white/5 py-20 px-6">

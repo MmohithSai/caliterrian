@@ -3,6 +3,7 @@ import { X, ChevronRight, CheckCircle2 } from "lucide-react";
 import { WhatsAppIcon as WhatsApp } from "@/components/icons";
 import { toast } from "sonner";
 import { submitForm } from "@/lib/supabase";
+import { trackFormSubmit, trackWhatsApp } from "@/lib/analytics";
 
 const WA_NUMBER = "918688458907";
 const PROGRAMS = [
@@ -52,10 +53,12 @@ export default function TrialBookingModal({ open, onClose }) {
       toast.error(error || "Could not book. Please try WhatsApp or call us.");
       return;
     }
+    trackFormSubmit("trial_booking");
     setSubmitted(true);
   };
 
   const goToWhatsApp = () => {
+    trackWhatsApp("trial_booking");
     window.open(buildWaLink(form), "_blank", "noopener,noreferrer");
     handleClose();
   };

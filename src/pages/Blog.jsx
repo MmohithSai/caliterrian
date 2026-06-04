@@ -1,21 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, ArrowRight } from "lucide-react";
 import SEO from "@/components/SEO";
 import { BLOG_POSTS } from "@/data/mockData";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const CATEGORIES = ["All", "Education", "Training Tips", "Kids Fitness", "Mobility", "Skill Progressions"];
-
-function useScrollReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".scroll-fade");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in-view"); });
-    }, { threshold: 0.1 });
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  });
-}
 
 export default function Blog() {
   const [filter, setFilter] = useState("All");
@@ -24,7 +14,7 @@ export default function Blog() {
 
   return (
     <div className="pt-24 min-h-screen bg-obsidian">
-      <SEO title="Fitness Blog" description="Calisthenics guides, training tips and fitness education from Cali Terrain." />
+      <SEO title="Fitness Blog" description="Calisthenics guides, training tips and fitness education from Cali Terrain." path="/blog" />
       <div className="bg-[#0D0D0D] border-b border-white/5 py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <p className="section-tag mb-2">Knowledge Hub</p>

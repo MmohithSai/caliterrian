@@ -1,18 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronRight, Clock, Users, User, Gift } from "lucide-react";
 import SEO from "@/components/SEO";
 import SpinWheel from "@/components/SpinWheel";
-
-function useScrollReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".scroll-fade");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in-view"); });
-    }, { threshold: 0.1 });
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  });
-}
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const G3 = [{ duration: "Monthly", price: "3,000" }, { duration: "Quarterly", price: "7,500" }, { duration: "Half Yearly", price: "13,500" }];
 const G5 = [{ duration: "Monthly", price: "4,500" }, { duration: "Quarterly", price: "12,000" }, { duration: "Half Yearly", price: "21,000" }];
@@ -78,7 +68,7 @@ export default function Pricing({ onBookTrial }) {
 
   return (
     <div className="pt-24 min-h-screen bg-obsidian">
-      <SEO title="Pricing & Schedule" description="Cali Terrain membership plans and batch timings. Group sessions from Rs 3000/month." />
+      <SEO title="Pricing & Schedule" description="Cali Terrain membership plans and batch timings. Group sessions from Rs 3000/month." path="/pricing" />
       <div className="bg-[#0D0D0D] border-b border-white/5 py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <p className="section-tag mb-2">Investment in Yourself</p>

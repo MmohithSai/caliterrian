@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   motion,
@@ -24,6 +24,7 @@ import {
 import SEO from "@/components/SEO";
 import HeroScrollAnimation from "@/components/HeroScrollAnimation";
 import { TESTIMONIALS, TRANSFORMATIONS } from "@/data/mockData";
+import { STATS } from "@/data/site";
 import {
   fadeUp,
   staggerContainer,
@@ -32,6 +33,7 @@ import {
   useSectionScroll,
 } from "@/lib/animations";
 import { useImageSequenceCanvas } from "@/lib/imageSequence";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const PROGRAMS = [
   { id: "adult-calisthenics", title: "Adult Calisthenics", icon: Dumbbell, desc: "Build strength, control and athletic movement using only your bodyweight." },
@@ -58,13 +60,6 @@ const JOURNEY_STEPS = [
   { num: "04", title: "See Results", desc: "Track your progress and celebrate milestones along the way." },
 ];
 
-const STATS = [
-  { value: "500+", label: "Members Trained" },
-  { value: "9+", label: "Years Experience" },
-  { value: "12", label: "Training Programs" },
-  { value: "4.9", label: "Google Rating" },
-];
-
 const FAQ = [
   { q: "Do I need prior fitness experience?", a: "Absolutely not. Our Beginner Transformation Program is designed for people with zero fitness experience. We start from the basics and build you up." },
   { q: "What age groups do you train?", a: "We train kids from 6-16 years and adults from 16+ years. We have specialized programs for each age group." },
@@ -72,23 +67,6 @@ const FAQ = [
   { q: "Is calisthenics good for weight loss?", a: "Yes. Our weight loss program combines bodyweight conditioning with circuit training. Many members lose 10-15kg in 3-5 months." },
   { q: "Where is Cali Terrain located?", a: "We are at SS Complex, 156/2, Sikh Rd, near DPS School, Bowenpally, Secunderabad, Telangana 500009." },
 ];
-
-function useScrollReveal() {
-  useEffect(() => {
-    const elements = document.querySelectorAll(".scroll-fade");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("in-view");
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
-
-    elements.forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
-  }, []);
-}
 
 function SectionHeading({ align = "left", tag, title, highlight }) {
   const alignClass = align === "center" ? "text-center mx-auto" : "";
@@ -863,11 +841,11 @@ function FinalCtaSection({ onBookTrial }) {
 
 export default function Home({ onBookTrial }) {
   const [faqOpen, setFaqOpen] = useState(null);
-  useScrollReveal();
+  useScrollReveal({ threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
 
   return (
     <div className="min-h-screen bg-obsidian">
-      <SEO />
+      <SEO path="/" />
       <HeroScrollAnimation onBookTrial={onBookTrial} />
 
       <section className="relative overflow-hidden bg-[#2EC4B6] px-6 py-10">

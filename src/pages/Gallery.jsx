@@ -1,30 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Image as ImageIcon } from "lucide-react";
 import SEO from "@/components/SEO";
 import { GALLERY } from "@/data/mockData";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const CATEGORIES = ["All", "skills", "training", "kids", "group", "workshop", "transformation", "facility"];
-
-function useScrollReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".scroll-fade");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in-view"); });
-    }, { threshold: 0.05 });
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  });
-}
 
 export default function Gallery() {
   const [filter, setFilter] = useState("All");
   const [lightbox, setLightbox] = useState(null);
-  useScrollReveal();
+  useScrollReveal({ threshold: 0.05 });
   const filtered = filter === "All" ? GALLERY : GALLERY.filter((i) => i.category === filter);
 
   return (
     <div className="pt-24 min-h-screen bg-obsidian">
-      <SEO title="Photo Gallery" description="Inside Cali Terrain calisthenics gym in Secunderabad." />
+      <SEO title="Photo Gallery" description="Inside Cali Terrain calisthenics gym in Secunderabad." path="/gallery" />
       <div className="bg-[#0D0D0D] border-b border-white/5 py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <p className="section-tag mb-2">Visual Stories</p>
