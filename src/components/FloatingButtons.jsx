@@ -24,7 +24,7 @@ const buttonVariants = {
   }),
 };
 
-export default function FloatingButtons({ onBookTrial }) {
+export default function FloatingButtons() {
   const [visible, setVisible] = useState(false);
   const [hoveredBtn, setHoveredBtn] = useState(null);
 
@@ -53,7 +53,7 @@ export default function FloatingButtons({ onBookTrial }) {
       external: false,
       label: "Call Us",
       icon: <Phone className="h-5 w-5 text-white" />,
-      bg: "bg-[#1A1A1A]",
+      bg: "bg-[#1A2230]",
       hoverBg: "#252525",
       border: "border border-white/15",
       shadow: "shadow-[0_4px_20px_rgba(0,0,0,0.4)]",
@@ -76,21 +76,6 @@ export default function FloatingButtons({ onBookTrial }) {
     <AnimatePresence>
       {visible && (
         <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-3">
-          {/* Book Free Trial CTA */}
-          <motion.button
-            data-testid="floating-book-trial-btn"
-            onClick={onBookTrial}
-            custom={0}
-            variants={buttonVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover={{ scale: 1.05, boxShadow: "0 8px 30px rgba(46, 196, 182, 0.4)" }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 border border-[#2EC4B6]/40 bg-[#2EC4B6] px-5 py-3 text-xs font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#25A599]"
-          >
-            Book Free Trial
-          </motion.button>
-
           {/* Social buttons */}
           <div className="flex flex-col gap-2">
             {buttons.map((btn, i) => (
@@ -103,7 +88,7 @@ export default function FloatingButtons({ onBookTrial }) {
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       exit={{ opacity: 0, x: 8, scale: 0.9 }}
                       transition={{ duration: 0.18 }}
-                      className="absolute right-14 whitespace-nowrap rounded bg-[#1A1A1A] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg border border-white/10"
+                      className="absolute right-14 whitespace-nowrap rounded bg-[#1A2230] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg border border-white/10"
                     >
                       {btn.label}
                     </motion.span>
@@ -116,7 +101,7 @@ export default function FloatingButtons({ onBookTrial }) {
                   rel={btn.external ? "noopener noreferrer" : undefined}
                   data-testid={btn.testId}
                   title={btn.label}
-                  custom={i + 1}
+                  custom={i}
                   variants={buttonVariants}
                   initial="hidden"
                   animate="visible"
