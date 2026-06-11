@@ -846,6 +846,59 @@ html {
     linear-gradient(180deg, rgba(11, 16, 22, 0.35) 0%, rgba(11, 16, 22, 0.45) 45%, rgba(11, 16, 22, 0.9) 100%),
     linear-gradient(120deg, rgba(46, 141, 255, 0.16), transparent 55%);
 }
+/* Panorama scrim — darkens only the lower band for caption legibility,
+   keeps the facility clearly visible (no heavy global tint). */
+.ct-media__scrim--pano {
+  background: linear-gradient(180deg, rgba(11, 16, 22, 0.0) 52%, rgba(11, 16, 22, 0.5) 86%, rgba(11, 16, 22, 0.82) 100%);
+}
+
+/* ── Cinematic color grade ─────────────────────────────────────────────────
+   Architectural-photography look applied purely in CSS (image file untouched):
+   deeper blacks + cleaner whites via contrast, teal shadows + warm highlights
+   via soft-light gradients, then the requested premium darkening overlay. */
+.ct-media__img--graded {
+  /* Premium athletic grade — micro contrast + clarity, richer turf & metallic
+     blue, cleaner whites, grey cast lifted. Realistic, not an HDR cartoon. */
+  filter: contrast(1.16) saturate(1.18) brightness(1.07);
+}
+.ct-media__grade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+/* Tone map: cools the yellow cast, drops a *subtle* teal into the shadows and
+   pools warm light into the highlights — soft-light so it grades, not paints. */
+.ct-media__grade::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: soft-light;
+  background:
+    /* soft volumetric daylight from the upper windows — extremely subtle */
+    radial-gradient(90% 55% at 50% -12%, rgba(255, 250, 238, 0.14), transparent 62%),
+    /* warm highlight pool */
+    radial-gradient(135% 90% at 68% 22%, rgba(255, 188, 120, 0.16), transparent 56%),
+    /* teal shadows (top band only, gentle) */
+    linear-gradient(180deg, rgba(20, 50, 58, 0.24) 0%, rgba(12, 22, 30, 0.0) 42%),
+    /* metallic blue cast to cool the grey/yellow */
+    linear-gradient(120deg, rgba(46, 141, 255, 0.10), transparent 60%);
+}
+/* Premium overlay (spec) — darkening reduced ~40% so the facility, turf and
+   equipment stay clearly visible and the image reads bright and premium. */
+.ct-media__grade::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.2));
+}
+
+/* Restrained hover for the large panorama — premium, not a gaming zoom. */
+.group\/media:hover .ct-media__img--pano,
+.ct-media:hover .ct-media__img--pano { transform: scale(1.02); }
+/* Keep the cinematic grade on hover (base hover rule would otherwise reset it). */
+.ct-media:hover .ct-media__img--graded,
+.group\/media:hover .ct-media__img--graded { filter: contrast(1.18) saturate(1.2) brightness(1.08); }
 
 .ct-media__content {
   position: absolute;
@@ -891,7 +944,9 @@ html {
   .ct-media--placeholder::after { animation: none; }
   .ct-media__img { transition: none; }
   .ct-media:hover .ct-media__img--zoom,
-  .group:hover .ct-media__img--zoom { transform: none; }
+  .group:hover .ct-media__img--zoom,
+  .ct-media:hover .ct-media__img--pano,
+  .group\/media:hover .ct-media__img--pano { transform: none; }
 }
 
 /* ── Surface card with blue edge-glow on hover ── */
@@ -926,7 +981,7 @@ html {
 }
 .ct-node[data-state="locked"] { opacity: 0.45; }
 
-/* ── Skill-graph node states (RPG dependency tree) ── */
+/* ── Skill-graph node levels (training blueprint) ── */
 .ct-skill {
   border: 1.5px solid #1E2A38;
   background: #131B25;
@@ -934,52 +989,41 @@ html {
   transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 220ms ease, border-color 220ms ease, background 220ms ease;
 }
-.ct-skill--mastered {
+.ct-skill--beginner {
   background: #2E8DFF;
   border-color: #2E8DFF;
   color: #ffffff;
   box-shadow: 0 0 22px rgba(46, 141, 255, 0.45);
 }
-.ct-skill--in-progress {
-  border-color: #2E8DFF;
-  color: #2E8DFF;
-  background: rgba(46, 141, 255, 0.12);
-  animation: ct-skill-pulse 2.4s ease-in-out infinite;
-}
-.ct-skill--available {
+.ct-skill--intermediate {
   border-color: rgba(46, 141, 255, 0.55);
   color: #2E8DFF;
   background: #131B25;
 }
-.ct-skill--locked {
-  border-color: #1E2A38;
-  color: #5C6B7C;
-  background: #0B1016;
+.ct-skill--advanced {
+  border-color: #2E8DFF;
+  color: #2E8DFF;
+  background: rgba(46, 141, 255, 0.12);
 }
-/* Hover lift for any reachable (non-locked) node */
-.group:hover > .ct-skill:not(.ct-skill--locked) {
+/* Hover lift — every node is explorable */
+.group:hover > .ct-skill {
   transform: scale(1.08);
   box-shadow: 0 0 26px rgba(46, 141, 255, 0.5);
 }
-/* Selected node gets a hard ring regardless of state */
+/* Selected node gets a hard ring regardless of level */
 .ct-skill[data-active] {
   box-shadow: 0 0 0 3px rgba(46, 141, 255, 0.4), 0 0 30px rgba(46, 141, 255, 0.55);
   border-color: #2E8DFF;
 }
-@keyframes ct-skill-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(46, 141, 255, 0.0); }
-  50% { box-shadow: 0 0 0 4px rgba(46, 141, 255, 0.18); }
-}
 
-/* ── Skill-state badge (detail rail) ── */
+/* ── Skill-level badge (detail rail) ── */
 .ct-skill-badge { border: 1px solid; border-radius: 2px; }
-.ct-skill-badge--mastered    { border-color: #2E8DFF; background: rgba(46,141,255,0.16); color: #2E8DFF; }
-.ct-skill-badge--in-progress { border-color: rgba(46,141,255,0.5); background: rgba(46,141,255,0.10); color: #2E8DFF; }
-.ct-skill-badge--available   { border-color: rgba(46,141,255,0.4); background: transparent; color: #2E8DFF; }
-.ct-skill-badge--locked      { border-color: #2A3645; background: #0B1016; color: #9AA7B6; }
+.ct-skill-badge--beginner     { border-color: #2E8DFF; background: rgba(46,141,255,0.16); color: #2E8DFF; }
+.ct-skill-badge--intermediate { border-color: rgba(46,141,255,0.5); background: rgba(46,141,255,0.10); color: #2E8DFF; }
+.ct-skill-badge--advanced     { border-color: rgba(46,141,255,0.4); background: transparent; color: #2E8DFF; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ct-skill, .ct-skill--in-progress { animation: none; transition: none; }
+  .ct-skill { animation: none; transition: none; }
 }
 
 /* ── Connector line between nodes/steps ── */
@@ -1028,20 +1072,6 @@ html {
   box-shadow: 0 0 0 6px rgba(11, 16, 22, 1), 0 0 30px rgba(46, 141, 255, 0.4);
 }
 
-/* ── Facility hotspot pin ── */
-.ct-pin > span {
-  border-color: #2E8DFF;
-  color: #2E8DFF;
-  box-shadow: 0 0 18px rgba(46, 141, 255, 0.5);
-}
-.ct-pin:hover > span,
-.ct-pin[data-active] > span {
-  background: #2E8DFF;
-  color: #ffffff;
-  transform: scale(1.18);
-  box-shadow: 0 0 0 4px rgba(46, 141, 255, 0.25), 0 0 26px rgba(46, 141, 255, 0.7);
-}
-
 /* ── Stat ring (Why Members Stay / Results) ── */
 .ct-ring {
   background:
@@ -1053,4 +1083,17 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .ct-card, .ct-node { transition: none; }
   .ct-card:hover { transform: none; }
+}
+
+/* ── 3D facility gallery: featured-card text rise (re-runs via React key) ── */
+@keyframes ct-gallery-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ct-gallery-rise {
+  opacity: 0;
+  animation: ct-gallery-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ct-gallery-rise { animation: none; opacity: 1; }
 }

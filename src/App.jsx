@@ -9,6 +9,7 @@ import FloatingButtons from "@/components/FloatingButtons";
 import ChatBot from "@/components/ChatBot";
 import TrialBookingModal from "@/components/TrialBookingModal";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import ClickSpark from "@/components/reactbits/ClickSpark";
 import { trackBookTrial } from "@/lib/analytics";
 
 // Each public page is code-split into its own chunk so the initial load only
@@ -43,7 +44,7 @@ function AppContent({ bookingOpen, setBookingOpen }) {
   // The /admin area is a self-contained app: no public Navbar/Footer/ChatBot.
   if (location.pathname.startsWith("/admin")) {
     return (
-      <Suspense fallback={<div className="min-h-screen bg-[#0A0A0A]" />}>
+      <Suspense fallback={<div className="min-h-screen bg-[#0B1016]" />}>
         <Routes>
           <Route path="/admin/*" element={<AdminApp />} />
         </Routes>
@@ -74,6 +75,8 @@ function AppContent({ bookingOpen, setBookingOpen }) {
       <ChatBot />
       <TrialBookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
       <Toaster position="top-right" />
+      {/* React Bits ClickSpark: blue spark burst on every click (public site only) */}
+      <ClickSpark />
     </>
   );
 }

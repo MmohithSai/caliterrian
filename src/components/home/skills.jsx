@@ -1,17 +1,17 @@
 // Sections 4–6: Skill Tree · Hall of Firsts · Member Journeys  (image-first)
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Check, Circle, CircleDot, Clock, Compass, Gauge, Heart, Lock, Play, Plus, Quote, Trophy } from "lucide-react";
+import { ArrowRight, Circle, CircleDot, Clock, Compass, Flame, Gauge, Heart, Map, Play, Plus, Quote, Trophy } from "lucide-react";
 import { Header, MediaSlot, Section } from "./ui";
 import { reveal, stagger, vpOnce } from "./anim";
 import { SKILLS, HALL_OF_FIRSTS, COMMUNITY } from "@/data/home";
+import GlareHover from "@/components/reactbits/GlareHover";
 
-// State → presentation map for the skill graph (icon + label + CTA verb).
-const STATE_META = {
-  mastered:     { icon: Check,     label: "Mastered",    cta: "Review This Skill" },
-  "in-progress":{ icon: CircleDot, label: "In Progress", cta: "Continue This Skill" },
-  available:    { icon: Circle,    label: "Available",   cta: "Start Working On This Skill" },
-  locked:       { icon: Lock,      label: "Locked",      cta: "Unlock This Skill" },
+// Difficulty → presentation map for the skill graph (icon + modifier class).
+const LEVEL_META = {
+  Beginner:     { icon: Circle,    mod: "beginner" },
+  Intermediate: { icon: CircleDot, mod: "intermediate" },
+  Advanced:     { icon: Flame,     mod: "advanced" },
 };
 
 // Walk the prereq chain to collect every ancestor of a node (the path to it).
@@ -40,11 +40,7 @@ export function SkillTreeSection({ onBookTrial }) {
   // Skills this node opens up next.
   const unlocks = nodes.filter((n) => n.prereq.includes(activeId));
 
-  // Personal progress widget (mastered counts full, in-progress counts half).
-  const counts = nodes.reduce((a, n) => ((a[n.state] = (a[n.state] || 0) + 1), a), {});
-  const progress = Math.round(((counts.mastered || 0) + 0.5 * (counts["in-progress"] || 0)) / nodes.length * 100);
-
-  const StateIcon = STATE_META[active.state].icon;
+  const LevelIcon = LEVEL_META[active.difficulty].icon;
 
   return (
     <Section id="skill-tree" className="bg-[#0E141C]">
@@ -53,10 +49,10 @@ export function SkillTreeSection({ onBookTrial }) {
       {/* Legend */}
       <div className="mb-6 flex flex-wrap items-center gap-x-5 gap-y-2">
         {SKILLS.legend.map((l) => {
-          const Icon = STATE_META[l.state].icon;
+          const Icon = LEVEL_META[l.level].icon;
           return (
-            <span key={l.state} className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-[#9AA7B6]">
-              <span className={`ct-skill ct-skill--${l.state} flex h-5 w-5 items-center justify-center rounded-full`}>
+            <span key={l.level} className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-[#9AA7B6]">
+              <span className={`ct-skill ct-skill--${LEVEL_META[l.level].mod} flex h-5 w-5 items-center justify-center rounded-full`}>
                 <Icon className="h-3 w-3" />
               </span>
               {l.label}
@@ -90,7 +86,7 @@ export function SkillTreeSection({ onBookTrial }) {
 
               {/* Node layer */}
               {nodes.map((node) => {
-                const Icon = STATE_META[node.state].icon;
+                const Icon = LEVEL_META[node.difficulty].icon;
                 return (
                   <button
                     key={node.id}
@@ -101,7 +97,7 @@ export function SkillTreeSection({ onBookTrial }) {
                   >
                     <span
                       data-active={node.id === activeId ? "" : undefined}
-                      className={`ct-skill ct-skill--${node.state} flex h-14 w-14 items-center justify-center rounded-full`}
+                      className={`ct-skill ct-skill--${LEVEL_META[node.difficulty].mod} flex h-14 w-14 items-center justify-center rounded-full`}
                     >
                       <Icon className="h-5 w-5" />
                     </span>
@@ -113,22 +109,19 @@ export function SkillTreeSection({ onBookTrial }) {
             </div>
           </div>
 
-          {/* Personal progress widget */}
+          {/* Blueprint note — this graph is a general roadmap, not personal tracking */}
           <div className="mt-4 flex flex-col items-center gap-4 border border-[#1E2A38] bg-[#131B25] px-5 py-4 sm:flex-row sm:justify-between">
             <div className="flex items-center gap-4">
-              <span className="ct-ring relative grid h-14 w-14 place-items-center" style={{ "--p": `${progress}%` }}>
-                <span className="font-heading text-sm text-white">{progress}%</span>
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-[#2E8DFF]/40 bg-[#2E8DFF]/10 text-[#2E8DFF]">
+                <Map className="h-6 w-6" />
               </span>
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6]">Your Progress</p>
-                <p className="text-sm text-white">
-                  <span className="text-[#2E8DFF]">{counts.mastered || 0} mastered</span>
-                  {" · "}{counts["in-progress"] || 0} in progress{" · "}{counts.locked || 0} locked
-                </p>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6]">{SKILLS.blueprint.title}</p>
+                <p className="text-sm leading-snug text-white">{SKILLS.blueprint.note}</p>
               </div>
             </div>
             <button onClick={onBookTrial} className="btn-secondary shrink-0 text-xs">
-              <Compass className="h-4 w-4" /> Not sure where to start? Take Assessment
+              <Compass className="h-4 w-4" /> Get Your Full Roadmap At The Gym
             </button>
           </div>
         </div>
@@ -154,15 +147,15 @@ export function SkillTreeSection({ onBookTrial }) {
 
               <div className="flex items-center justify-between gap-3">
                 <h3 className="font-heading text-3xl tracking-wide text-white">{active.name}</h3>
-                <span className={`ct-skill-badge ct-skill-badge--${active.state} inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest`}>
-                  <StateIcon className="h-3 w-3" /> {STATE_META[active.state].label}
+                <span className={`ct-skill-badge ct-skill-badge--${LEVEL_META[active.difficulty].mod} inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest`}>
+                  <LevelIcon className="h-3 w-3" /> {active.difficulty}
                 </span>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-[#9AA7B6]">{active.desc}</p>
 
               <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
                 <Meta icon={Clock} label="Avg. Timeline" value={active.time} />
-                <Meta icon={Gauge} label="Difficulty" value={active.difficulty} />
+                <Meta icon={Gauge} label="Stage" value={active.tier} />
               </div>
 
               <div className="mt-5">
@@ -175,9 +168,9 @@ export function SkillTreeSection({ onBookTrial }) {
                       <button
                         key={p}
                         onClick={() => setActiveId(p)}
-                        className={`border px-2.5 py-1 text-xs transition-colors ${byId[p].state === "mastered" ? "border-[#2E8DFF]/40 bg-[#2E8DFF]/10 text-[#2E8DFF]" : "border-[#1E2A38] bg-[#0B1016] text-white hover:border-[#2E8DFF]/50"}`}
+                        className="border border-[#1E2A38] bg-[#0B1016] px-2.5 py-1 text-xs text-white transition-colors hover:border-[#2E8DFF]/50"
                       >
-                        {byId[p].state === "mastered" && <Check className="-ml-0.5 mr-1 inline h-3 w-3" />}{nameOf(p)}
+                        {nameOf(p)}
                       </button>
                     ))
                   )}
@@ -193,10 +186,10 @@ export function SkillTreeSection({ onBookTrial }) {
                 </div>
               </div>
 
-              {/* What it unlocks */}
+              {/* What it leads to next on the blueprint */}
               {unlocks.length > 0 && (
                 <div className="mt-5">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6]">Unlocks</p>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6]">Leads To</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {unlocks.map((u) => (
                       <button key={u.id} onClick={() => setActiveId(u.id)} className="inline-flex items-center gap-1 border border-[#1E2A38] bg-[#0B1016] px-2.5 py-1 text-xs text-white transition-colors hover:border-[#2E8DFF]/50">
@@ -208,7 +201,7 @@ export function SkillTreeSection({ onBookTrial }) {
               )}
 
               <button onClick={onBookTrial} className="btn-primary mt-6 w-full justify-center text-xs">
-                {STATE_META[active.state].cta} <ArrowRight className="h-4 w-4" />
+                Train This Skill With A Coach <ArrowRight className="h-4 w-4" />
               </button>
             </motion.div>
           </AnimatePresence>
@@ -249,6 +242,8 @@ export function HallOfFirstsSection({ onBookTrial }) {
       >
         {HALL_OF_FIRSTS.items.map((item) => (
           <motion.div key={item.id} variants={reveal} className="group w-[200px] shrink-0 snap-start overflow-hidden rounded-sm border border-[#1E2A38]">
+            {/* React Bits GlareHover: light sweep across each achievement card */}
+            <GlareHover className="h-full">
             <MediaSlot media={{ ...item.media, ratio: "4/5" }} align="" scrim="ct-media__scrim--full">
               <div className="flex items-start justify-between">
                 <span className="inline-flex items-center gap-1 bg-[#2E8DFF] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
@@ -263,6 +258,7 @@ export function HallOfFirstsSection({ onBookTrial }) {
                 <p className="mt-1 text-[10px] uppercase tracking-widest text-[#C6D2DF]/80">{item.date}</p>
               </div>
             </MediaSlot>
+            </GlareHover>
           </motion.div>
         ))}
 

@@ -6,6 +6,10 @@ import { ArrowRight, Check, ChevronDown, Play, Quote, Sparkles, Trophy } from "l
 import { Eyebrow, Header, MediaSlot, Section, StatRing } from "./ui";
 import { reveal, stagger, vpOnce } from "./anim";
 import { RESULTS, MEMBERSHIPS, FAQ, FINAL_CTA } from "@/data/home";
+import SplitText from "@/components/reactbits/SplitText";
+import SpotlightCard from "@/components/reactbits/SpotlightCard";
+import GlareHover from "@/components/reactbits/GlareHover";
+import Magnet from "@/components/reactbits/Magnet";
 
 // ── SECTION 10 · Results — outcome rings + member video stories ────────────
 // Consolidates the old Why-Stay, Member-Journeys and Testimonials sections.
@@ -28,10 +32,13 @@ export function ResultsSection() {
           {RESULTS.reasons.map((r) => {
             const Icon = r.icon;
             return (
-              <motion.div key={r.title} variants={reveal} className="ct-card p-5">
-                <Icon className="h-6 w-6 text-[#2E8DFF]" />
-                <h3 className="mt-3 font-heading text-lg tracking-wide text-white">{r.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-[#9AA7B6]">{r.desc}</p>
+              <motion.div key={r.title} variants={reveal}>
+                {/* React Bits SpotlightCard: cursor-tracking blue glow */}
+                <SpotlightCard className="ct-card h-full p-5">
+                  <Icon className="h-6 w-6 text-[#2E8DFF]" />
+                  <h3 className="mt-3 font-heading text-lg tracking-wide text-white">{r.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-[#9AA7B6]">{r.desc}</p>
+                </SpotlightCard>
               </motion.div>
             );
           })}
@@ -56,11 +63,14 @@ export function ResultsSection() {
           {RESULTS.stories.map((s) => (
             <motion.figure key={s.id} variants={reveal} className="ct-card group overflow-hidden">
               <div className="group/v relative overflow-hidden">
-                <MediaSlot media={{ ...s.media, ratio: "4/5" }} video={s.video} align="items-center" scrim="ct-media__scrim--full">
-                  <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/30 bg-black/40 backdrop-blur transition-transform group-hover/v:scale-110">
-                    <Play className="h-7 w-7 fill-white text-white" />
-                  </span>
-                </MediaSlot>
+                {/* React Bits GlareHover: light sweep across the story media on hover */}
+                <GlareHover>
+                  <MediaSlot media={{ ...s.media, ratio: "4/5" }} video={s.video} align="items-center" scrim="ct-media__scrim--full">
+                    <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/30 bg-black/40 backdrop-blur transition-transform group-hover/v:scale-110">
+                      <Play className="h-7 w-7 fill-white text-white" />
+                    </span>
+                  </MediaSlot>
+                </GlareHover>
                 <span className="absolute left-3 top-3 inline-flex items-center gap-1 bg-[#2E8DFF] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
                   <Trophy className="h-2.5 w-2.5" /> {s.achieved}
                 </span>
@@ -92,20 +102,22 @@ export function MembershipsSection({ onBookTrial }) {
         className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
       >
         {MEMBERSHIPS.tiers.map((tier) => (
-          <motion.div
-            key={tier.name}
-            variants={reveal}
-            className={`relative flex flex-col p-6 ${
-              tier.featured
-                ? "border-2 border-[#2E8DFF] bg-[#131B25] shadow-[0_0_40px_rgba(46,141,255,0.18)]"
-                : "ct-card"
-            }`}
-          >
+          <motion.div key={tier.name} variants={reveal} className="relative">
+            {/* Badge lives outside the SpotlightCard — its overflow:hidden would clip the -top offset */}
             {tier.badge && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2E8DFF] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-white">
+              <span className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 bg-[#2E8DFF] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-white">
                 {tier.badge}
               </span>
             )}
+            {/* React Bits SpotlightCard: cursor-tracking glow, stronger on the featured tier */}
+            <SpotlightCard
+              spotlightColor={tier.featured ? "rgba(46, 141, 255, 0.22)" : "rgba(46, 141, 255, 0.12)"}
+              className={`flex h-full flex-col p-6 ${
+                tier.featured
+                  ? "border-2 border-[#2E8DFF] bg-[#131B25] shadow-[0_0_40px_rgba(46,141,255,0.18)]"
+                  : "ct-card"
+              }`}
+            >
             <h3 className="font-heading text-2xl tracking-wide text-white">{tier.name}</h3>
             <p className="text-xs uppercase tracking-widest text-[#9AA7B6]">{tier.caption}</p>
             <p className="mt-4 font-heading text-4xl text-white">
@@ -128,6 +140,7 @@ export function MembershipsSection({ onBookTrial }) {
                 {tier.cta} <ArrowRight className="h-4 w-4" />
               </Link>
             )}
+            </SpotlightCard>
           </motion.div>
         ))}
       </motion.div>
@@ -212,14 +225,18 @@ export function FinalCtaSection({ onBookTrial }) {
         className="relative mx-auto max-w-4xl text-center"
       >
         <Eyebrow center>Final Step</Eyebrow>
+        {/* React Bits SplitText: word-by-word reveal mirroring the hero headline */}
         <h2 className="ct-display mx-auto mt-5 text-5xl sm:text-6xl lg:text-7xl">
-          <span className="block">{FINAL_CTA.title[0]}</span>
-          <span className="block accent">{FINAL_CTA.title[1]}</span>
+          <SplitText text={FINAL_CTA.title[0]} className="block" splitType="words" delay={70} />
+          <SplitText text={FINAL_CTA.title[1]} className="block accent" splitType="words" delay={70} startDelay={0.25} />
         </h2>
         <p className="ct-sub mx-auto mt-6 max-w-xl text-base">{FINAL_CTA.sub}</p>
-        <button onClick={onBookTrial} className="btn-primary mx-auto mt-9 text-sm">
-          {FINAL_CTA.primaryCta} <ArrowRight className="h-4 w-4" />
-        </button>
+        {/* React Bits Magnet: magnetic pull on the closing CTA */}
+        <Magnet>
+          <button onClick={onBookTrial} className="btn-primary mt-9 text-sm">
+            {FINAL_CTA.primaryCta} <ArrowRight className="h-4 w-4" />
+          </button>
+        </Magnet>
       </motion.div>
     </section>
   );

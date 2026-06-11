@@ -15,9 +15,10 @@ export function StatRing({ value, suffix = "", label, size = "h-28 w-28", text =
   useEffect(() => {
     if (!inView) return;
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) { setDisplay(value); return; }
+    // duration 0 jumps straight to the value via the async onUpdate callback,
+    // which keeps setState out of the effect body (react-hooks/set-state-in-effect).
     const controls = animate(0, value, {
-      duration: 1.4,
+      duration: reduce ? 0 : 1.4,
       ease: [0.22, 1, 0.36, 1],
       onUpdate: (v) => setDisplay(Math.round(v)),
     });
@@ -96,6 +97,8 @@ export function MediaSlot({
   zoom = true,
   parallax = false,
   scrim = "",
+  grade = false,
+  imgClassName = "",
   align = "items-end",
   showLabel = true,
   children,
@@ -112,15 +115,18 @@ export function MediaSlot({
     <div ref={ref} className={`ct-media group/media ${hasAsset ? "" : "ct-media--placeholder"} ${className}`} style={style}>
       <Layer {...layerProps} className={`ct-media__layer ${parallax ? "ct-media__layer--parallax" : ""}`}>
         {video ? (
-          <video className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""}`} autoPlay muted loop playsInline poster={img}>
+          <video className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""} ${imgClassName}`} autoPlay muted loop playsInline poster={img}>
             <source src={video} />
           </video>
         ) : img ? (
-          <img src={img} alt="" loading="lazy" className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""}`} />
+          <img src={img} alt="" loading="lazy" className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""} ${imgClassName}`} />
         ) : (
           <span className="ct-media__grid" aria-hidden="true" />
         )}
       </Layer>
+
+      {/* Cinematic color grade: teal shadows · warm highlights · premium overlay */}
+      {grade && hasAsset && <span className="ct-media__grade" aria-hidden="true" />}
 
       {!hasAsset && showLabel && (
         <span className="ct-media__ph">

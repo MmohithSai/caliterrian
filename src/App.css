@@ -1,12 +1,12 @@
 /* Cali Terrain - App Styles */
-.App { min-height: 100vh; background-color: #0A0A0A; }
+.App { min-height: 100vh; background-color: #0B1016; }
 
-.text-volt { color: #2EC4B6; }
-.bg-volt { background-color: #2EC4B6; }
-.border-volt { border-color: #2EC4B6; }
+.text-volt { color: #2E8DFF; }
+.bg-volt { background-color: #2E8DFF; }
+.border-volt { border-color: #2E8DFF; }
 
 .btn-primary {
-  background-color: #2EC4B6;
+  background-color: #2E8DFF;
   color: white;
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
@@ -19,11 +19,11 @@
   align-items: center;
   gap: 8px;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 0 20px rgba(46,196,182,0.3);
+  box-shadow: 0 0 20px rgba(46, 141, 255,0.3);
 }
 .btn-primary:hover {
-  background-color: #25A599;
-  box-shadow: 0 0 30px rgba(46,196,182,0.5);
+  background-color: #1F6FE0;
+  box-shadow: 0 0 30px rgba(46, 141, 255,0.5);
 }
 .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -53,6 +53,6 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #2EC4B6;
+  color: #2E8DFF;
   margin-bottom: 12px;
 }

@@ -4,6 +4,22 @@ import { ArrowDown, ArrowRight, Award, Check, Dumbbell, Star, Users, X } from "l
 import { Eyebrow, Header, Heading, MediaSlot, Section } from "./ui";
 import { reveal, stagger, vpOnce } from "./anim";
 import { HERO, PROBLEM, PATH } from "@/data/home";
+import SplitText from "@/components/reactbits/SplitText";
+import CountUp from "@/components/reactbits/CountUp";
+import Magnet from "@/components/reactbits/Magnet";
+
+// "500+" → animated 500 with a literal "+" suffix; non-numeric values render as-is.
+function TrustValue({ value }) {
+  const num = parseFloat(value);
+  if (!Number.isFinite(num)) return value;
+  const suffix = String(value).replace(/^[\d.]+/, "");
+  return (
+    <>
+      <CountUp to={num} duration={1.6} className="tabular-nums" />
+      {suffix}
+    </>
+  );
+}
 
 const scrollTo = (id) => (e) => {
   e.preventDefault();
@@ -34,17 +50,21 @@ export function HeroSection({ onBookTrial }) {
       <div className="mx-auto w-full max-w-7xl px-6">
         <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-3xl">
           <Eyebrow>{HERO.eyebrow}</Eyebrow>
-          <motion.h1 variants={reveal} className="ct-display mt-5 text-5xl sm:text-6xl lg:text-7xl">
-            <span className="block">{HERO.headline[0]}</span>
-            <span className="block accent">{HERO.headline[1]}</span>
-          </motion.h1>
+          {/* React Bits SplitText: word-by-word kinetic reveal, line 2 cascades after line 1 */}
+          <h1 className="ct-display mt-5 text-5xl sm:text-6xl lg:text-7xl">
+            <SplitText text={HERO.headline[0]} className="block" splitType="words" delay={70} />
+            <SplitText text={HERO.headline[1]} className="block accent" splitType="words" delay={70} startDelay={0.3} />
+          </h1>
           <motion.p variants={reveal} className="ct-sub mt-6 max-w-xl text-base leading-relaxed sm:text-lg">
             {HERO.sub}
           </motion.p>
           <motion.div variants={reveal} className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <button onClick={onBookTrial} className="btn-primary text-sm">
-              {HERO.primaryCta} <ArrowRight className="h-4 w-4" />
-            </button>
+            {/* React Bits Magnet: subtle magnetic pull on the primary CTA */}
+            <Magnet>
+              <button onClick={onBookTrial} className="btn-primary text-sm">
+                {HERO.primaryCta} <ArrowRight className="h-4 w-4" />
+              </button>
+            </Magnet>
             <a href="#path" onClick={scrollTo("path")} className="btn-secondary text-sm">
               {HERO.secondaryCta}
             </a>
@@ -65,7 +85,8 @@ export function HeroSection({ onBookTrial }) {
               <motion.div key={s.label} variants={reveal} className="flex items-center gap-3 bg-[#0B1016]/85 px-5 py-5 backdrop-blur-sm">
                 <Icon className="h-5 w-5 shrink-0 text-[#2E8DFF]" />
                 <div>
-                  <div className="font-heading text-2xl leading-none text-white">{s.value}</div>
+                  {/* React Bits CountUp: stats count up when the trust bar scrolls into view */}
+                  <div className="font-heading text-2xl leading-none text-white"><TrustValue value={s.value} /></div>
                   <div className="text-[11px] uppercase tracking-widest text-[#9AA7B6]">{s.label}</div>
                 </div>
               </motion.div>

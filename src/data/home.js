@@ -85,29 +85,32 @@ export const PATH = {
 };
 
 // ── SECTION 4 · Skill Tree ────────────────────────────────────────────────
-// An RPG-style dependency graph. Each node carries:
+// A generalized training blueprint shown as a dependency graph. Each node:
 //  • prereq[]  — edges drawn between skills (the tree structure)
-//  • state     — mastered · in-progress · available · locked (gamified status)
+//  • difficulty — Beginner · Intermediate · Advanced (drives node styling)
 //  • pos {x,y} — % position inside the graph canvas (left→right progression)
 //  • insight   — one-line coach note shown in the detail rail
-// A node is "available" only when every prereq is mastered; otherwise "locked".
+// There is no per-user state — the full personalized roadmap lives at the gym.
 export const SKILLS = {
   eyebrow: "Skill Tree",
   title: ["See The Journey.", "Chase The Skills."],
-  sub: "Every skill is connected. Click any node to see its requirements, what it unlocks and how to get there. Locked skills open up as you master their foundations.",
+  sub: "Every skill is connected. Click any node to see what it requires, what it leads to and how long it typically takes. This is the general blueprint — your personal roadmap is built with a coach at the gym.",
   legend: [
-    { state: "mastered",    label: "Mastered" },
-    { state: "in-progress", label: "In Progress" },
-    { state: "available",   label: "Available" },
-    { state: "locked",      label: "Locked" },
+    { level: "Beginner",     label: "Beginner" },
+    { level: "Intermediate", label: "Intermediate" },
+    { level: "Advanced",     label: "Advanced" },
   ],
+  blueprint: {
+    title: "The Blueprint",
+    note: "A simplified map of the calisthenics journey. Your full roadmap — tailored to your level and goals — is built with a coach at the gym.",
+  },
   nodes: [
-    { id: "push-up",     name: "Push-Up",     tier: "Foundation", difficulty: "Beginner",      time: "Week 1–4",    prereq: [],                   state: "mastered",    pos: { x: 8,  y: 50 }, img: pushupFrame(45), desc: "Build a strong pressing foundation — the entry point to every pushing skill.",          insight: "Own full range before chasing volume — depth is what builds the press." },
-    { id: "pull-up",     name: "Pull-Up",     tier: "Strength",   difficulty: "Beginner",      time: "6–12 Weeks",  prereq: ["push-up"],          state: "mastered",    pos: { x: 37, y: 26 }, img: muscleup(15),    desc: "Unlock pulling strength. The single most important calisthenics milestone.",            insight: "Band-assisted reps and slow negatives get you to your first rep fastest." },
-    { id: "l-sit",       name: "L-Sit",       tier: "Control",    difficulty: "Intermediate",  time: "2–4 Months",  prereq: ["push-up"],          state: "in-progress", pos: { x: 37, y: 74 }, img: pushupFrame(60), desc: "Core compression and straight-arm strength. The gateway to every static hold.",         insight: "Start tucked, then one leg. Straight legs are the last 10% — earn the compression." },
-    { id: "muscle-up",   name: "Muscle-Up",   tier: "Advanced",   difficulty: "Advanced",      time: "4–12 Months", prereq: ["pull-up"],          state: "available",   pos: { x: 68, y: 14 }, img: muscleup(55),    desc: "Explosive pulling into a transition above the bar. The classic ultimate goal.",         insight: "Explosive high pull-ups + straight-bar dips unlock the transition over the bar." },
-    { id: "handstand",   name: "Handstand",   tier: "Skill",      difficulty: "Intermediate",  time: "4–8 Months",  prereq: ["l-sit"],            state: "locked",      pos: { x: 68, y: 86 }, img: null,            desc: "Balance, shoulder strength and body awareness — full inverted control.",                insight: "Wall time builds the shoulders; balance is the final layer once you're strong." },
-    { id: "front-lever", name: "Front Lever", tier: "Mastery",    difficulty: "Advanced",      time: "8+ Months",   prereq: ["pull-up", "l-sit"], state: "locked",      pos: { x: 68, y: 50 }, img: null,            desc: "Total-body tension and pulling mastery — an elite straight-arm hold.",                  insight: "Tuck → advanced tuck → straddle. Patience on the straight-arm scapular strength." },
+    { id: "push-up",     name: "Push-Up",     tier: "Foundation", difficulty: "Beginner",      time: "Week 1–4",    prereq: [],                   pos: { x: 8,  y: 50 }, img: pushupFrame(45), desc: "Build a strong pressing foundation — the entry point to every pushing skill.",          insight: "Own full range before chasing volume — depth is what builds the press." },
+    { id: "pull-up",     name: "Pull-Up",     tier: "Strength",   difficulty: "Beginner",      time: "6–12 Weeks",  prereq: ["push-up"],          pos: { x: 37, y: 26 }, img: muscleup(15),    desc: "Unlock pulling strength. The single most important calisthenics milestone.",            insight: "Band-assisted reps and slow negatives get you to your first rep fastest." },
+    { id: "l-sit",       name: "L-Sit",       tier: "Control",    difficulty: "Intermediate",  time: "2–4 Months",  prereq: ["push-up"],          pos: { x: 37, y: 74 }, img: pushupFrame(60), desc: "Core compression and straight-arm strength. The gateway to every static hold.",         insight: "Start tucked, then one leg. Straight legs are the last 10% — earn the compression." },
+    { id: "muscle-up",   name: "Muscle-Up",   tier: "Advanced",   difficulty: "Advanced",      time: "4–12 Months", prereq: ["pull-up"],          pos: { x: 68, y: 14 }, img: muscleup(55),    desc: "Explosive pulling into a transition above the bar. The classic ultimate goal.",         insight: "Explosive high pull-ups + straight-bar dips unlock the transition over the bar." },
+    { id: "handstand",   name: "Handstand",   tier: "Skill",      difficulty: "Intermediate",  time: "4–8 Months",  prereq: ["l-sit"],            pos: { x: 68, y: 86 }, img: null,            desc: "Balance, shoulder strength and body awareness — full inverted control.",                insight: "Wall time builds the shoulders; balance is the final layer once you're strong." },
+    { id: "front-lever", name: "Front Lever", tier: "Mastery",    difficulty: "Advanced",      time: "8+ Months",   prereq: ["pull-up", "l-sit"], pos: { x: 68, y: 50 }, img: null,            desc: "Total-body tension and pulling mastery — an elite straight-arm hold.",                  insight: "Tuck → advanced tuck → straddle. Patience on the straight-arm scapular strength." },
   ],
 };
 
@@ -272,7 +275,7 @@ export const FACILITY = {
     { name: "Running Lane",        icon: Footprints, desc: "Sprint and movement work down the turf lane.",              media: { label: "Running lane photo", hint: "Turf sprint lane", ratio: "4/3" } },
     { name: "Turf Area",           icon: Compass,    desc: "Versatile turf for sleds, carries and functional training.",media: { label: "Turf area photo", hint: "Green turf zone", ratio: "4/3" } },
   ],
-  panorama: { label: "Wide Facility Panorama", hint: "Replace with a single wide shot showing all zones — used for the interactive hotspot map", ratio: "21/9" },
+  panorama: { img: "/facility/panorama.png", label: "Wide Facility Panorama", hint: "Single wide shot showing all zones — used for the interactive hotspot map", ratio: "21/9" },
 };
 
 // ── SECTION 11 · Community ─────────────────────────────────────────────────
