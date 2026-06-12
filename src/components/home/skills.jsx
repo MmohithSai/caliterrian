@@ -1,11 +1,14 @@
 // Sections 4–6: Skill Tree · Hall of Firsts · Member Journeys  (image-first)
-import { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Circle, CircleDot, Clock, Compass, Flame, Gauge, Heart, Map, Play, Plus, Quote, Trophy } from "lucide-react";
+import { lazy, Suspense, useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
+import { ArrowRight, Circle, CircleDot, Clock, Compass, Flame, Gauge, Map, Play, Quote } from "lucide-react";
 import { Header, MediaSlot, Section } from "./ui";
 import { reveal, stagger, vpOnce } from "./anim";
 import { SKILLS, HALL_OF_FIRSTS, COMMUNITY } from "@/data/home";
-import GlareHover from "@/components/reactbits/GlareHover";
+
+// Three.js + GSAP land in their own chunk, fetched only when the section nears
+// the viewport.
+const HallOfFirstsGallery3D = lazy(() => import("./HallOfFirstsGallery3D"));
 
 // Difficulty → presentation map for the skill graph (icon + modifier class).
 const LEVEL_META = {
@@ -228,55 +231,12 @@ export function HallOfFirstsSection({ onBookTrial }) {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <Header eyebrow={HALL_OF_FIRSTS.eyebrow} lines={HALL_OF_FIRSTS.title} sub={HALL_OF_FIRSTS.sub} maxSub="max-w-2xl" />
         <span className="mb-12 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6]">
-          <span className="ct-live-dot relative flex h-2 w-2 rounded-full bg-[#2E8DFF]" /> Live feed · scroll →
+          <span className="ct-live-dot relative flex h-2 w-2 rounded-full bg-[#2E8DFF]" /> Live wall · drag to explore
         </span>
       </div>
 
-      {/* Horizontal achievement stream */}
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={vpOnce}
-        variants={stagger}
-        className="ct-feed -mx-6 flex snap-x gap-4 overflow-x-auto px-6 pb-3"
-      >
-        {HALL_OF_FIRSTS.items.map((item) => (
-          <motion.div key={item.id} variants={reveal} className="group w-[200px] shrink-0 snap-start overflow-hidden rounded-sm border border-[#1E2A38]">
-            {/* React Bits GlareHover: light sweep across each achievement card */}
-            <GlareHover className="h-full">
-            <MediaSlot media={{ ...item.media, ratio: "4/5" }} align="" scrim="ct-media__scrim--full">
-              <div className="flex items-start justify-between">
-                <span className="inline-flex items-center gap-1 bg-[#2E8DFF] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
-                  <Trophy className="h-2.5 w-2.5" /> {item.milestone}
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur">
-                  <Heart className="h-2.5 w-2.5 fill-[#2E8DFF] text-[#2E8DFF]" /> {item.reactions}
-                </span>
-              </div>
-              <div className="mt-auto">
-                <h3 className="font-heading text-lg leading-none tracking-wide text-white">{item.name}</h3>
-                <p className="mt-1 text-[10px] uppercase tracking-widest text-[#C6D2DF]/80">{item.date}</p>
-              </div>
-            </MediaSlot>
-            </GlareHover>
-          </motion.div>
-        ))}
-
-        {/* "You're next" ghost card */}
-        <motion.button
-          variants={reveal}
-          onClick={onBookTrial}
-          className="group flex w-[200px] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-sm border border-dashed border-[#2E8DFF]/50 bg-[#0E141C] p-5 text-center transition-colors hover:border-[#2E8DFF] hover:bg-[#131B25]"
-        >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#2E8DFF]/50 text-[#2E8DFF] transition-transform group-hover:scale-110">
-            <Plus className="h-6 w-6" />
-          </span>
-          <span className="font-heading text-lg leading-tight tracking-wide text-white">Your milestone<br />starts here</span>
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-widest text-[#2E8DFF]">
-            Book Trial <ArrowRight className="h-3 w-3" />
-          </span>
-        </motion.button>
-      </motion.div>
+      {/* Spherical milestone wall — drag to look around, click a first to open it */}
+      <HallGalleryMount onBookTrial={onBookTrial} />
 
       {/* Community — folded in: the feed is where the culture lives */}
       <div className="mt-12 border-t border-[#1E2A38] pt-10">
@@ -328,6 +288,32 @@ export function HallOfFirstsSection({ onBookTrial }) {
         </button>
       </motion.div>
     </Section>
+  );
+}
+
+// Defers the WebGL chunk until the section is close to the viewport, then
+// keeps a sized placeholder so the page never jumps while it loads.
+function HallGalleryMount({ onBookTrial }) {
+  const ref = useRef(null);
+  const near = useInView(ref, { once: true, margin: "600px 0px" });
+  return (
+    <div ref={ref}>
+      {near ? (
+        <Suspense fallback={<HallGalleryPlaceholder />}>
+          <HallOfFirstsGallery3D onBookTrial={onBookTrial} />
+        </Suspense>
+      ) : (
+        <HallGalleryPlaceholder />
+      )}
+    </div>
+  );
+}
+
+function HallGalleryPlaceholder() {
+  return (
+    <div className="flex h-[80vh] min-h-[560px] w-full items-center justify-center rounded-lg border border-[#1E2A38] bg-[#05080D] sm:h-[88vh]">
+      <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">Loading experience…</span>
+    </div>
   );
 }
 
