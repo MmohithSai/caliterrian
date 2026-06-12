@@ -622,15 +622,9 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
 
       {/* ── Explore UI ── */}
       <div className={`pointer-events-none absolute inset-0 z-20 transition-opacity duration-500 ${focused ? "opacity-0" : "opacity-100"}`}>
-        {/* Live badge — top left */}
-        <div className="absolute left-5 top-5 flex items-center gap-2 sm:left-8 sm:top-7">
-          <span className="ct-live-dot relative flex h-2 w-2 rounded-full bg-[#2E8DFF]" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/70">Live Wall</span>
-        </div>
-
         {/* Count — top right */}
         <div className="absolute right-5 top-5 text-[10px] font-bold uppercase tracking-[0.28em] text-white/40 sm:right-8 sm:top-7">
-          {ENTRIES.length} Firsts · This Season
+          {ENTRIES.length} Firsts
         </div>
 
         {/* Drag hint — bottom centre pill */}

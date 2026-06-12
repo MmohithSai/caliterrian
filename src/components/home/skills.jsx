@@ -231,7 +231,7 @@ export function HallOfFirstsSection({ onBookTrial }) {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <Header eyebrow={HALL_OF_FIRSTS.eyebrow} lines={HALL_OF_FIRSTS.title} sub={HALL_OF_FIRSTS.sub} maxSub="max-w-2xl" />
         <span className="mb-12 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6]">
-          <span className="ct-live-dot relative flex h-2 w-2 rounded-full bg-[#2E8DFF]" /> Live wall · drag to explore
+          Drag to explore
         </span>
       </div>
 
