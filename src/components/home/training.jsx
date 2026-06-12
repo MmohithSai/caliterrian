@@ -5,6 +5,7 @@ import { ArrowRight, Check, Quote, Trophy } from "lucide-react";
 import { Header, MediaSlot, Section } from "./ui";
 import { reveal, stagger, vpOnce } from "./anim";
 import { FIRST_SESSION, DISCIPLINES, COACHES } from "@/data/home";
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 
 // ── SECTION 7 · First Session — photo-backed step flow w/ arrow connectors ─
 function StepCard({ step }) {
@@ -96,46 +97,58 @@ export function FirstSessionSection({ onBookTrial }) {
   );
 }
 
-// ── SECTION 8 · Training Disciplines — bento mosaic (varied density) ───────
+// ── SECTION 8 · Training Disciplines — infinite moving cards (marquee) ─────
+// Aceternity infinite-moving-cards (src/components/ui/) with discipline cards
+// rendered through MediaSlot so each picks up its real photo once wired in
+// home.js. Pauses on hover; edges fade via mask. Cards link to /programs.
+function DisciplineCard({ d }) {
+  const Icon = d.icon;
+  return (
+    <Link to="/programs" className="group block w-[300px] overflow-hidden rounded-2xl border border-[#1E2A38] md:w-[420px]">
+      <MediaSlot media={{ ...d.media, ratio: "3/2" }} align="" scrim="ct-media__scrim--full">
+        <div className="flex">
+          <span className="flex h-9 w-9 items-center justify-center rounded-sm border border-[#2E8DFF]/40 bg-[#0B1016]/70 text-[#2E8DFF] backdrop-blur">
+            <Icon className="h-4 w-4" />
+          </span>
+        </div>
+        <div className="mt-auto">
+          <h3 className="font-heading text-xl tracking-wide text-white md:text-2xl">{d.name}</h3>
+          <p className="mt-1 text-[11px] leading-snug text-[#C6D2DF] md:text-xs">{d.desc}</p>
+          <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[#2E8DFF] transition-transform group-hover:translate-x-1">
+            Learn More <ArrowRight className="h-3 w-3" />
+          </span>
+        </div>
+      </MediaSlot>
+    </Link>
+  );
+}
+
 export function DisciplinesSection() {
   return (
     <Section id="disciplines" className="bg-[#0E141C]">
       <Header eyebrow={DISCIPLINES.eyebrow} lines={DISCIPLINES.title} sub={DISCIPLINES.sub} />
 
+      <motion.div initial="hidden" whileInView="visible" viewport={vpOnce} variants={reveal}>
+        <InfiniteMovingCards
+          items={DISCIPLINES.items}
+          direction="right"
+          speed="slow"
+          pauseOnHover
+          className="mx-auto"
+          renderItem={(d) => <DisciplineCard d={d} />}
+        />
+      </motion.div>
+
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={vpOnce}
-        variants={stagger}
-        className="grid auto-rows-[190px] grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+        variants={reveal}
+        className="mt-8 flex justify-center"
       >
-        {DISCIPLINES.items.map((d) => {
-          const Icon = d.icon;
-          return (
-            <motion.div
-              key={d.name}
-              variants={reveal}
-              className={`group overflow-hidden rounded-sm border border-[#1E2A38] ${d.featured ? "row-span-2 sm:col-span-2" : ""}`}
-            >
-              <Link to="/programs" className="block h-full">
-                <MediaSlot media={{ ...d.media, ratio: undefined }} align="" scrim="ct-media__scrim--full" className="h-full">
-                  <div className="flex">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-sm border border-[#2E8DFF]/40 bg-[#0B1016]/70 text-[#2E8DFF] backdrop-blur">
-                      <Icon className="h-4 w-4" />
-                    </span>
-                  </div>
-                  <div className="mt-auto">
-                    <h3 className={`font-heading tracking-wide text-white ${d.featured ? "text-2xl sm:text-3xl" : "text-lg"}`}>{d.name}</h3>
-                    <p className={`mt-1 leading-snug text-[#C6D2DF] ${d.featured ? "text-sm" : "text-[11px]"}`}>{d.desc}</p>
-                    <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[#2E8DFF] transition-transform group-hover:translate-x-1">
-                      Learn More <ArrowRight className="h-3 w-3" />
-                    </span>
-                  </div>
-                </MediaSlot>
-              </Link>
-            </motion.div>
-          );
-        })}
+        <Link to="/programs" className="btn-secondary text-xs">
+          Explore All Programs <ArrowRight className="h-4 w-4" />
+        </Link>
       </motion.div>
     </Section>
   );
