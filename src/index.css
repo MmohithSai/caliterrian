@@ -1109,3 +1109,16 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .ct-gallery-rise { animation: none; opacity: 1; }
 }
+
+/* ── 3D facility gallery: featured-card text rise (re-runs via React key) ── */
+@keyframes ct-gallery-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ct-gallery-rise {
+  opacity: 0;
+  animation: ct-gallery-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ct-gallery-rise { animation: none; opacity: 1; }
+}

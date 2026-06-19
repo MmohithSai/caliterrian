@@ -1,11 +1,15 @@
 // Section 10: Facility Experience — interactive hotspot panorama
 // (Community → folded into Hall of Firsts; Why Members Stay → folded into Results.)
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, Plus } from "lucide-react";
+import { lazy, Suspense, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { Plus } from "lucide-react";
 import { Header, MediaSlot, Section } from "./ui";
-import { reveal, stagger, vpOnce } from "./anim";
+import { reveal, vpOnce } from "./anim";
 import { FACILITY } from "@/data/home";
+
+// Three.js + GSAP land in their own chunk, fetched only when the section nears
+// the viewport.
+const FacilityGallery3D = lazy(() => import("./FacilityGallery3D"));
 
 const PIN_POS = [
   { left: "16%", top: "62%" }, { left: "34%", top: "40%" }, { left: "50%", top: "70%" },
@@ -62,42 +66,34 @@ export function FacilitySection() {
         </div>
       </motion.div>
 
-      {/* Zone selector grid — clicking a tile drives the panorama detail card */}
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={vpOnce}
-        variants={stagger}
-        className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5"
-      >
-        {zones.map((zone, i) => {
-          const Icon = zone.icon;
-          return (
-            <motion.button
-              key={zone.name}
-              variants={reveal}
-              onMouseEnter={() => i < PIN_POS.length && setActive(i)}
-              onClick={() => i < PIN_POS.length && setActive(i)}
-              className={`group overflow-hidden rounded-sm border text-left transition-colors ${active === i ? "border-[#2E8DFF]" : "border-[#1E2A38] hover:border-[#2E8DFF]/50"}`}
-            >
-              <MediaSlot media={{ ...zone.media, ratio: "1/1" }} align="" scrim="ct-media__scrim--full">
-                <div className="flex">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-sm border border-[#2E8DFF]/40 bg-[#0B1016]/70 text-[#2E8DFF] backdrop-blur">
-                    <Icon className="h-4 w-4" />
-                  </span>
-                </div>
-                <div className="mt-auto">
-                  <h3 className="font-heading text-base leading-none tracking-wide text-white">{zone.name}</h3>
-                  <p className="mt-1 text-[10px] leading-snug text-[#C6D2DF]">{zone.desc}</p>
-                  <span className="mt-1.5 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-[#2E8DFF]">
-                    Explore <ArrowRight className="h-2.5 w-2.5" />
-                  </span>
-                </div>
-              </MediaSlot>
-            </motion.button>
-          );
-        })}
-      </motion.div>
+      {/* Immersive 3D zone gallery — drag to orbit, click a card to step inside */}
+      <GalleryMount />
     </Section>
+  );
+}
+
+// Defers the WebGL chunk until the section is close to the viewport, then
+// keeps a sized placeholder so the page never jumps while it loads.
+function GalleryMount() {
+  const ref = useRef(null);
+  const near = useInView(ref, { once: true, margin: "600px 0px" });
+  return (
+    <div ref={ref} className="mt-8">
+      {near ? (
+        <Suspense fallback={<GalleryPlaceholder />}>
+          <FacilityGallery3D />
+        </Suspense>
+      ) : (
+        <GalleryPlaceholder />
+      )}
+    </div>
+  );
+}
+
+function GalleryPlaceholder() {
+  return (
+    <div className="flex h-[78vh] min-h-[540px] w-full items-center justify-center rounded-lg border border-[#1E2A38] bg-[#05080D] sm:h-[86vh]">
+      <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">Loading experience…</span>
+    </div>
   );
 }
