@@ -11,9 +11,12 @@ import { FACILITY } from "@/data/home";
 // the viewport.
 const FacilityGallery3D = lazy(() => import("./FacilityGallery3D"));
 
+// Pin placement matched to /facility/panorama.jpg (IMG_4006 wide shot):
+// mobility mats right of the mirror, strength lab through the left doorway,
+// performance lane down the turf, rig platform center, monkey bars overhead.
 const PIN_POS = [
-  { left: "16%", top: "62%" }, { left: "34%", top: "40%" }, { left: "50%", top: "70%" },
-  { left: "64%", top: "38%" }, { left: "78%", top: "58%" }, { left: "88%", top: "44%" },
+  { left: "84%", top: "62%" }, { left: "25%", top: "44%" }, { left: "32%", top: "72%" },
+  { left: "62%", top: "36%" }, { left: "55%", top: "54%" }, { left: "46%", top: "26%" },
 ];
 
 // ── SECTION 10 · Facility Experience ──────────────────────────────────────
@@ -29,7 +32,7 @@ export function FacilitySection() {
 
       {/* Cinematic panorama with parallax + interactive zone hotspots */}
       <motion.div initial="hidden" whileInView="visible" viewport={vpOnce} variants={reveal} className="relative overflow-hidden rounded-sm border border-[#1E2A38]">
-        <MediaSlot media={FACILITY.panorama} parallax scrim="ct-media__scrim--full">
+        <MediaSlot media={FACILITY.panorama} img={FACILITY.panorama.img} parallax scrim="ct-media__scrim--full">
           {zones.slice(0, PIN_POS.length).map((zone, i) => (
             <button
               key={zone.name}
@@ -54,7 +57,7 @@ export function FacilitySection() {
         {/* Hotspot detail card (desktop overlay) */}
         <div className="pointer-events-none absolute right-3 top-3 z-20 hidden w-60 border border-[#2E8DFF]/40 bg-[#0B1016]/90 p-3 backdrop-blur sm:block">
           <div className="overflow-hidden rounded-sm">
-            <MediaSlot media={{ ...activeZone.media, ratio: "16/9" }} align="" showLabel={false} />
+            <MediaSlot media={{ ...activeZone.media, ratio: "16/9" }} img={activeZone.media.img} align="" showLabel={false} />
           </div>
           <div className="mt-3 flex items-center gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-sm border border-[#2E8DFF]/40 text-[#2E8DFF]">

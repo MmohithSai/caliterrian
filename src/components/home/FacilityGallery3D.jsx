@@ -42,6 +42,14 @@ const CARDS = [
     img: "/facility/cards/freestyle-area.jpg",
     features: ["Monkey bars & parallel bars", "Crash mats for safe skill work", "Open floor for freestyle flow"],
   },
+  {
+    id: "mobility-zone",
+    title: "Mobility Zone",
+    tag: "Mobility · Recovery",
+    desc: "Turf, mats and wall bars for the work that keeps you moving — restore range and build the foundation your body needs.",
+    img: "/facility/cards/mobility-zone.jpg",
+    features: ["Open turf + mat space", "Wall bars for deep positions", "Mobility tools & soft landings"],
+  },
 ];
 
 // ── Scene constants ────────────────────────────────────────────────────────

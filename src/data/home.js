@@ -264,18 +264,18 @@ export const FACILITY = {
   title: ["Explore The Space.", "Experience The Difference."],
   sub: "More than a gym. A fully-designed training ecosystem built for every stage of your journey.",
   zones: [
-    { name: "Mobility Zone",       icon: HeartPulse, desc: "Restore range and build the foundation your body needs.", media: { label: "Mobility zone photo", hint: "Turf + mobility tools", ratio: "4/3" } },
-    { name: "Strength Lab",        icon: Dumbbell,   desc: "Free weights, machines and structured strength training.",  media: { label: "Strength lab photo", hint: "Racks + free weights", ratio: "4/3" } },
-    { name: "Performance Lane",    icon: Gauge,      desc: "Conditioning, sprints and athletic performance.",           media: { label: "Performance lane photo", hint: "Turf running lane + sled", ratio: "4/3" } },
-    { name: "Skill Arena",         icon: Sparkles,   desc: "Calisthenics, skills and advanced movement under the rig.", media: { label: "Skill arena photo", hint: "Blue pull-up rig", ratio: "4/3" } },
-    { name: "Freestyle Area",      icon: Waypoints,  desc: "Open space to flow, express and train creative movement.",  media: { label: "Freestyle area photo", hint: "Open bar area", ratio: "4/3" } },
-    { name: "Monkey Bars",         icon: Footprints, desc: "Grip, swing and upper-body coordination.",                  media: { label: "Monkey bars photo", hint: "Overhead monkey bars", ratio: "4/3" } },
+    { name: "Mobility Zone",       icon: HeartPulse, desc: "Restore range and build the foundation your body needs.", media: { img: "/facility/cards/mobility-zone.jpg", label: "Mobility zone photo", hint: "Turf + mobility tools", ratio: "4/3" } },
+    { name: "Strength Lab",        icon: Dumbbell,   desc: "Free weights, machines and structured strength training.",  media: { img: "/facility/cards/strength-lab.jpg", label: "Strength lab photo", hint: "Racks + free weights", ratio: "4/3" } },
+    { name: "Performance Lane",    icon: Gauge,      desc: "Conditioning, sprints and athletic performance.",           media: { img: "/facility/cards/performance-lane.jpg", label: "Performance lane photo", hint: "Turf running lane + sled", ratio: "4/3" } },
+    { name: "Skill Arena",         icon: Sparkles,   desc: "Calisthenics, skills and advanced movement under the rig.", media: { img: "/facility/cards/skill-arena.jpg", label: "Skill arena photo", hint: "Blue pull-up rig", ratio: "4/3" } },
+    { name: "Freestyle Area",      icon: Waypoints,  desc: "Open space to flow, express and train creative movement.",  media: { img: "/facility/cards/freestyle-area.jpg", label: "Freestyle area photo", hint: "Open bar area", ratio: "4/3" } },
+    { name: "Monkey Bars",         icon: Footprints, desc: "Grip, swing and upper-body coordination.",                  media: { img: "/facility/cards/monkey-bars.jpg", label: "Monkey bars photo", hint: "Overhead monkey bars", ratio: "4/3" } },
     { name: "Parallel Bars",       icon: Repeat,     desc: "Dips, holds and upper-body strength work.",                 media: { label: "Parallel bars photo", hint: "Parallettes / P-bars", ratio: "4/3" } },
     { name: "SkiErgs",             icon: Activity,   desc: "High-intensity conditioning for power and endurance.",      media: { label: "SkiErg photo", hint: "Row of SkiErgs", ratio: "4/3" } },
     { name: "Running Lane",        icon: Footprints, desc: "Sprint and movement work down the turf lane.",              media: { label: "Running lane photo", hint: "Turf sprint lane", ratio: "4/3" } },
     { name: "Turf Area",           icon: Compass,    desc: "Versatile turf for sleds, carries and functional training.",media: { label: "Turf area photo", hint: "Green turf zone", ratio: "4/3" } },
   ],
-  panorama: { img: "/facility/panorama.png", label: "Wide Facility Panorama", hint: "Single wide shot showing all zones — used for the interactive hotspot map", ratio: "21/9" },
+  panorama: { img: "/facility/panorama.jpg", label: "Wide Facility Panorama", hint: "Single wide shot showing all zones — used for the interactive hotspot map", ratio: "21/9" },
 };
 
 // ── SECTION 11 · Community ─────────────────────────────────────────────────
