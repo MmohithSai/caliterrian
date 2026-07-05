@@ -8,7 +8,7 @@ import { useImageSequenceCanvas } from "@/lib/imageSequence";
    Frame Configuration
    66 pre-graded cinematic JPG frames (1920x1080, ~150KB each).
    Color grade, vignette, atmospheric blur, vertical bbox-tracking
-   crop and teal rim light are all baked in — the canvas just blits
+   crop and blue rim light are all baked in — the canvas just blits
    each frame, which keeps scrolling at 60 fps.
    ────────────────────────────────────────────────────────── */
 const HERO_FRAME_COUNT = 66;
@@ -107,12 +107,12 @@ function HeroStatic({ onBookTrial }) {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 70% 55% at 50% 45%, rgba(46,196,182,0.14), transparent 70%)",
+            "radial-gradient(ellipse 70% 55% at 50% 45%, rgba(46,141,255,0.14), transparent 70%)",
         }}
       />
       <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
         <h1 className="hero-brand-text font-heading text-white">
-          CALI<span className="text-[#2EC4B6]">TERRAIN</span>
+          CALI<span className="text-[#2E8DFF]">TERRAIN</span>
         </h1>
         <p className="hero-subtitle max-w-lg text-zinc-300">
           Master your body. Redefine your limits.
@@ -120,7 +120,7 @@ function HeroStatic({ onBookTrial }) {
         <div className="mt-2 flex flex-col items-center gap-4 sm:flex-row">
           <button
             onClick={onBookTrial}
-            className="hero-cta-primary kinetic-button inline-flex items-center gap-2 bg-[#2EC4B6] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#25A599]"
+            className="hero-cta-primary kinetic-button inline-flex items-center gap-2 bg-[#2E8DFF] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#1F6FE0]"
           >
             Book Free Trial <ChevronRight className="h-4 w-4" />
           </button>
@@ -155,7 +155,7 @@ function HeroAnimated({ onBookTrial }) {
   // Overall cinematic zoom: entire canvas scales subtly
   const canvasScale = useTransform(smoothed, [0, 1], [1.0, 1.04]);
 
-  // Teal glow intensifies at peak muscle-up
+  // Blue glow intensifies at peak muscle-up
   const glowOpacity = useTransform(
     smoothed,
     [0, 0.3, 0.6, 0.85, 1],
@@ -189,7 +189,7 @@ function HeroAnimated({ onBookTrial }) {
   const introOpacity = useTransform(smoothed, [0, 0.035, 0.055], [1, 1, 0]);
   const introY = useTransform(smoothed, [0, 0.055], [0, -28]);
   const introScale = useTransform(smoothed, [0, 0.06], [1, 0.96]);
-  // Soft teal-on-dark radial backdrop gives the brand a stage at scroll = 0
+  // Soft blue-on-dark radial backdrop gives the brand a stage at scroll = 0
   // without flat black; fades as the cinematic frame takes over.
   const introBackdropOpacity = useTransform(smoothed, [0, 0.08], [1, 0]);
 
@@ -243,7 +243,7 @@ function HeroAnimated({ onBookTrial }) {
         <div className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-24 bg-gradient-to-r from-[#0A0A0A]/50 to-transparent sm:w-40" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-24 bg-gradient-to-l from-[#0A0A0A]/50 to-transparent sm:w-40" />
 
-        {/* Teal atmospheric glow — peaks during transition */}
+        {/* Blue atmospheric glow — peaks during transition */}
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-[3]"
@@ -253,7 +253,7 @@ function HeroAnimated({ onBookTrial }) {
               : {
                   opacity: glowOpacity,
                   background:
-                    "radial-gradient(ellipse 60% 50% at 50% 42%, rgba(46, 196, 182, 0.25), transparent 70%)",
+                    "radial-gradient(ellipse 60% 50% at 50% 42%, rgba(46, 141, 255, 0.25), transparent 70%)",
                 }
           }
         />
@@ -261,7 +261,7 @@ function HeroAnimated({ onBookTrial }) {
         {/* Cinematic grain overlay via CSS */}
         <div className="hero-grain pointer-events-none absolute inset-0 z-[4]" />
 
-        {/* ── Intro backdrop: soft teal radial over the dead-hang frame
+        {/* ── Intro backdrop: soft blue radial over the dead-hang frame
               so the brand has a stage at scroll = 0. Fades as the user
               begins scrolling and the cinematic takes over. ── */}
         <motion.div
@@ -273,7 +273,7 @@ function HeroAnimated({ onBookTrial }) {
               : {
                   opacity: introBackdropOpacity,
                   background:
-                    "radial-gradient(ellipse 80% 65% at 50% 48%, rgba(46, 196, 182, 0.12) 0%, rgba(10, 10, 10, 0.78) 65%, rgba(10, 10, 10, 0.92) 100%)",
+                    "radial-gradient(ellipse 80% 65% at 50% 48%, rgba(46, 141, 255, 0.12) 0%, rgba(10, 10, 10, 0.78) 65%, rgba(10, 10, 10, 0.92) 100%)",
                 }
           }
         />
@@ -306,7 +306,7 @@ function HeroAnimated({ onBookTrial }) {
             }
           >
             <h1 className="hero-brand-text font-heading text-white">
-              CALI<span className="text-[#2EC4B6]">TERRAIN</span>
+              CALI<span className="text-[#2E8DFF]">TERRAIN</span>
             </h1>
             <motion.p
               className="hero-subtitle max-w-lg text-center text-zinc-300"
@@ -331,7 +331,7 @@ function HeroAnimated({ onBookTrial }) {
           <div className="flex flex-col items-center gap-4 sm:flex-row">
             <button
               onClick={onBookTrial}
-              className="hero-cta-primary kinetic-button pointer-events-auto inline-flex items-center gap-2 bg-[#2EC4B6] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#25A599]"
+              className="hero-cta-primary kinetic-button pointer-events-auto inline-flex items-center gap-2 bg-[#2E8DFF] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#1F6FE0]"
             >
               Book Free Trial <ChevronRight className="h-4 w-4" />
             </button>
@@ -381,7 +381,7 @@ function HeroAnimated({ onBookTrial }) {
           <div className="mt-2 flex flex-col items-center gap-4 sm:flex-row">
             <button
               onClick={onBookTrial}
-              className="hero-cta-primary kinetic-button pointer-events-auto inline-flex items-center gap-2 bg-[#2EC4B6] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#25A599]"
+              className="hero-cta-primary kinetic-button pointer-events-auto inline-flex items-center gap-2 bg-[#2E8DFF] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#1F6FE0]"
             >
               Book Free Trial <ChevronRight className="h-4 w-4" />
             </button>
@@ -397,7 +397,7 @@ function HeroAnimated({ onBookTrial }) {
         {/* ── Progress bar ── */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[7] h-[2px] bg-white/5">
           <motion.div
-            className="h-full bg-[#2EC4B6]"
+            className="h-full bg-[#2E8DFF]"
             style={{ scaleX: progressScale, transformOrigin: "0 50%" }}
           />
         </div>
@@ -409,7 +409,7 @@ function HeroAnimated({ onBookTrial }) {
 /* ──────────────────────────────────────────────────────────
    HeroPhase — cinematic broadcast HUD per movement phase
    Layered reveal: chapter index (top-left) -> phase label
-   (top-right) -> split-letter headline (center) -> teal
+   (top-right) -> split-letter headline (center) -> blue
    underline grow -> subtitle. Each layer has staggered enter
    + faster exit. Reduced-motion just shows the active phase
    statically with a hard opacity envelope.
@@ -454,7 +454,7 @@ function HeroPhase({
     [40, 0, 0, 32]
   );
 
-  // Teal tick line under label — grows then shrinks.
+  // Blue tick line under label — grows then shrinks.
   const tickScale = useTransform(
     smoothed,
     [start + span * 0.04, start + span * 0.18, end - span * 0.18, end],
@@ -529,7 +529,7 @@ function HeroPhase({
           ))}
         </h2>
 
-        {/* Teal underline accent */}
+        {/* Blue underline accent */}
         <motion.span
           className="hero-phase-underline"
           style={

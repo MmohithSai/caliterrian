@@ -3,14 +3,14 @@ import { X } from "lucide-react";
 import { WhatsAppIcon as WhatsApp } from "@/components/icons";
 
 const SEGMENTS = [
-  { num: 1, label: "10% OFF Membership", color: "#2EC4B6", text: "white" },
-  { num: 2, label: "Do 10 Push-ups for 15% OFF", color: "#1A1A1A", text: "#2EC4B6" },
-  { num: 3, label: "Free Trial Week", color: "#25A599", text: "white" },
-  { num: 4, label: "5% OFF", color: "#1A1A1A", text: "#2EC4B6" },
-  { num: 5, label: "Do 5 Pull-ups for 20% OFF", color: "#2EC4B6", text: "white" },
-  { num: 6, label: "Free Cali Terrain T-shirt", color: "#1A1A1A", text: "#2EC4B6" },
-  { num: 7, label: "3-Day Free Pass", color: "#25A599", text: "white" },
-  { num: 8, label: "30s Handstand for 25% OFF", color: "#1A1A1A", text: "#2EC4B6" },
+  { num: 1, label: "10% OFF Membership", color: "#2E8DFF", text: "white" },
+  { num: 2, label: "Do 10 Push-ups for 15% OFF", color: "#1A2230", text: "#2E8DFF" },
+  { num: 3, label: "Free Trial Week", color: "#1F6FE0", text: "white" },
+  { num: 4, label: "5% OFF", color: "#1A2230", text: "#2E8DFF" },
+  { num: 5, label: "Do 5 Pull-ups for 20% OFF", color: "#2E8DFF", text: "white" },
+  { num: 6, label: "Free Cali Terrain T-shirt", color: "#1A2230", text: "#2E8DFF" },
+  { num: 7, label: "3-Day Free Pass", color: "#1F6FE0", text: "white" },
+  { num: 8, label: "30s Handstand for 25% OFF", color: "#1A2230", text: "#2E8DFF" },
 ];
 
 export default function SpinWheel({ open, onClose }) {
@@ -53,20 +53,20 @@ export default function SpinWheel({ open, onClose }) {
       onClick={onClose}
     >
       <div
-        className="relative bg-[#0D0D0D] border border-white/10 p-6 sm:p-8 max-w-md w-full text-center"
+        className="relative bg-[#0E141C] border border-white/10 p-6 sm:p-8 max-w-md w-full text-center"
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} data-testid="spin-wheel-close" className="absolute top-4 right-4 text-zinc-500 hover:text-white">
+        <button onClick={onClose} data-testid="spin-wheel-close" className="absolute top-4 right-4 text-[#8A99AB] hover:text-white">
           <X className="w-5 h-5" />
         </button>
 
-        <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#2EC4B6] mb-2">New Member Offer</p>
+        <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#2E8DFF] mb-2">New Member Offer</p>
         <h2 className="font-heading text-3xl text-white mb-6">SPIN THE WHEEL</h2>
 
         {/* Wheel */}
         <div className="relative mx-auto w-72 h-72 sm:w-80 sm:h-80 mb-6">
           {/* Pointer */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 z-10 w-0 h-0 border-l-[12px] border-r-[12px] border-t-[24px] border-l-transparent border-r-transparent border-t-[#2EC4B6]" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 z-10 w-0 h-0 border-l-[12px] border-r-[12px] border-t-[24px] border-l-transparent border-r-transparent border-t-[#2E8DFF]" />
 
           {/* Wheel SVG */}
           <svg
@@ -115,8 +115,8 @@ export default function SpinWheel({ open, onClose }) {
                 </g>
               );
             })}
-            <circle cx="150" cy="150" r="22" fill="#0A0A0A" stroke="#2EC4B6" strokeWidth="3" />
-            <text x="150" y="150" fill="#2EC4B6" fontSize="10" fontWeight="bold" textAnchor="middle" dominantBaseline="central">CT</text>
+            <circle cx="150" cy="150" r="22" fill="#0A0A0A" stroke="#2E8DFF" strokeWidth="3" />
+            <text x="150" y="150" fill="#2E8DFF" fontSize="10" fontWeight="bold" textAnchor="middle" dominantBaseline="central">CT</text>
           </svg>
         </div>
 
@@ -131,9 +131,9 @@ export default function SpinWheel({ open, onClose }) {
           </button>
         ) : (
           <div className="space-y-4">
-            <div className="bg-[#2EC4B6]/10 border border-[#2EC4B6]/40 p-4">
-              <p className="text-xs uppercase tracking-widest text-zinc-500 mb-1">You got number {result.num}!</p>
-              <p data-testid="spin-wheel-result" className="font-heading text-2xl text-[#2EC4B6]">{result.label}</p>
+            <div className="bg-[#2E8DFF]/10 border border-[#2E8DFF]/40 p-4">
+              <p className="text-xs uppercase tracking-widest text-[#8A99AB] mb-1">You got number {result.num}!</p>
+              <p data-testid="spin-wheel-result" className="font-heading text-2xl text-[#2E8DFF]">{result.label}</p>
             </div>
             <button
               data-testid="spin-wheel-whatsapp-share"
@@ -144,7 +144,7 @@ export default function SpinWheel({ open, onClose }) {
             </button>
             <button
               onClick={() => setResult(null)}
-              className="text-zinc-500 text-xs hover:text-white transition-colors"
+              className="text-[#8A99AB] text-xs hover:text-white transition-colors"
             >
               Spin again
             </button>

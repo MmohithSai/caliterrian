@@ -1,5 +1,6 @@
 import SEO from "@/components/SEO";
-import { HeroSection, ProblemSection, PathSection } from "@/components/home/intro";
+import { HeroSection } from "@/components/home/hero";
+import { JourneySection } from "@/components/home/journey";
 import { SkillTreeSection, HallOfFirstsSection } from "@/components/home/skills";
 import { FirstSessionSection, DisciplinesSection, CoachesSection } from "@/components/home/training";
 import { FacilitySection } from "@/components/home/facility";
@@ -20,8 +21,7 @@ export default function Home({ onBookTrial }) {
       <SEO path="/" />
 
       <HeroSection onBookTrial={onBookTrial} />            {/* 1  Hero */}
-      <ProblemSection />                                   {/* 2  The Problem */}
-      <PathSection />                                      {/* 3  The Caliterrain Path */}
+      <JourneySection />                                   {/* 2  A Journey That Builds You */}
       <SkillTreeSection onBookTrial={onBookTrial} />       {/* 4  Skill Tree */}
       <HallOfFirstsSection onBookTrial={onBookTrial} />    {/* 5  Hall of Firsts (+ Community) */}
       <FirstSessionSection onBookTrial={onBookTrial} />    {/* 6  First Session */}

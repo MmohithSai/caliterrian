@@ -92,6 +92,7 @@ export function MediaSlot({
   media,
   img,
   video,
+  videoWebm,
   className = "",
   overlay = true,
   zoom = true,
@@ -104,10 +105,23 @@ export function MediaSlot({
   children,
 }) {
   const ref = useRef(null);
+  const videoRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-7%", "7%"]);
   const style = media?.ratio ? { aspectRatio: media.ratio.replace("/", " / ") } : undefined;
   const hasAsset = Boolean(img || video);
+
+  // React doesn't reliably set the `muted` *attribute* on <video>, so Chrome's
+  // autoplay gate can block muted-autoplay and the element just sits on its
+  // (dark) poster. Force the property and kick off play() once mounted.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.defaultMuted = true;
+    const p = v.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  }, [video, videoWebm]);
   const Layer = parallax ? motion.div : "div";
   const layerProps = parallax ? { style: { y } } : {};
 
@@ -115,8 +129,11 @@ export function MediaSlot({
     <div ref={ref} className={`ct-media group/media ${hasAsset ? "" : "ct-media--placeholder"} ${className}`} style={style}>
       <Layer {...layerProps} className={`ct-media__layer ${parallax ? "ct-media__layer--parallax" : ""}`}>
         {video ? (
-          <video className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""} ${imgClassName}`} autoPlay muted loop playsInline poster={img}>
-            <source src={video} />
+          <video ref={videoRef} className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""} ${imgClassName}`} autoPlay muted loop playsInline preload="auto" poster={img}>
+            {/* H.264 MP4 first — universally hardware-decodable, most reliable
+                first paint. WebM offered second for browsers that prefer it. */}
+            <source src={video} type="video/mp4" />
+            {videoWebm && <source src={videoWebm} type="video/webm" />}
           </video>
         ) : img ? (
           <img src={img} alt="" loading="lazy" className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""} ${imgClassName}`} />

@@ -6,6 +6,8 @@
 .border-volt { border-color: #2E8DFF; }
 
 .btn-primary {
+  position: relative;
+  overflow: hidden;
   background-color: #2E8DFF;
   color: white;
   font-family: 'Manrope', sans-serif;
@@ -18,13 +20,26 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow 0.25s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   box-shadow: 0 0 20px rgba(46, 141, 255,0.3);
 }
+/* Light sweep across the face on hover */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 25%, rgba(255,255,255,0.35) 50%, transparent 75%);
+  transform: translateX(-130%);
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.btn-primary:hover::after { transform: translateX(130%); }
 .btn-primary:hover {
   background-color: #1F6FE0;
-  box-shadow: 0 0 30px rgba(46, 141, 255,0.5);
+  box-shadow: 0 8px 30px rgba(46, 141, 255,0.5);
+  transform: translateY(-2px);
 }
+.btn-primary:active { transform: translateY(0) scale(0.97); }
 .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .btn-secondary {
@@ -40,19 +55,39 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .btn-secondary:hover {
   border-color: white;
   background-color: rgba(255,255,255,0.05);
+  transform: translateY(-2px);
+}
+.btn-secondary:active { transform: translateY(0) scale(0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary, .btn-secondary { transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+  .btn-primary:hover, .btn-secondary:hover, .btn-primary:active, .btn-secondary:active { transform: none; }
+  .btn-primary::after { display: none; }
 }
 
+/* Section eyebrow — same grammar as the homepage .ct-eyebrow: a glowing
+   2px tick leading a tracked uppercase label. */
 .section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   font-family: 'Manrope', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.28em;
   color: #2E8DFF;
   margin-bottom: 12px;
+}
+.section-tag::before {
+  content: '';
+  width: 1.6rem;
+  height: 2px;
+  background: #2E8DFF;
+  box-shadow: 0 0 10px rgba(46, 141, 255, 0.6);
 }

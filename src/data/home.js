@@ -14,9 +14,9 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 import {
-  Activity, Brain, ChevronsUp, Compass, Dumbbell, Flame, Footprints,
+  Activity, BarChart3, Brain, ChevronsUp, Compass, Dumbbell, Flame, Footprints,
   Gauge, GraduationCap, HeartPulse, Layers, Medal, Move, Repeat,
-  Rocket, Route, ShieldCheck, Sparkles, Target, Timer, Trophy,
+  Rocket, Route, ShieldCheck, Sparkles, Target, Timer, TrendingUp, Trophy,
   Users, Waypoints, Wind, Zap,
 } from "lucide-react";
 
@@ -35,33 +35,23 @@ export const HERO = {
   sub: "A clear, coached path to strength, skills, mobility and athletic performance — built in a facility designed for every stage of your journey.",
   primaryCta: "Book Trial Session",
   secondaryCta: "Explore The Path",
+  // Removes the "am I fit enough?" fear right under the CTAs.
+  reassure: "No experience needed. Day one starts wherever you are.",
   // Reuses the real headline stats from site.js — no invented figures.
   trust: STATS,
-  media: { label: "Hero Facility Panorama", hint: "Replace with wide shot of the floor — blue rigs, ceiling lights, turf lane", ratio: "16/9" },
+  // Seamless FULL UNCUT facility tour from the real walkthrough footage
+  // (scripts/build-hero-cinematic.sh) — every shot, nothing trimmed:
+  // performance lane, freestyle crash mats + climbing rope, functional rig,
+  // stretching runway, squat racks + platform, dumbbell rack, conditioning
+  // corner, and the calisthenics bars. Stabilized and lightly graded so the
+  // floor stays clearly visible. `img` doubles as the <video> poster / LCP
+  // image and the reduced-motion fallback.
+  video: "/hero/facility-cinematic.mp4?v=4",
+  webm: "/hero/facility-cinematic.webm?v=4",
+  img: "/hero/facility-cinematic-poster.jpg?v=4",
 };
 
-// ── SECTION 2 · The Problem — Myth vs Reality ─────────────────────────────
-export const PROBLEM = {
-  eyebrow: "The Problem",
-  mythLabel: "Myth",
-  myth: "I need to get fit before I start.",
-  mythTail: "So they wait. And nothing changes.",
-  realityLabel: "Reality",
-  truth: ["The gym exists to", "help you get there."],
-  realitySub: "You start where you are. We build the rest — one rep, one skill at a time.",
-  resolve: "You don't have to be fit to start. You just have to start.",
-  // Photographic progression. Real movement frames illustrate the movements
-  // themselves (legitimate per the data rules); the first state is a labeled
-  // photo slot. caption = the felt experience at each step.
-  steps: [
-    { label: "Can't Hang",  caption: "Where most people begin", state: "locked", img: null,            media: { label: "Can't hang yet", hint: "Beginner struggling on the bar", ratio: "3/4" } },
-    { label: "Push-Up",     caption: "Weeks in",                 state: "done",   img: pushupFrame(45), media: { label: "Push-up", hint: "First clean push-up", ratio: "3/4" } },
-    { label: "Pull-Up",     caption: "Months in",                state: "done",   img: muscleup(20),    media: { label: "Pull-up", hint: "First pull-up on the bar", ratio: "3/4" } },
-    { label: "Muscle-Up",   caption: "Skills you'll own",        state: "done",   img: muscleup(55),    media: { label: "Muscle-up", hint: "Muscle-up over the bar", ratio: "3/4" } },
-  ],
-};
-
-// ── SECTION 3 · The Caliterrain Path ──────────────────────────────────────
+// ── SECTION 2 · The Caliterrain Path ──────────────────────────────────────
 export const PATH = {
   eyebrow: "The Caliterrain Path",
   title: ["A Structured Journey", "From Basics To Mastery."],
@@ -81,6 +71,33 @@ export const PATH = {
     { icon: GraduationCap, title: "Expert Coaching",  desc: "Coached by experienced athletes." },
     { icon: Target,      title: "Measurable Results", desc: "Track your progress and skills." },
     { icon: ShieldCheck, title: "Skills For Life",    desc: "Strength that stays with you." },
+  ],
+};
+
+// ── SECTION 2b · A Journey That Builds You (cinematic timeline) ────────────
+// One connected, left→right progression — no cards. Six stages each carry a
+// large background number, an athlete silhouette (poses get progressively more
+// impressive), a node on the glowing rail, and a minimal label. The final
+// stage (Mastery) is the only one in gold. Pillars below reuse the real Path
+// promises. Copy matches the approved comp verbatim.
+export const JOURNEY = {
+  label: "From Basics To Mastery",
+  // Heading is split so "Builds You." renders in the blue accent.
+  heading: ["A Journey That", "Builds You."],
+  paragraph: "We take you step by step from where you are today to skills you never thought possible.",
+  stages: [
+    { n: "01", pose: "standing",   icon: Users,    title: "Assessment",  desc: "Find your starting point and understand where you are." },
+    { n: "02", pose: "pushup",     icon: Layers,   title: "Foundation",  desc: "Build solid movement foundations and master the basics." },
+    { n: "03", pose: "pullup",     icon: Rocket,   title: "Strength",    desc: "Increase your strength and unlock your physical potential." },
+    { n: "04", pose: "handstand",  icon: Target,   title: "Skills",      desc: "Learn real skills with precision, control and confidence." },
+    { n: "05", pose: "ringdip",    icon: Activity, title: "Performance", desc: "Enhance performance, build endurance and move with power." },
+    { n: "06", pose: "frontlever", icon: Trophy,   title: "Mastery",     desc: "Master your body. Move with freedom for life.", gold: true },
+  ],
+  pillars: [
+    { icon: TrendingUp,  title: "Clear Progression", desc: "Always know your next step." },
+    { icon: Users,       title: "Expert Coaching",   desc: "Learn from experienced athletes." },
+    { icon: BarChart3,   title: "Measurable Results", desc: "Track progress and see real changes." },
+    { icon: ShieldCheck, title: "Skills For Life",   desc: "Build strength, confidence and discipline." },
   ],
 };
 
@@ -264,18 +281,18 @@ export const FACILITY = {
   title: ["Explore The Space.", "Experience The Difference."],
   sub: "More than a gym. A fully-designed training ecosystem built for every stage of your journey.",
   zones: [
-    { name: "Mobility Zone",       icon: HeartPulse, desc: "Restore range and build the foundation your body needs.", media: { img: "/facility/cards/mobility-zone.jpg", label: "Mobility zone photo", hint: "Turf + mobility tools", ratio: "4/3" } },
-    { name: "Strength Lab",        icon: Dumbbell,   desc: "Free weights, machines and structured strength training.",  media: { img: "/facility/cards/strength-lab.jpg", label: "Strength lab photo", hint: "Racks + free weights", ratio: "4/3" } },
-    { name: "Performance Lane",    icon: Gauge,      desc: "Conditioning, sprints and athletic performance.",           media: { img: "/facility/cards/performance-lane.jpg", label: "Performance lane photo", hint: "Turf running lane + sled", ratio: "4/3" } },
-    { name: "Skill Arena",         icon: Sparkles,   desc: "Calisthenics, skills and advanced movement under the rig.", media: { img: "/facility/cards/skill-arena.jpg", label: "Skill arena photo", hint: "Blue pull-up rig", ratio: "4/3" } },
-    { name: "Freestyle Area",      icon: Waypoints,  desc: "Open space to flow, express and train creative movement.",  media: { img: "/facility/cards/freestyle-area.jpg", label: "Freestyle area photo", hint: "Open bar area", ratio: "4/3" } },
-    { name: "Monkey Bars",         icon: Footprints, desc: "Grip, swing and upper-body coordination.",                  media: { img: "/facility/cards/monkey-bars.jpg", label: "Monkey bars photo", hint: "Overhead monkey bars", ratio: "4/3" } },
+    { name: "Mobility Zone",       icon: HeartPulse, desc: "Restore range and build the foundation your body needs.", media: { img: "/facility/cards/mobility-zone.jpg?v=2", label: "Mobility zone photo", hint: "Turf + mobility tools", ratio: "4/3" } },
+    { name: "Strength Lab",        icon: Dumbbell,   desc: "Free weights, machines and structured strength training.",  media: { img: "/facility/cards/strength-lab.jpg?v=2", label: "Strength lab photo", hint: "Racks + free weights", ratio: "4/3" } },
+    { name: "Performance Lane",    icon: Gauge,      desc: "Conditioning, sprints and athletic performance.",           media: { img: "/facility/cards/performance-lane.jpg?v=2", label: "Performance lane photo", hint: "Turf running lane + sled", ratio: "4/3" } },
+    { name: "Skill Arena",         icon: Sparkles,   desc: "Calisthenics, skills and advanced movement under the rig.", media: { img: "/facility/cards/skill-arena.jpg?v=2", label: "Skill arena photo", hint: "Blue pull-up rig", ratio: "4/3" } },
+    { name: "Freestyle Area",      icon: Waypoints,  desc: "Open space to flow, express and train creative movement.",  media: { img: "/facility/cards/freestyle-area.jpg?v=2", label: "Freestyle area photo", hint: "Open bar area", ratio: "4/3" } },
+    { name: "Monkey Bars",         icon: Footprints, desc: "Grip, swing and upper-body coordination.",                  media: { img: "/facility/cards/monkey-bars.jpg?v=2", label: "Monkey bars photo", hint: "Overhead monkey bars", ratio: "4/3" } },
     { name: "Parallel Bars",       icon: Repeat,     desc: "Dips, holds and upper-body strength work.",                 media: { label: "Parallel bars photo", hint: "Parallettes / P-bars", ratio: "4/3" } },
     { name: "SkiErgs",             icon: Activity,   desc: "High-intensity conditioning for power and endurance.",      media: { label: "SkiErg photo", hint: "Row of SkiErgs", ratio: "4/3" } },
     { name: "Running Lane",        icon: Footprints, desc: "Sprint and movement work down the turf lane.",              media: { label: "Running lane photo", hint: "Turf sprint lane", ratio: "4/3" } },
     { name: "Turf Area",           icon: Compass,    desc: "Versatile turf for sleds, carries and functional training.",media: { label: "Turf area photo", hint: "Green turf zone", ratio: "4/3" } },
   ],
-  panorama: { img: "/facility/panorama.jpg", label: "Wide Facility Panorama", hint: "Single wide shot showing all zones — used for the interactive hotspot map", ratio: "21/9" },
+  panorama: { img: "/facility/panorama.jpg?v=3", label: "Wide Facility Panorama", hint: "Single wide shot showing all zones — used for the interactive hotspot map", ratio: "21/9" },
 };
 
 // ── SECTION 11 · Community ─────────────────────────────────────────────────

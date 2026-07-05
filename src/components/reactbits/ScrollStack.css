@@ -1,0 +1,175 @@
+/* React Bits ScrollStack — adapted to the Caliterrain dark blue system.
+   Base structural rules kept from stock; the surface/paddings are re-themed
+   and the scroller is given an explicit height so it runs as a self-contained
+   internal scroll region (never a global scroll hijack). */
+
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: scroll-position;
+  /* Hide the raw scrollbar — Lenis drives the motion, the bar is just noise. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scroll-stack-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-stack-inner {
+  padding: 12vh 1rem 26rem;
+  min-height: 100%;
+}
+
+.scroll-stack-card-wrapper {
+  position: relative;
+}
+
+.scroll-stack-card {
+  transform-origin: top center;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  width: 100%;
+  margin: 24px 0;
+  box-sizing: border-box;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  position: relative;
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}
+
+/* ── Community "We Are A Family" instance ──────────────────────────────── */
+
+/* Contained scroll region: cards stack within this box, page scroll stays put. */
+.ct-community-stack {
+  height: clamp(500px, 78vh, 720px);
+  border: 1px solid #1e2a38;
+  border-radius: 4px;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(46, 141, 255, 0.08), transparent 60%),
+    #0b1016;
+}
+
+.ct-community-stack .scroll-stack-inner {
+  padding-inline: clamp(1rem, 4vw, 3.5rem);
+}
+
+.ct-community-card {
+  min-height: clamp(15rem, 40vh, 19rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: 22px;
+  border: 1px solid #1e2a38;
+  background:
+    radial-gradient(140% 120% at 100% 0%, rgba(46, 141, 255, 0.12), transparent 55%),
+    linear-gradient(180deg, #131b25 0%, #0d141d 100%);
+  box-shadow:
+    0 24px 60px -30px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(46, 141, 255, 0.04) inset;
+  overflow: hidden;
+}
+
+.ct-community-card__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  height: 100%;
+  align-items: stretch;
+}
+
+.ct-community-card__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.ct-community-card__index {
+  font-family: var(--font-heading, "Bebas Neue", sans-serif);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1;
+  color: rgba(46, 141, 255, 0.18);
+  letter-spacing: 0.02em;
+}
+
+.ct-community-card__badge {
+  display: inline-flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(46, 141, 255, 0.4);
+  background: rgba(11, 16, 22, 0.7);
+  color: #2e8dff;
+  backdrop-filter: blur(6px);
+}
+
+.ct-community-card__title {
+  margin-top: 1rem;
+  font-family: var(--font-heading, "Bebas Neue", sans-serif);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.ct-community-card__desc {
+  margin-top: 0.5rem;
+  max-width: 34ch;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #9aa7b6;
+}
+
+.ct-community-card__media {
+  position: relative;
+  height: 100%;
+  min-height: 10rem;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.ct-community-card__media .ct-media {
+  height: 100%;
+  border-radius: 14px;
+}
+
+@media (max-width: 640px) {
+  .ct-community-card__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .ct-community-card__media {
+    display: none;
+  }
+  .ct-community-card {
+    min-height: 13rem;
+  }
+}
+
+/* Reduced motion: the JS skips Lenis + transforms, so let the box grow to the
+   content and scroll as a normal list instead of a fixed pinned stack. */
+@media (prefers-reduced-motion: reduce) {
+  .ct-community-stack {
+    height: auto;
+  }
+  .ct-community-stack .scroll-stack-inner {
+    padding-block: 1.5rem;
+  }
+  .ct-community-card {
+    scale: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}

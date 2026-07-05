@@ -92,7 +92,7 @@ export default function ChatBot() {
         data-testid="chatbot-toggle-btn"
         onClick={toggleOpen}
         className={`fixed bottom-4 left-4 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-md shadow-black/25 transition-all duration-300 ${
-          open ? "bg-[#1A1A1A] border border-white/20" : "bg-[#2EC4B6]"
+          open ? "bg-[#1A2230] border border-white/20" : "bg-[#2E8DFF]"
         }`}
         aria-label="Open chat"
       >
@@ -107,7 +107,7 @@ export default function ChatBot() {
           style={{ height: "480px", maxHeight: "calc(100vh - 120px)" }}
         >
           {/* Header */}
-          <div className="bg-[#2EC4B6] px-4 py-3 flex items-center gap-3">
+          <div className="bg-[#2E8DFF] px-4 py-3 flex items-center gap-3">
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
               <MessageCircle className="w-4 h-4 text-white" />
             </div>
@@ -123,8 +123,8 @@ export default function ChatBot() {
               <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[85%] px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === "user"
-                    ? "bg-[#2EC4B6] text-white"
-                    : "bg-[#1A1A1A] border border-white/10 text-zinc-200"
+                    ? "bg-[#2E8DFF] text-white"
+                    : "bg-[#1A2230] border border-white/10 text-zinc-200"
                 }`}>
                   {msg.content}
                 </div>
@@ -133,10 +133,10 @@ export default function ChatBot() {
 
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-[#1A1A1A] border border-white/10 px-4 py-3 flex gap-1 items-center">
-                  <span className="w-1.5 h-1.5 bg-[#2EC4B6] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="w-1.5 h-1.5 bg-[#2EC4B6] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="w-1.5 h-1.5 bg-[#2EC4B6] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                <div className="bg-[#1A2230] border border-white/10 px-4 py-3 flex gap-1 items-center">
+                  <span className="w-1.5 h-1.5 bg-[#2E8DFF] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 bg-[#2E8DFF] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 bg-[#2E8DFF] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                 </div>
               </div>
             )}
@@ -148,10 +148,10 @@ export default function ChatBot() {
                   <button
                     key={opt.label}
                     onClick={() => sendMessage(opt.value)}
-                    className="flex items-center justify-between text-left text-xs text-white bg-[#1A1A1A] border border-white/10 hover:border-[#2EC4B6] px-3 py-2 transition-colors duration-200"
+                    className="flex items-center justify-between text-left text-xs text-white bg-[#1A2230] border border-white/10 hover:border-[#2E8DFF] px-3 py-2 transition-colors duration-200"
                   >
                     {opt.label}
-                    <ChevronRight className="w-3 h-3 text-[#2EC4B6] flex-shrink-0" />
+                    <ChevronRight className="w-3 h-3 text-[#2E8DFF] flex-shrink-0" />
                   </button>
                 ))}
               </div>
@@ -168,14 +168,14 @@ export default function ChatBot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 bg-[#1A1A1A] border border-white/10 text-white text-sm px-3 py-2 outline-none focus:border-[#2EC4B6] placeholder-zinc-600 transition-colors duration-200"
+              className="flex-1 bg-[#1A2230] border border-white/10 text-white text-sm px-3 py-2 outline-none focus:border-[#2E8DFF] placeholder-[#5C6B7C] transition-colors duration-200"
               disabled={loading}
             />
             <button
               data-testid="chatbot-send-btn"
               type="submit"
               disabled={loading || !input.trim()}
-              className="w-10 h-10 bg-[#2EC4B6] hover:bg-[#25A599] disabled:opacity-50 flex items-center justify-center transition-colors duration-200"
+              className="w-10 h-10 bg-[#2E8DFF] hover:bg-[#1F6FE0] disabled:opacity-50 flex items-center justify-center transition-colors duration-200"
             >
               <Send className="w-4 h-4 text-white" />
             </button>

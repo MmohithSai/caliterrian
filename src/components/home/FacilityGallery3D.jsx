@@ -15,7 +15,7 @@ const CARDS = [
     title: "Strength Lab",
     tag: "Strength · Power",
     desc: "Racks, platforms and free weights for structured strength training — the engine room where heavy work gets done.",
-    img: "/facility/cards/strength-lab.jpg",
+    img: "/facility/cards/strength-lab.jpg?v=2",
     features: ["Competition racks & lifting platform", "Full dumbbell + barbell range", "Sleds, plates & conditioning tools"],
   },
   {
@@ -23,7 +23,7 @@ const CARDS = [
     title: "Performance Lane",
     tag: "Speed · Conditioning",
     desc: "A dedicated turf lane for sprints, sled pushes and engine work — built to make you faster and harder to tire out.",
-    img: "/facility/cards/performance-lane.jpg",
+    img: "/facility/cards/performance-lane.jpg?v=2",
     features: ["Sprint + sled turf lane", "Climbing ropes & battle ropes", "Plyo boxes for explosive work"],
   },
   {
@@ -31,7 +31,7 @@ const CARDS = [
     title: "Skill Arena",
     tag: "Calisthenics · Skills",
     desc: "Rings, rigs and open floor under the lights — where muscle-ups, levers and handstands are trained, not wished for.",
-    img: "/facility/cards/skill-arena.jpg",
+    img: "/facility/cards/skill-arena.jpg?v=2",
     features: ["Gymnastic rings & pull-up rig", "Skill progressions for every level", "Mirrored wall for movement feedback"],
   },
   {
@@ -39,7 +39,7 @@ const CARDS = [
     title: "Freestyle Area",
     tag: "Flow · Movement",
     desc: "Bars, mats and room to move — an open playground for creative movement, freestyle flows and soft landings.",
-    img: "/facility/cards/freestyle-area.jpg",
+    img: "/facility/cards/freestyle-area.jpg?v=2",
     features: ["Monkey bars & parallel bars", "Crash mats for safe skill work", "Open floor for freestyle flow"],
   },
   {
@@ -47,7 +47,7 @@ const CARDS = [
     title: "Mobility Zone",
     tag: "Mobility · Recovery",
     desc: "Turf, mats and wall bars for the work that keeps you moving — restore range and build the foundation your body needs.",
-    img: "/facility/cards/mobility-zone.jpg",
+    img: "/facility/cards/mobility-zone.jpg?v=2",
     features: ["Open turf + mat space", "Wall bars for deep positions", "Mobility tools & soft landings"],
   },
 ];
@@ -92,14 +92,16 @@ const cardFrag = /* glsl */ `
     if (mask < 0.01) discard;
 
     vec3 col = texture2D(uMap, vUv).rgb;
-    // cinematic grade: cool the shadows, lift the highlights slightly
+    // lift shadows (gamma) + gentle exposure so the footage reads bright
+    col = pow(col, vec3(0.82)) * 1.08;
+    // cinematic grade: barely cool the shadows, keep them open
     float lum0 = dot(col, vec3(0.299, 0.587, 0.114));
-    col = mix(col * vec3(0.86, 0.94, 1.12), col, smoothstep(0.0, 0.65, lum0));
+    col = mix(col * vec3(0.96, 0.99, 1.05), col, smoothstep(0.0, 0.5, lum0));
     // vignette inside the card
     float vig = smoothstep(0.95, 0.3, length(p * vec2(0.8, 1.05)));
-    col *= mix(0.82, 1.0, vig);
+    col *= mix(0.93, 1.0, vig);
     // recede when not featured, light up on hover
-    col *= mix(0.55, 1.0, uActive) + uHover * 0.22;
+    col *= mix(0.8, 1.0, uActive) + uHover * 0.18;
     // top sheen so the surface reads as glass
     col += vec3(0.5, 0.7, 1.0) * smoothstep(0.55, 1.0, vUv.y) * 0.05 * (0.4 + uActive);
     // accent edge glow
@@ -276,8 +278,8 @@ export default function FacilityGallery3D() {
     cards.forEach((c, i) => {
       const mat = c.mat.clone();
       mat.uniforms.uMap.value = c.mat.uniforms.uMap.value;
-      mat.uniforms.uOpacity.value = 0.4;
-      mat.uniforms.uActive.value = 0.4;
+      mat.uniforms.uOpacity.value = 0.5;
+      mat.uniforms.uActive.value = 0.6;
       mat.depthWrite = false;
       const m = new THREE.Mesh(geo, mat);
       // spread echoes around the full circle so the loop always has depth
@@ -730,9 +732,9 @@ export default function FacilityGallery3D() {
 
       {/* Atmosphere grade on top of the canvas */}
       <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#0B1016] to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0B1016]/90 to-transparent" />
-        <div className="absolute inset-0 [background:radial-gradient(120%_90%_at_50%_50%,transparent_55%,rgba(3,6,10,0.55)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#0B1016]/70 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0B1016]/60 to-transparent" />
+        <div className="absolute inset-0 [background:radial-gradient(120%_90%_at_50%_50%,transparent_70%,rgba(3,6,10,0.3)_100%)]" />
       </div>
 
       {/* ── Explore UI ── */}
@@ -832,8 +834,8 @@ export default function FacilityGallery3D() {
         <div ref={detailRef} className="absolute inset-0 z-30 overflow-hidden bg-[#05080D]">
           <div className="absolute inset-0 overflow-hidden">
             <img ref={detailImgRef} src={detail.img} alt={detail.title} className="h-full w-full scale-[1.12] object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#05080D] via-[#05080D]/35 to-[#05080D]/20" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#05080D]/85 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#05080D]/90 via-[#05080D]/15 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#05080D]/70 via-transparent to-transparent" />
           </div>
 
           <button

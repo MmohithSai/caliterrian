@@ -19,6 +19,10 @@ out
 .env.*
 !.env.example
 
+# Build-only source frames (4K facility renders → public/hero/facility-loop.*)
+# Kept local; never committed. Regenerate outputs via scripts/build-hero-loop.ps1
+assets/
+
 # OS
 Thumbs.db
 
@@ -32,3 +36,8 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+.hero-tmp/
+.gstack/
+
+# Pristine pre-grade facility stills (seeded/graded by scripts/grade-facility-stills.py)
+scripts/facility-originals/

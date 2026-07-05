@@ -71,24 +71,24 @@ export default function TrialBookingModal({ open, onClose }) {
       onClick={handleClose}
     >
       <div
-        className="relative bg-[#0D0D0D] border border-white/10 p-6 sm:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+        className="relative bg-[#0E141C] border border-white/10 p-6 sm:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={handleClose} aria-label="Close" className="absolute top-4 right-4 text-zinc-500 hover:text-white">
+        <button onClick={handleClose} aria-label="Close" className="absolute top-4 right-4 text-[#8A99AB] hover:text-white">
           <X className="w-5 h-5" />
         </button>
 
         {submitted ? (
           /* ---------- Success screen ---------- */
           <div className="text-center py-6">
-            <div className="mx-auto w-16 h-16 rounded-full bg-[#2EC4B6]/15 flex items-center justify-center mb-5">
-              <CheckCircle2 className="w-9 h-9 text-[#2EC4B6]" />
+            <div className="mx-auto w-16 h-16 rounded-full bg-[#2E8DFF]/15 flex items-center justify-center mb-5">
+              <CheckCircle2 className="w-9 h-9 text-[#2E8DFF]" />
             </div>
             <h2 className="font-heading text-3xl text-white mb-2">YOU'RE BOOKED!</h2>
-            <p className="text-zinc-400 text-sm max-w-sm mx-auto mb-1">
+            <p className="text-[#9AA7B6] text-sm max-w-sm mx-auto mb-1">
               Thanks{form.name ? `, ${form.name.split(" ")[0]}` : ""} — we've received your free trial request.
             </p>
-            <p className="text-zinc-500 text-sm max-w-sm mx-auto mb-7">
+            <p className="text-[#8A99AB] text-sm max-w-sm mx-auto mb-7">
               Our team will reach out shortly to confirm your slot. Want a faster response? Send us the details on WhatsApp.
             </p>
 
@@ -100,7 +100,7 @@ export default function TrialBookingModal({ open, onClose }) {
             </button>
             <button
               onClick={handleClose}
-              className="mt-3 text-sm text-zinc-500 hover:text-white transition-colors"
+              className="mt-3 text-sm text-[#8A99AB] hover:text-white transition-colors"
             >
               Done
             </button>
@@ -119,37 +119,37 @@ export default function TrialBookingModal({ open, onClose }) {
                 className="absolute -left-[9999px] h-0 w-0 opacity-0" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Name *</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Name *</label>
                   <input
                     type="text" name="name" value={form.name} onChange={handleChange} required
                     placeholder="Your full name"
-                    className="w-full bg-[#1A1A1A] border border-white/10 focus:border-[#2EC4B6] text-white px-4 py-3 text-sm outline-none placeholder-zinc-600 transition-colors duration-200"
+                    className="w-full bg-[#1A2230] border border-white/10 focus:border-[#2E8DFF] text-white px-4 py-3 text-sm outline-none placeholder-[#5C6B7C] transition-colors duration-200"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Phone *</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Phone *</label>
                   <input
                     type="tel" name="phone" value={form.phone} onChange={handleChange} required
                     placeholder="Your mobile number"
-                    className="w-full bg-[#1A1A1A] border border-white/10 focus:border-[#2EC4B6] text-white px-4 py-3 text-sm outline-none placeholder-zinc-600 transition-colors duration-200"
+                    className="w-full bg-[#1A2230] border border-white/10 focus:border-[#2E8DFF] text-white px-4 py-3 text-sm outline-none placeholder-[#5C6B7C] transition-colors duration-200"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Age</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Age</label>
                 <input
                   type="text" name="age" value={form.age} onChange={handleChange}
                   placeholder="Your age"
-                  className="w-full bg-[#1A1A1A] border border-white/10 focus:border-[#2EC4B6] text-white px-4 py-3 text-sm outline-none placeholder-zinc-600 transition-colors duration-200"
+                  className="w-full bg-[#1A2230] border border-white/10 focus:border-[#2E8DFF] text-white px-4 py-3 text-sm outline-none placeholder-[#5C6B7C] transition-colors duration-200"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Interested Program</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Interested Program</label>
                 <select
                   name="program" value={form.program} onChange={handleChange}
-                  className="w-full bg-[#1A1A1A] border border-white/10 focus:border-[#2EC4B6] text-white px-4 py-3 text-sm outline-none transition-colors duration-200"
+                  className="w-full bg-[#1A2230] border border-white/10 focus:border-[#2E8DFF] text-white px-4 py-3 text-sm outline-none transition-colors duration-200"
                 >
                   <option value="">Select a program</option>
                   {PROGRAMS.map((p) => (
@@ -159,19 +159,19 @@ export default function TrialBookingModal({ open, onClose }) {
               </div>
 
               <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Fitness Goal</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Fitness Goal</label>
                 <input
                   type="text" name="goal" value={form.goal} onChange={handleChange}
                   placeholder="e.g. Lose weight, build strength, first pull-up..."
-                  className="w-full bg-[#1A1A1A] border border-white/10 focus:border-[#2EC4B6] text-white px-4 py-3 text-sm outline-none placeholder-zinc-600 transition-colors duration-200"
+                  className="w-full bg-[#1A2230] border border-white/10 focus:border-[#2E8DFF] text-white px-4 py-3 text-sm outline-none placeholder-[#5C6B7C] transition-colors duration-200"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Preferred Time</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Preferred Time</label>
                 <select
                   name="preferred_time" value={form.preferred_time} onChange={handleChange}
-                  className="w-full bg-[#1A1A1A] border border-white/10 focus:border-[#2EC4B6] text-white px-4 py-3 text-sm outline-none transition-colors duration-200"
+                  className="w-full bg-[#1A2230] border border-white/10 focus:border-[#2E8DFF] text-white px-4 py-3 text-sm outline-none transition-colors duration-200"
                 >
                   <option value="">Select preferred time</option>
                   {TIME_SLOTS.map((t) => (

@@ -32,7 +32,7 @@ export function FacilitySection() {
 
       {/* Cinematic panorama with parallax + interactive zone hotspots */}
       <motion.div initial="hidden" whileInView="visible" viewport={vpOnce} variants={reveal} className="relative overflow-hidden rounded-sm border border-[#1E2A38]">
-        <MediaSlot media={FACILITY.panorama} img={FACILITY.panorama.img} parallax scrim="ct-media__scrim--full">
+        <MediaSlot media={FACILITY.panorama} img={FACILITY.panorama.img} parallax scrim="ct-media__scrim--pano">
           {zones.slice(0, PIN_POS.length).map((zone, i) => (
             <button
               key={zone.name}

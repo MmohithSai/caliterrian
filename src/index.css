@@ -61,8 +61,26 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(46, 141, 255, 0.85);
+    color: #04101F;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(46, 141, 255, 0.9);
+    outline-offset: 2px;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
   }
 }
+
+/* Tabular figures for stats, prices, counters */
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
 
 .font-heading { font-family: 'Bebas Neue', sans-serif; }
 
@@ -71,11 +89,14 @@
 ::-webkit-scrollbar-thumb { background: #2E8DFF; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #1F6FE0; }
 
-.scroll-fade { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.scroll-fade { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
 .scroll-fade.in-view { opacity: 1; transform: translateY(0); }
-.scroll-fade-delay-1 { transition-delay: 0.1s; }
-.scroll-fade-delay-2 { transition-delay: 0.2s; }
-.scroll-fade-delay-3 { transition-delay: 0.3s; }
+.scroll-fade-delay-1 { transition-delay: 0.08s; }
+.scroll-fade-delay-2 { transition-delay: 0.16s; }
+.scroll-fade-delay-3 { transition-delay: 0.24s; }
+.scroll-fade-delay-4 { transition-delay: 0.32s; }
+.scroll-fade-delay-5 { transition-delay: 0.40s; }
+.scroll-fade-delay-6 { transition-delay: 0.48s; }
 
 .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(46, 141, 255,0.3), transparent); }
 
@@ -87,7 +108,25 @@
   pointer-events: none;
 }
 
-.card-glow:hover { box-shadow: none; }
+/* Interactive card: lifts toward the viewer with a blue glow; its cover image
+   slowly zooms. Used across Programs / Coaches / Pricing / Blog / Transformations. */
+.card-glow {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s ease, border-color 0.3s ease,
+              opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-glow:hover {
+  transform: translateY(-6px);
+  border-color: rgba(46, 141, 255, 0.45) !important;
+  box-shadow: 0 18px 44px -14px rgba(46, 141, 255, 0.4);
+}
+.card-glow img { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.card-glow:hover img { transform: scale(1.05); }
+
+@media (prefers-reduced-motion: reduce) {
+  .card-glow, .card-glow img { transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+  .card-glow:hover, .card-glow:hover img { transform: none; }
+}
 
 .program-parallax-wave {
   background:
@@ -775,11 +814,221 @@ html {
   letter-spacing: 0.01em;
   color: #ffffff;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 .ct-display .accent { color: #2E8DFF; }
 
 /* Secondary text */
-.ct-sub { color: #9AA7B6; }
+.ct-sub { color: #9AA7B6; line-height: 1.7; max-width: 65ch; text-wrap: pretty; }
+
+/* ── Page hero — shared cinematic header band for inner pages ──
+   Deep #03070D band, blueprint grid + blue atmosphere, giant two-tone
+   Bebas display with a ghost outline word drifting behind. */
+.page-hero {
+  position: relative;
+  background: #03070D;
+  border-bottom: 1px solid #1E2A38;
+  overflow: hidden;
+}
+.page-hero__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(47, 128, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 128, 255, 0.05) 1px, transparent 1px);
+  background-size: 52px 52px;
+  -webkit-mask-image: radial-gradient(130% 110% at 24% 0%, #000 30%, transparent 82%);
+  mask-image: radial-gradient(130% 110% at 24% 0%, #000 30%, transparent 82%);
+}
+.page-hero__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 85% at 14% 12%, rgba(46, 141, 255, 0.13), transparent 68%),
+    radial-gradient(42% 70% at 88% 100%, rgba(46, 141, 255, 0.06), transparent 70%);
+}
+/* React Bits Particles layer — blue specks drifting behind the ghost word */
+.page-hero__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(120% 120% at 50% 20%, #000 40%, transparent 90%);
+  mask-image: radial-gradient(120% 120% at 50% 20%, #000 40%, transparent 90%);
+}
+/* Ghost word — enormous outlined Bebas anchored to the right edge */
+.page-hero__ghost {
+  position: absolute;
+  right: -0.06em;
+  bottom: -0.18em;
+  z-index: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(8rem, 24vw, 21rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(46, 141, 255, 0.14);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.page-hero__title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.75rem, 9vw, 8rem);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-wrap: balance;
+  text-shadow: 0 14px 44px rgba(0, 0, 0, 0.5);
+}
+.page-hero__title .accent { color: #2E8DFF; }
+.page-hero__sub {
+  color: #9AA7B6;
+  font-size: clamp(0.95rem, 1.15vw, 1.06rem);
+  line-height: 1.7;
+  max-width: 38rem;
+  text-wrap: pretty;
+}
+/* Clip wrapper so title lines rise from below on entrance */
+.page-hero__clip {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+/* ── Home hero — cinematic facility reel (components/home/hero.jsx) ──
+   Film-opening choreography: obsidian letterbox curtains retract over the
+   stabilized facility loop; headline lines rise out of clip masks; a
+   hairline trust strip anchors the fold. */
+.hero-cine {
+  background: #03070D;
+}
+.hero-cine-reel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 115%; /* slack so the -11% scroll parallax never exposes an edge */
+  object-fit: cover;
+  filter: saturate(1.05) contrast(1.03);
+}
+.hero-cine-bar {
+  height: 13svh;
+  background: #03070D;
+  will-change: transform;
+}
+.hero-cine-copy {
+  text-shadow: 0 18px 52px rgba(0, 0, 0, 0.58);
+}
+.hero-cine-title {
+  max-width: 24ch;
+  font-size: clamp(3.4rem, 6.4vw, 5.9rem);
+  line-height: 0.9;
+}
+.hero-cine-title .accent {
+  color: #6FB0FF;
+  text-shadow: 0 0 34px rgba(46, 141, 255, 0.24), 0 18px 52px rgba(0, 0, 0, 0.58);
+}
+/* Clip mask each headline line rises out of. The tiny padding keeps Bebas
+   descenders from shaving during the reveal. */
+.hero-cine-clip {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.07em;
+  margin-bottom: -0.07em;
+}
+.hero-cine .ct-sub {
+  color: #D7E1EC;
+  text-wrap: pretty;
+}
+
+/* Hairline film frame over the clear (right) side of the reel */
+.hero-cine-frame {
+  inset: 6.25rem 2.75rem 9rem 56%;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 0 0 1px rgba(46, 141, 255, 0.06), 0 24px 90px rgba(0, 0, 0, 0.2);
+}
+/* Scroll cue — 1px line a blue segment keeps dropping through */
+.hero-cine-cue {
+  position: relative;
+  width: 1px;
+  height: 48px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+}
+.hero-cine-cue::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -40%;
+  width: 100%;
+  height: 40%;
+  background: #2E8DFF;
+  box-shadow: 0 0 8px rgba(46, 141, 255, 0.8);
+  animation: hero-cue-drop 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+@keyframes hero-cue-drop {
+  0% { top: -40%; }
+  70%, 100% { top: 110%; }
+}
+
+/* Trust strip — hairline separators, no cards */
+.hero-cine-trust {
+  background: linear-gradient(180deg, rgba(3, 7, 13, 0.0), rgba(3, 7, 13, 0.45));
+}
+.hero-cine-trust > div {
+  border-left: 1px solid rgba(255, 255, 255, 0.10);
+}
+.hero-cine-trust > div:first-child {
+  border-left: 0;
+}
+
+@media (max-width: 640px) {
+  .hero-cine-bar {
+    height: 9svh;
+  }
+  .hero-cine .ct-eyebrow {
+    letter-spacing: 0.2em;
+    font-size: 0.66rem;
+  }
+  /* Keep the reassurance line clear of the floating chat/WhatsApp buttons */
+  .hero-cine-copy {
+    padding-bottom: 3.5rem;
+  }
+  .hero-cine-title {
+    max-width: 10ch;
+    font-size: clamp(3rem, 14vw, 4.25rem);
+  }
+  .hero-cine .ct-sub {
+    max-width: 23rem;
+    font-size: 0.98rem;
+  }
+  .hero-cine .btn-primary,
+  .hero-cine .btn-secondary {
+    width: 100%;
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  /* 2×2 stat grid: kill the edge hairline on row starts, add row separators */
+  .hero-cine-trust > div:nth-child(odd) {
+    border-left: 0;
+  }
+  .hero-cine-trust > div:nth-child(n + 3) {
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cine-cue::after {
+    animation: none;
+  }
+}
 
 /* ── Image-first media — cinematic slots that feel like photo/video even
    while real assets are pending. Real <img>/<video> drop in with the same
@@ -1121,4 +1370,307 @@ html {
 }
 @media (prefers-reduced-motion: reduce) {
   .ct-gallery-rise { animation: none; opacity: 1; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   A Journey That Builds You — cinematic, card-less progression timeline
+   ════════════════════════════════════════════════════════════════════════ */
+.journey-section {
+  background: #03070D;
+}
+
+/* Background texture: faint blueprint grid + a soft top glow, edges masked. */
+.journey-bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(47, 128, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 128, 255, 0.05) 1px, transparent 1px);
+  background-size: 52px 52px;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 30%, #000 35%, transparent 85%);
+  mask-image: radial-gradient(120% 90% at 50% 30%, #000 35%, transparent 85%);
+}
+.journey-bg-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(47, 128, 255, 0.14), transparent 70%),
+    radial-gradient(40% 60% at 92% 60%, rgba(242, 184, 75, 0.06), transparent 70%);
+}
+
+/* ── Hero copy ── */
+.journey-eyebrow {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  color: #2F80FF;
+}
+.journey-heading {
+  font-size: clamp(2.75rem, 8vw, 7.25rem);
+  line-height: 0.9;
+}
+.journey-para {
+  max-width: 34rem;
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.6;
+}
+
+/* ── Athlete band ── */
+.journey-figwrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 250px;
+}
+.journey-num {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 6.5rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.11);
+  user-select: none;
+}
+.journey-num--gold { color: rgba(242, 184, 75, 0.5); }
+.journey-num--sm { font-size: 3.25rem; }
+
+.journey-figure {
+  position: relative;
+  z-index: 1;
+  display: block;
+  height: 222px;
+  width: 100%;
+  max-width: 150px;
+  filter: drop-shadow(0 6px 14px rgba(47, 128, 255, 0.32)) drop-shadow(0 0 22px rgba(47, 128, 255, 0.18));
+}
+.journey-figure--gold {
+  filter: drop-shadow(0 6px 16px rgba(242, 184, 75, 0.45)) drop-shadow(0 0 26px rgba(242, 184, 75, 0.28));
+}
+
+/* Mastery light rays + soft glow */
+.journey-rays {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  z-index: 0;
+  width: 230px;
+  height: 300px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(242, 184, 75, 0.16), transparent 72%);
+}
+.journey-rays::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(from 90deg at 50% 62%, rgba(242, 184, 75, 0.10) 0deg 2deg, transparent 2deg 22deg);
+  -webkit-mask-image: radial-gradient(closest-side, #000, transparent 70%);
+  mask-image: radial-gradient(closest-side, #000, transparent 70%);
+  opacity: 0.6;
+  animation: journey-rays-rot 24s linear infinite;
+}
+@keyframes journey-rays-rot { to { transform: rotate(360deg); } }
+
+/* ── Rail (desktop) ── */
+.journey-rail {
+  position: relative;
+  height: 60px;
+  margin-top: -6px;
+}
+.journey-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.journey-node-wrap {
+  position: absolute;
+  top: 30px;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+/* short stem from each node down toward its icon/label */
+.journey-stem {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 1px;
+  height: 40px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(47, 128, 255, 0.55), transparent);
+}
+.journey-stem--gold {
+  background: linear-gradient(180deg, rgba(242, 184, 75, 0.6), transparent);
+}
+
+/* ── Node ── */
+.journey-node {
+  position: relative;
+  display: block;
+  width: 34px;
+  height: 34px;
+}
+.journey-node__glow {
+  position: absolute;
+  inset: -11px;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, rgba(47, 128, 255, 0.55), transparent 72%);
+}
+.journey-node__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid #2F80FF;
+  background: #03070D;
+  box-shadow: 0 0 16px rgba(47, 128, 255, 0.7);
+}
+.journey-node__dot {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.85);
+}
+.journey-node--gold .journey-node__ring {
+  border-color: #F2B84B;
+  box-shadow: 0 0 18px rgba(242, 184, 75, 0.8);
+}
+.journey-node--gold .journey-node__dot {
+  background: #FFE7B0;
+  box-shadow: 0 0 10px rgba(242, 184, 75, 0.9);
+}
+.journey-node--gold .journey-node__glow {
+  background: radial-gradient(closest-side, rgba(242, 184, 75, 0.6), transparent 72%);
+  animation: journey-pulse 2.6s ease-in-out infinite;
+}
+@keyframes journey-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.35); opacity: 0.4; }
+}
+
+/* ── Labels ── */
+.journey-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 0.5rem;
+}
+.journey-label__icon {
+  width: 22px;
+  height: 22px;
+  color: #2F80FF;
+  margin-bottom: 0.6rem;
+}
+.journey-label__icon--gold { color: #F2B84B; }
+.journey-label__title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.journey-label__title--gold { color: #F2B84B; }
+.journey-label__desc {
+  margin-top: 0.45rem;
+  max-width: 200px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #9AA7B6;
+}
+
+/* ── Mobile vertical timeline ── */
+.journey-vline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 28px;
+  width: 2px;
+  background: linear-gradient(180deg, #2F80FF 0%, #2F80FF 80%, #F2B84B 100%);
+  box-shadow: 0 0 14px rgba(47, 128, 255, 0.5);
+}
+.journey-vnode-wrap {
+  position: absolute;
+  top: 38px;
+  left: -36px;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.journey-vfig {
+  width: 88px;
+  height: 116px;
+}
+.journey-vfig .journey-figure { height: 116px; max-width: 88px; }
+.journey-vrail .journey-label {
+  align-items: flex-start;
+  text-align: left;
+  padding: 0;
+}
+.journey-vrail .journey-label__desc { max-width: 22rem; }
+
+/* ── Premium promise / stats strip ── */
+.journey-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+.journey-stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1.4rem 1.6rem;
+}
+.journey-stat__icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: #2F80FF;
+}
+.journey-stat__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.journey-stat__desc {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #9AA7B6;
+}
+@media (min-width: 640px) {
+  .journey-stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .journey-stats {
+    grid-template-columns: repeat(4, 1fr);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  /* hairline dividers between columns (the 1px grid gap shows through) */
+  .journey-stat { background: #03070D; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-node--gold .journey-node__glow,
+  .journey-rays::before { animation: none; }
 }

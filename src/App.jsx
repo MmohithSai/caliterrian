@@ -1,6 +1,7 @@
 import { useState, lazy, Suspense } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/Navbar";
@@ -33,6 +34,11 @@ const PageSkeleton = () => <div className="min-h-screen bg-obsidian" />;
 
 function AppContent({ bookingOpen, setBookingOpen }) {
   const location = useLocation();
+  const reduce = useReducedMotion();
+  // Whole-page crossfade on every route change. Reduced motion → opacity only.
+  const pageMotion = reduce
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
+    : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -8 } };
 
   // Single entry point for every "Book Trial" CTA — tracks the click (tagged
   // with the page it fired from) before opening the modal.
@@ -56,20 +62,31 @@ function AppContent({ bookingOpen, setBookingOpen }) {
   return (
     <>
       <Navbar onBookTrial={openBooking} />
-      <Suspense fallback={<PageSkeleton />}>
-        <Routes>
-          <Route path="/" element={<Home onBookTrial={openBooking} />} />
-          <Route path="/programs" element={<Programs onBookTrial={openBooking} />} />
-          <Route path="/coaches" element={<Coaches onBookTrial={openBooking} />} />
-          <Route path="/transformations" element={<Transformations onBookTrial={openBooking} />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:id" element={<BlogPost />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/pricing" element={<Pricing onBookTrial={openBooking} />} />
-          <Route path="/contact" element={<Contact onBookTrial={openBooking} />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.main
+          key={location.pathname}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={pageMotion}
+          transition={{ duration: reduce ? 0.2 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Suspense fallback={<PageSkeleton />}>
+            <Routes location={location}>
+              <Route path="/" element={<Home onBookTrial={openBooking} />} />
+              <Route path="/programs" element={<Programs onBookTrial={openBooking} />} />
+              <Route path="/coaches" element={<Coaches onBookTrial={openBooking} />} />
+              <Route path="/transformations" element={<Transformations onBookTrial={openBooking} />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:id" element={<BlogPost />} />
+              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/pricing" element={<Pricing onBookTrial={openBooking} />} />
+              <Route path="/contact" element={<Contact onBookTrial={openBooking} />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </motion.main>
+      </AnimatePresence>
       <Footer />
       <FloatingButtons onBookTrial={openBooking} />
       <ChatBot />

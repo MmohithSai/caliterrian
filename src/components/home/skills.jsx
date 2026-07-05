@@ -1,14 +1,16 @@
 // Sections 4–6: Skill Tree · Hall of Firsts · Member Journeys  (image-first)
 import { lazy, Suspense, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
 import { ArrowRight, Circle, CircleDot, Clock, Compass, Flame, Gauge, Map, Play, Quote } from "lucide-react";
 import { Header, MediaSlot, Section } from "./ui";
-import { reveal, stagger, vpOnce } from "./anim";
+import { reveal, stagger, vpOnce, fade } from "./anim";
 import { SKILLS, HALL_OF_FIRSTS, COMMUNITY } from "@/data/home";
+import ScrollStack, { ScrollStackItem } from "@/components/reactbits/ScrollStack";
 
 // Three.js + GSAP land in their own chunk, fetched only when the section nears
 // the viewport.
 const HallOfFirstsGallery3D = lazy(() => import("./HallOfFirstsGallery3D"));
+const SkillTree3D = lazy(() => import("./SkillTree3D"));
 
 // Difficulty → presentation map for the skill graph (icon + modifier class).
 const LEVEL_META = {
@@ -29,14 +31,14 @@ function ancestorsOf(id, byId) {
 export function SkillTreeSection({ onBookTrial }) {
   const nodes = SKILLS.nodes;
   const byId = useMemo(() => Object.fromEntries(nodes.map((n) => [n.id, n])), [nodes]);
-  const edges = useMemo(
-    () => nodes.flatMap((n) => n.prereq.map((p) => ({ from: p, to: n.id }))),
-    [nodes],
-  );
 
   const [activeId, setActiveId] = useState("muscle-up");
   const active = byId[activeId];
   const nameOf = (id) => byId[id]?.name;
+
+  const rm = useReducedMotion();
+  // Detail-rail content cascades in on every skill switch (calm fade if reduced).
+  const itemV = rm ? fade : reveal;
 
   // The illuminated path to the active node (its ancestors + itself).
   const pathSet = useMemo(() => new Set([...ancestorsOf(activeId, byId), activeId]), [activeId, byId]);
@@ -65,52 +67,9 @@ export function SkillTreeSection({ onBookTrial }) {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-5">
-        {/* ── Graph canvas ───────────────────────────────────────────────── */}
-        <div className="lg:col-span-3">
-          <div className="overflow-x-auto rounded-sm border border-[#1E2A38] bg-[#0B1016] p-2">
-            <div className="relative mx-auto h-[420px] min-w-[560px]">
-              {/* Edge layer */}
-              <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                {edges.map((e) => {
-                  const a = byId[e.from], b = byId[e.to];
-                  const lit = pathSet.has(e.from) && pathSet.has(e.to);
-                  return (
-                    <line
-                      key={`${e.from}-${e.to}`}
-                      x1={a.pos.x} y1={a.pos.y} x2={b.pos.x} y2={b.pos.y}
-                      stroke={lit ? "#2E8DFF" : "#1E2A38"}
-                      strokeWidth={lit ? 2 : 1.25}
-                      vectorEffect="non-scaling-stroke"
-                      className="transition-[stroke] duration-300"
-                    />
-                  );
-                })}
-              </svg>
-
-              {/* Node layer */}
-              {nodes.map((node) => {
-                const Icon = LEVEL_META[node.difficulty].icon;
-                return (
-                  <button
-                    key={node.id}
-                    onClick={() => setActiveId(node.id)}
-                    aria-pressed={node.id === activeId}
-                    className="group absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5 text-center"
-                    style={{ left: `${node.pos.x}%`, top: `${node.pos.y}%` }}
-                  >
-                    <span
-                      data-active={node.id === activeId ? "" : undefined}
-                      className={`ct-skill ct-skill--${LEVEL_META[node.difficulty].mod} flex h-14 w-14 items-center justify-center rounded-full`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <span className="whitespace-nowrap font-heading text-sm tracking-wide text-white">{node.name}</span>
-                    <span className="whitespace-nowrap text-[9px] font-bold uppercase tracking-widest text-[#5C6B7C]">{node.tier}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+        {/* ── 3D constellation — WebGL chunk deferred until the section nears ── */}
+        <div className="min-w-0 max-w-full lg:col-span-3">
+          <SkillTreeMount nodes={nodes} activeId={activeId} pathSet={pathSet} onSelect={setActiveId} />
 
           {/* Blueprint note — this graph is a general roadmap, not personal tracking */}
           <div className="mt-4 flex flex-col items-center gap-4 border border-[#1E2A38] bg-[#131B25] px-5 py-4 sm:flex-row sm:justify-between">
@@ -134,34 +93,35 @@ export function SkillTreeSection({ onBookTrial }) {
           <AnimatePresence mode="wait">
             <motion.div
               key={active.id}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial="hidden"
+              animate="visible"
               exit={{ opacity: 0, y: -12 }}
+              variants={stagger}
               transition={{ duration: 0.3 }}
               className="ct-card p-5"
             >
-              <div className="group relative mb-4 overflow-hidden rounded-sm">
+              <motion.div variants={itemV} className="group relative mb-4 overflow-hidden rounded-sm">
                 <MediaSlot media={{ label: `${active.name} demo`, hint: "", ratio: "16/9" }} img={active.img} align="items-center">
                   <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-black/40 backdrop-blur transition-transform group-hover:scale-110">
                     <Play className="h-5 w-5 fill-white text-white" />
                   </span>
                 </MediaSlot>
-              </div>
+              </motion.div>
 
-              <div className="flex items-center justify-between gap-3">
+              <motion.div variants={itemV} className="flex items-center justify-between gap-3">
                 <h3 className="font-heading text-3xl tracking-wide text-white">{active.name}</h3>
                 <span className={`ct-skill-badge ct-skill-badge--${LEVEL_META[active.difficulty].mod} inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest`}>
                   <LevelIcon className="h-3 w-3" /> {active.difficulty}
                 </span>
-              </div>
-              <p className="mt-2 text-sm leading-relaxed text-[#9AA7B6]">{active.desc}</p>
+              </motion.div>
+              <motion.p variants={itemV} className="mt-2 text-sm leading-relaxed text-[#9AA7B6]">{active.desc}</motion.p>
 
-              <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
+              <motion.div variants={itemV} className="mt-5 grid grid-cols-2 gap-3 text-sm">
                 <Meta icon={Clock} label="Avg. Timeline" value={active.time} />
                 <Meta icon={Gauge} label="Stage" value={active.tier} />
-              </div>
+              </motion.div>
 
-              <div className="mt-5">
+              <motion.div variants={itemV} className="mt-5">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6]">Requirements</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {active.prereq.length === 0 ? (
@@ -178,20 +138,20 @@ export function SkillTreeSection({ onBookTrial }) {
                     ))
                   )}
                 </div>
-              </div>
+              </motion.div>
 
               {/* Coach insight */}
-              <div className="mt-5 flex gap-2 border-l-2 border-[#2E8DFF] bg-[#0B1016] px-4 py-3">
+              <motion.div variants={itemV} className="mt-5 flex gap-2 border-l-2 border-[#2E8DFF] bg-[#0B1016] px-4 py-3">
                 <Quote className="h-4 w-4 shrink-0 text-[#2E8DFF]" />
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-[#9AA7B6]">Coach Insight</p>
                   <p className="mt-0.5 text-sm italic text-[#C6D2DF]">{active.insight}</p>
                 </div>
-              </div>
+              </motion.div>
 
               {/* What it leads to next on the blueprint */}
               {unlocks.length > 0 && (
-                <div className="mt-5">
+                <motion.div variants={itemV} className="mt-5">
                   <p className="text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6]">Leads To</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {unlocks.map((u) => (
@@ -200,17 +160,49 @@ export function SkillTreeSection({ onBookTrial }) {
                       </button>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               )}
 
-              <button onClick={onBookTrial} className="btn-primary mt-6 w-full justify-center text-xs">
+              <motion.button
+                variants={itemV}
+                onClick={onBookTrial}
+                whileHover={rm ? undefined : { scale: 1.02 }}
+                whileTap={rm ? undefined : { scale: 0.98 }}
+                className="btn-primary mt-6 w-full justify-center text-xs"
+              >
                 Train This Skill With A Coach <ArrowRight className="h-4 w-4" />
-              </button>
+              </motion.button>
             </motion.div>
           </AnimatePresence>
         </div>
       </div>
     </Section>
+  );
+}
+
+// Defers the skill-tree WebGL chunk until it approaches the viewport, keeping
+// a same-size placeholder so the page never jumps while it loads.
+function SkillTreeMount(props) {
+  const ref = useRef(null);
+  const near = useInView(ref, { once: true, margin: "500px 0px" });
+  return (
+    <div ref={ref}>
+      {near ? (
+        <Suspense fallback={<SkillTreePlaceholder />}>
+          <SkillTree3D {...props} />
+        </Suspense>
+      ) : (
+        <SkillTreePlaceholder />
+      )}
+    </div>
+  );
+}
+
+function SkillTreePlaceholder() {
+  return (
+    <div className="flex h-[440px] w-full items-center justify-center rounded-sm border border-[#1E2A38] bg-[#0B1016] sm:h-[500px]">
+      <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">Loading skill tree…</span>
+    </div>
   );
 }
 
@@ -244,32 +236,39 @@ export function HallOfFirstsSection({ onBookTrial }) {
           <h3 className="font-heading text-2xl tracking-wide text-white">{COMMUNITY.title[0]} <span className="accent">{COMMUNITY.title[1]}</span></h3>
           <p className="text-sm text-[#9AA7B6]">{COMMUNITY.sub}</p>
         </div>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={vpOnce}
-          variants={stagger}
-          className="grid grid-cols-2 gap-4 lg:grid-cols-4"
+        {/* Scroll-driven card stack (React Bits ScrollStack) — scroll inside the
+            panel and each family pillar pins + stacks on the one before it. */}
+        <ScrollStack
+          className="ct-community-stack"
+          itemDistance={140}
+          itemStackDistance={22}
+          baseScale={0.88}
+          stackPosition="18%"
+          scaleEndPosition="8%"
         >
-          {COMMUNITY.items.map((c) => {
+          {COMMUNITY.items.map((c, i) => {
             const Icon = c.icon;
             return (
-              <motion.div key={c.name} variants={reveal} className="group overflow-hidden rounded-sm border border-[#1E2A38]">
-                <MediaSlot media={{ ...c.media, ratio: "4/3" }} align="" scrim="ct-media__scrim--full">
-                  <div className="flex">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-sm border border-[#2E8DFF]/40 bg-[#0B1016]/70 text-[#2E8DFF] backdrop-blur">
-                      <Icon className="h-4 w-4" />
-                    </span>
+              <ScrollStackItem key={c.name} itemClassName="ct-community-card">
+                <div className="ct-community-card__grid">
+                  <div className="ct-community-card__body">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="ct-community-card__badge">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="ct-community-card__index">{String(i + 1).padStart(2, "0")}</span>
+                    </div>
+                    <h4 className="ct-community-card__title">{c.name}</h4>
+                    <p className="ct-community-card__desc">{c.desc}</p>
                   </div>
-                  <div className="mt-auto">
-                    <h4 className="font-heading text-lg tracking-wide text-white">{c.name}</h4>
-                    <p className="mt-1 text-[10px] leading-snug text-[#C6D2DF]">{c.desc}</p>
+                  <div className="ct-community-card__media">
+                    <MediaSlot media={{ ...c.media, ratio: undefined }} align="" scrim="ct-media__scrim--full" />
                   </div>
-                </MediaSlot>
-              </motion.div>
+                </div>
+              </ScrollStackItem>
             );
           })}
-        </motion.div>
+        </ScrollStack>
       </div>
 
       <motion.div

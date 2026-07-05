@@ -37,7 +37,7 @@ function easedFrameProgress(t) {
    Draws the layered composition onto a single canvas:
      L0  Solid dark base
      L1  Atmospheric blurred background
-     L2  Cinematic vignette + teal glow
+     L2  Cinematic vignette + blue glow
      L3  Sharp foreground athlete with edge blending
      L4  Motion blur ghost (previous frame at low opacity)
      L5  Grain overlay
@@ -78,7 +78,7 @@ function drawCinematicFrame(ctx, canvas, image, opts = {}) {
   ctx.drawImage(image, bgX, bgY, bgFit.width, bgFit.height);
   ctx.filter = "none";
 
-  // Subtle teal tint over background
+  // Subtle blue tint over background
   ctx.globalAlpha = 0.08;
   ctx.fillStyle = "#1a6b63";
   ctx.fillRect(0, 0, cw, ch);
@@ -98,16 +98,16 @@ function drawCinematicFrame(ctx, canvas, image, opts = {}) {
   ctx.fillStyle = vigGrad;
   ctx.fillRect(0, 0, cw, ch);
 
-  // Teal atmospheric glow — intensifies at peak
+  // Blue atmospheric glow — intensifies at peak
   const glowIntensity = 0.06 + scrollProgress * 0.12;
-  const tealGrad = ctx.createRadialGradient(
+  const glowGrad = ctx.createRadialGradient(
     cw * 0.52, ch * 0.4, 0,
     cw * 0.52, ch * 0.4, ch * 0.7
   );
-  tealGrad.addColorStop(0, `rgba(46, 196, 182, ${glowIntensity})`);
-  tealGrad.addColorStop(0.4, `rgba(46, 196, 182, ${glowIntensity * 0.3})`);
-  tealGrad.addColorStop(1, "rgba(46, 196, 182, 0)");
-  ctx.fillStyle = tealGrad;
+  glowGrad.addColorStop(0, `rgba(46, 141, 255, ${glowIntensity})`);
+  glowGrad.addColorStop(0.4, `rgba(46, 141, 255, ${glowIntensity * 0.3})`);
+  glowGrad.addColorStop(1, "rgba(46, 141, 255, 0)");
+  ctx.fillStyle = glowGrad;
   ctx.fillRect(0, 0, cw, ch);
   ctx.restore();
 
@@ -183,9 +183,9 @@ function drawCinematicFrame(ctx, canvas, image, opts = {}) {
       cw * 0.5, ch * 0.35, fgFit.width * 0.15,
       cw * 0.5, ch * 0.45, fgFit.width * 0.6
     );
-    rimGrad.addColorStop(0, `rgba(46, 196, 182, ${bloomStrength})`);
-    rimGrad.addColorStop(0.5, `rgba(46, 196, 182, ${bloomStrength * 0.3})`);
-    rimGrad.addColorStop(1, "rgba(46, 196, 182, 0)");
+    rimGrad.addColorStop(0, `rgba(46, 141, 255, ${bloomStrength})`);
+    rimGrad.addColorStop(0.5, `rgba(46, 141, 255, ${bloomStrength * 0.3})`);
+    rimGrad.addColorStop(1, "rgba(46, 141, 255, 0)");
     ctx.fillStyle = rimGrad;
     ctx.fillRect(0, 0, cw, ch);
     ctx.restore();

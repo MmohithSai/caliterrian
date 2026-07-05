@@ -4,6 +4,8 @@ import { MapPin, Phone, ChevronRight, Send } from "lucide-react";
 import { InstagramIcon as Instagram, WhatsAppIcon as WhatsApp } from "@/components/icons";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
+import PageHero from "@/components/PageHero";
+import PageBackdrop from "@/components/PageBackdrop";
 import { submitForm } from "@/lib/supabase";
 import { NAP, SOCIAL, telLink, waLink } from "@/data/site";
 import { trackFormSubmit, trackWhatsApp, trackCall } from "@/lib/analytics";
@@ -60,12 +62,12 @@ export default function Contact({ onBookTrial }) {
       id: "phone",
       href: telLink(),
       icon: <Phone className="w-5 h-5 text-white" />,
-      iconBg: "bg-[#2EC4B6]",
-      borderColor: "border-[#2EC4B6]/30 hover:border-[#2EC4B6]",
-      bgStyle: { background: "linear-gradient(135deg, rgba(46,196,182,0.08), rgba(46,196,182,0.02))" },
+      iconBg: "bg-[#2E8DFF]",
+      borderColor: "border-[#2E8DFF]/30 hover:border-[#2E8DFF]",
+      bgStyle: { background: "linear-gradient(135deg, rgba(46,141,255,0.08), rgba(46,141,255,0.02))" },
       title: NAP.phoneDisplay,
       subtitle: "Call us directly during training hours",
-      glow: "rgba(46,196,182,0.15)",
+      glow: "rgba(46,141,255,0.15)",
       onTrack: () => trackCall("contact"),
     },
     {
@@ -83,23 +85,16 @@ export default function Contact({ onBookTrial }) {
   ];
 
   return (
-    <div className="pt-24 min-h-screen bg-obsidian">
+    <div className="relative isolate pt-24 min-h-screen bg-obsidian">
       <SEO title="Contact Us" description="Contact Cali Terrain calisthenics gym at Bowenpally, Secunderabad. Call 8688458907." path="/contact" />
+      <PageBackdrop />
 
-      {/* Hero Header */}
-      <div className="relative bg-[#0D0D0D] border-b border-white/5 py-20 px-6 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 20% 80%, rgba(46,196,182,0.06), transparent 50%)" }} />
-        <motion.div
-          className="max-w-7xl mx-auto relative"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <p className="section-tag mb-2">Get In Touch</p>
-          <h1 className="font-heading text-6xl md:text-8xl text-white leading-none mb-4">CONTACT<br /><span className="text-[#2EC4B6]">US</span></h1>
-          <p className="text-zinc-400 text-base max-w-2xl">Have questions? Want to book a trial? We're here to help.</p>
-        </motion.div>
-      </div>
+      <PageHero
+        eyebrow="Get In Touch"
+        lines={["CONTACT", "US"]}
+        ghost="HELLO"
+        sub="Have questions? Want to book a trial? We're here to help."
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -132,10 +127,10 @@ export default function Contact({ onBookTrial }) {
                     {card.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-bold text-sm group-hover:text-[#2EC4B6] transition-colors duration-200">{card.title}</p>
-                    <p className="text-zinc-500 text-xs">{card.subtitle}</p>
+                    <p className="text-white font-bold text-sm group-hover:text-[#2E8DFF] transition-colors duration-200">{card.title}</p>
+                    <p className="text-[#8A99AB] text-xs">{card.subtitle}</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-zinc-600 transition-all duration-200 group-hover:text-[#2EC4B6] group-hover:translate-x-1 flex-shrink-0" />
+                  <ChevronRight className="w-4 h-4 text-[#5C6B7C] transition-all duration-200 group-hover:text-[#2E8DFF] group-hover:translate-x-1 flex-shrink-0" />
                 </motion.a>
               ))}
             </motion.div>
@@ -143,13 +138,13 @@ export default function Contact({ onBookTrial }) {
             {/* Address */}
             <motion.div
               variants={fadeUp}
-              className="flex gap-3 mb-10 bg-[#121212] border border-white/5 p-5 hover:border-white/15 transition-colors duration-200"
-              whileHover={{ borderColor: "rgba(46,196,182,0.2)" }}
+              className="flex gap-3 mb-10 bg-[#131B25] border border-white/5 p-5 hover:border-white/15 transition-colors duration-200"
+              whileHover={{ borderColor: "rgba(46,141,255,0.2)" }}
             >
-              <MapPin className="w-5 h-5 text-[#2EC4B6] mt-0.5 flex-shrink-0" />
+              <MapPin className="w-5 h-5 text-[#2E8DFF] mt-0.5 flex-shrink-0" />
               <div>
                 <p className="text-white font-bold text-sm mb-1">{NAP.name}</p>
-                <p className="text-zinc-400 text-sm leading-relaxed">
+                <p className="text-[#9AA7B6] text-sm leading-relaxed">
                   {NAP.addressLines.map((line, i) => (
                     <span key={i}>{line}{i < NAP.addressLines.length - 1 && <br />}</span>
                   ))}
@@ -162,7 +157,7 @@ export default function Contact({ onBookTrial }) {
               variants={fadeUp}
               onClick={onBookTrial}
               className="btn-primary text-sm w-full justify-center"
-              whileHover={{ scale: 1.02, boxShadow: "0 0 35px rgba(46,196,182,0.4)" }}
+              whileHover={{ scale: 1.02, boxShadow: "0 0 35px rgba(46,141,255,0.4)" }}
               whileTap={{ scale: 0.98 }}
             >
               Book Free Trial <ChevronRight className="w-4 h-4" />
@@ -193,73 +188,73 @@ export default function Contact({ onBookTrial }) {
                 className="absolute -left-[9999px] h-0 w-0 opacity-0" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="form-field-group">
-                  <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Name *</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Name *</label>
                   <input
                     type="text" name="name" value={form.name} onChange={handleChange} required
                     placeholder="Your full name"
                     onFocus={() => setFocusedField("name")}
                     onBlur={() => setFocusedField(null)}
-                    className={`contact-input w-full bg-[#1A1A1A] border text-white px-4 py-3 text-sm outline-none placeholder-zinc-600 transition-all duration-200 ${focusedField === "name" ? "border-[#2EC4B6] shadow-[0_0_12px_rgba(46,196,182,0.15)]" : "border-white/10"}`}
+                    className={`contact-input w-full bg-[#1A2230] border text-white px-4 py-3 text-sm outline-none placeholder-[#5C6B7C] transition-all duration-200 ${focusedField === "name" ? "border-[#2E8DFF] shadow-[0_0_12px_rgba(46,141,255,0.15)]" : "border-white/10"}`}
                   />
                 </div>
                 <div className="form-field-group">
-                  <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Phone *</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Phone *</label>
                   <input
                     type="tel" name="phone" value={form.phone} onChange={handleChange} required
                     placeholder="Your mobile number"
                     onFocus={() => setFocusedField("phone")}
                     onBlur={() => setFocusedField(null)}
-                    className={`contact-input w-full bg-[#1A1A1A] border text-white px-4 py-3 text-sm outline-none placeholder-zinc-600 transition-all duration-200 ${focusedField === "phone" ? "border-[#2EC4B6] shadow-[0_0_12px_rgba(46,196,182,0.15)]" : "border-white/10"}`}
+                    className={`contact-input w-full bg-[#1A2230] border text-white px-4 py-3 text-sm outline-none placeholder-[#5C6B7C] transition-all duration-200 ${focusedField === "phone" ? "border-[#2E8DFF] shadow-[0_0_12px_rgba(46,141,255,0.15)]" : "border-white/10"}`}
                   />
                 </div>
               </div>
               <div className="form-field-group">
-                <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Age</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Age</label>
                 <input
                   type="text" name="age" value={form.age} onChange={handleChange}
                   placeholder="Your age"
                   onFocus={() => setFocusedField("age")}
                   onBlur={() => setFocusedField(null)}
-                  className={`contact-input w-full bg-[#1A1A1A] border text-white px-4 py-3 text-sm outline-none placeholder-zinc-600 transition-all duration-200 ${focusedField === "age" ? "border-[#2EC4B6] shadow-[0_0_12px_rgba(46,196,182,0.15)]" : "border-white/10"}`}
+                  className={`contact-input w-full bg-[#1A2230] border text-white px-4 py-3 text-sm outline-none placeholder-[#5C6B7C] transition-all duration-200 ${focusedField === "age" ? "border-[#2E8DFF] shadow-[0_0_12px_rgba(46,141,255,0.15)]" : "border-white/10"}`}
                 />
               </div>
               <div className="form-field-group">
-                <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Fitness Goal</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Fitness Goal</label>
                 <input
                   type="text" name="fitness_goal" value={form.fitness_goal} onChange={handleChange}
                   placeholder="e.g. Lose weight, build strength..."
                   onFocus={() => setFocusedField("fitness_goal")}
                   onBlur={() => setFocusedField(null)}
-                  className={`contact-input w-full bg-[#1A1A1A] border text-white px-4 py-3 text-sm outline-none placeholder-zinc-600 transition-all duration-200 ${focusedField === "fitness_goal" ? "border-[#2EC4B6] shadow-[0_0_12px_rgba(46,196,182,0.15)]" : "border-white/10"}`}
+                  className={`contact-input w-full bg-[#1A2230] border text-white px-4 py-3 text-sm outline-none placeholder-[#5C6B7C] transition-all duration-200 ${focusedField === "fitness_goal" ? "border-[#2E8DFF] shadow-[0_0_12px_rgba(46,141,255,0.15)]" : "border-white/10"}`}
                 />
               </div>
               <div className="form-field-group">
-                <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Interested Program</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Interested Program</label>
                 <select
                   name="interested_program" value={form.interested_program} onChange={handleChange}
                   onFocus={() => setFocusedField("program")}
                   onBlur={() => setFocusedField(null)}
-                  className={`contact-input w-full bg-[#1A1A1A] border text-white px-4 py-3 text-sm outline-none transition-all duration-200 ${focusedField === "program" ? "border-[#2EC4B6] shadow-[0_0_12px_rgba(46,196,182,0.15)]" : "border-white/10"}`}
+                  className={`contact-input w-full bg-[#1A2230] border text-white px-4 py-3 text-sm outline-none transition-all duration-200 ${focusedField === "program" ? "border-[#2E8DFF] shadow-[0_0_12px_rgba(46,141,255,0.15)]" : "border-white/10"}`}
                 >
                   <option value="">Select a program</option>
                   {PROGRAMS.map((p) => (<option key={p} value={p}>{p}</option>))}
                 </select>
               </div>
               <div className="form-field-group">
-                <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Message</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1.5 block">Message</label>
                 <textarea
                   name="message" value={form.message} onChange={handleChange} rows={4}
                   placeholder="Any other questions..."
                   onFocus={() => setFocusedField("message")}
                   onBlur={() => setFocusedField(null)}
-                  className={`contact-input w-full bg-[#1A1A1A] border text-white px-4 py-3 text-sm outline-none resize-none placeholder-zinc-600 transition-all duration-200 ${focusedField === "message" ? "border-[#2EC4B6] shadow-[0_0_12px_rgba(46,196,182,0.15)]" : "border-white/10"}`}
+                  className={`contact-input w-full bg-[#1A2230] border text-white px-4 py-3 text-sm outline-none resize-none placeholder-[#5C6B7C] transition-all duration-200 ${focusedField === "message" ? "border-[#2E8DFF] shadow-[0_0_12px_rgba(46,141,255,0.15)]" : "border-white/10"}`}
                 />
               </div>
               <motion.button
                 type="submit"
                 disabled={submitting}
                 className="btn-primary text-sm w-full justify-center"
-                whileHover={{ scale: 1.02, boxShadow: "0 0 35px rgba(46,196,182,0.4)" }}
+                whileHover={{ scale: 1.02, boxShadow: "0 0 35px rgba(46,141,255,0.4)" }}
                 whileTap={{ scale: 0.97 }}
               >
                 {submitting ? "Sending..." : "Send Message"} {!submitting && <Send className="w-4 h-4" />}

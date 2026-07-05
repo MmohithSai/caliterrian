@@ -10,6 +10,7 @@ import SplitText from "@/components/reactbits/SplitText";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
 import GlareHover from "@/components/reactbits/GlareHover";
 import Magnet from "@/components/reactbits/Magnet";
+import MuscleUp3D from "@/components/home/MuscleUp3D";
 
 // ── SECTION 10 · Results — outcome rings + member video stories ────────────
 // Consolidates the old Why-Stay, Member-Journeys and Testimonials sections.
@@ -203,19 +204,14 @@ export function FaqSection({ onBookTrial }) {
 // ── SECTION 16 · Final CTA — cinematic background ─────────────────────────
 export function FinalCtaSection({ onBookTrial }) {
   return (
-    <section id="final-cta" className="relative isolate flex min-h-[60vh] items-center overflow-hidden px-6 py-28">
-      <MediaSlot
-        media={{ label: "Facility / training panorama", hint: "", ratio: undefined }}
-        video={FINAL_CTA.video}
-        parallax
-        zoom={false}
-        overlay={false}
-        showLabel={false}
-        className="absolute inset-0 -z-10"
-      />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(11,16,22,0.86),rgba(11,16,22,0.92))]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(90%_120%_at_50%_0%,rgba(46,141,255,0.26),transparent_60%)]" />
-      <div className="hero-grain pointer-events-none absolute inset-0 -z-10 opacity-40" />
+    <section id="final-cta" className="relative isolate flex min-h-[70vh] items-center overflow-hidden bg-[#0B1016] px-6 py-28">
+      {/* MuscleUp3D: particle-constellation athlete looping a muscle-up behind
+          the headline (replaces the old Orb) — same ink-dot language as the
+          Training Programs hero silhouette, but the skeleton is animated
+          through the full rep. Reduced motion freezes it at the top. */}
+      <MuscleUp3D className="-z-10 opacity-70" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(90%_120%_at_50%_0%,rgba(46,141,255,0.14),transparent_60%)]" />
+      <div className="hero-grain pointer-events-none absolute inset-0 -z-10 opacity-30" />
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}

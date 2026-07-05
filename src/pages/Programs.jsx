@@ -1,5 +1,9 @@
 import { ChevronRight, Check, ArrowRight } from "lucide-react";
 import SEO from "@/components/SEO";
+import PageHero from "@/components/PageHero";
+import DotGrid from "@/components/reactbits/DotGrid";
+import PageBackdrop from "@/components/PageBackdrop";
+import SilhouetteBackdrop3D from "@/components/home/SilhouetteBackdrop3D";
 import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const PROGRAMS_DATA = [
@@ -21,21 +25,22 @@ export default function Programs({ onBookTrial }) {
   useScrollReveal();
 
   return (
-    <div className="pt-24 min-h-screen bg-obsidian">
+    <div className="relative isolate pt-24 min-h-screen bg-obsidian">
       <SEO title="Training Programs" description="12 calisthenics and bodyweight training programs at Cali Terrain, Secunderabad. Adult, kids, weight loss, handstand, personal coaching and more." path="/programs" />
+      <PageBackdrop />
 
-      {/* Header */}
-      <div className="bg-[#0D0D0D] border-b border-white/5 py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <p className="section-tag mb-2">What We Offer</p>
-          <h1 className="font-heading text-6xl md:text-8xl text-white leading-none mb-4">
-            TRAINING<br /><span className="text-[#2EC4B6]">PROGRAMS</span>
-          </h1>
-          <p className="text-zinc-400 text-base max-w-2xl leading-relaxed">
-            From complete beginners to advanced calisthenics athletes — we have a program for every goal and fitness level in Secunderabad.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        eyebrow="What We Offer"
+        lines={["TRAINING", "PROGRAMS"]}
+        ghost="12"
+        sub="From complete beginners to advanced calisthenics athletes: a program for every goal and fitness level in Secunderabad."
+        backdrop={
+          /* 3D particle handstand standing in the open right half of the hero */
+          <div className="absolute inset-y-0 right-[3%] hidden w-[44%] max-w-[520px] sm:block" aria-hidden="true">
+            <SilhouetteBackdrop3D className="opacity-70" />
+          </div>
+        }
+      />
 
       {/* Programs Grid */}
       <div className="max-w-7xl mx-auto px-6 py-20">
@@ -43,7 +48,7 @@ export default function Programs({ onBookTrial }) {
           {PROGRAMS_DATA.map((program, i) => (
             <div
               key={program.id}
-              className="bg-[#121212] border border-white/5 hover:border-[#2EC4B6]/30 overflow-hidden scroll-fade card-glow"
+              className="bg-[#131B25] border border-white/5 hover:border-[#2E8DFF]/30 overflow-hidden scroll-fade card-glow"
               style={{ transitionDelay: `${(i % 2) * 0.1}s` }}
             >
               <div className="aspect-[21/9] overflow-hidden">
@@ -51,34 +56,34 @@ export default function Programs({ onBookTrial }) {
                   src={program.image}
                   alt={program.title}
                   className="w-full h-full object-cover"
-                  onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#1A1A1A"; }}
+                  onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#1A2230"; }}
                 />
               </div>
               <div className="p-6">
                 <div className="flex items-start justify-between mb-3">
                   <h2 className="font-heading text-2xl text-white tracking-wide">{program.title}</h2>
                   <div className="flex gap-2 flex-shrink-0 ml-4">
-                    <span className="text-xs bg-[#2EC4B6]/10 border border-[#2EC4B6]/30 text-[#2EC4B6] px-2 py-1 font-bold uppercase tracking-wider">
+                    <span className="text-xs bg-[#2E8DFF]/10 border border-[#2E8DFF]/30 text-[#2E8DFF] px-2 py-1 font-bold uppercase tracking-wider">
                       {program.level}
                     </span>
                   </div>
                 </div>
-                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-3 font-bold">Age: {program.ageGroup}</p>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-5">{program.description}</p>
+                <p className="text-[#8A99AB] text-xs uppercase tracking-wider mb-3 font-bold">Age: {program.ageGroup}</p>
+                <p className="text-[#9AA7B6] text-sm leading-relaxed mb-5">{program.description}</p>
 
                 <div className="mb-5">
-                  <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3">Key Benefits</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-3">Key Benefits</p>
                   <div className="grid grid-cols-2 gap-2">
                     {program.benefits.map((b, j) => (
-                      <div key={j} className="flex items-center gap-2 text-sm text-zinc-400">
-                        <Check className="w-3 h-3 text-[#2EC4B6] flex-shrink-0" /> {b}
+                      <div key={j} className="flex items-center gap-2 text-sm text-[#9AA7B6]">
+                        <Check className="w-3 h-3 text-[#2E8DFF] flex-shrink-0" /> {b}
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="bg-[#1A1A1A] border border-white/5 p-4 mb-5">
-                  <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1">Expected Outcome</p>
+                <div className="bg-[#1A2230] border border-white/5 p-4 mb-5">
+                  <p className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-1">Expected Outcome</p>
                   <p className="text-white text-sm font-medium">{program.outcome}</p>
                 </div>
 
@@ -92,13 +97,17 @@ export default function Programs({ onBookTrial }) {
       </div>
 
       {/* CTA Banner */}
-      <div className="bg-[#2EC4B6] py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <div className="relative overflow-hidden bg-[#2E8DFF] py-20 px-6">
+        {/* React Bits DotGrid: white interactive dots over the blue band */}
+        <div className="absolute inset-0 pointer-events-none opacity-60" aria-hidden="true">
+          <DotGrid dotSize={3} gap={30} baseColor="#57A4FF" activeColor="#FFFFFF" proximity={150} />
+        </div>
+        <div className="relative max-w-4xl mx-auto text-center">
           <h2 className="font-heading text-5xl md:text-6xl text-white mb-4">NOT SURE WHICH PROGRAM?</h2>
           <p className="text-white/80 mb-8 text-base max-w-lg mx-auto">
             Come in for a free assessment. Our coaches will recommend the best program based on your goals and current fitness.
           </p>
-          <button onClick={onBookTrial} className="bg-white hover:bg-zinc-100 text-[#2EC4B6] font-bold uppercase tracking-widest px-8 py-4 text-sm inline-flex items-center gap-2 transition-colors duration-200">
+          <button onClick={onBookTrial} className="bg-white hover:bg-zinc-100 text-[#2E8DFF] font-bold uppercase tracking-widest px-8 py-4 text-sm inline-flex items-center gap-2 transition-colors duration-200">
             Book Free Assessment <ArrowRight className="w-4 h-4" />
           </button>
         </div>

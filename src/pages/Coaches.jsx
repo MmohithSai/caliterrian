@@ -1,5 +1,8 @@
 import { ChevronRight, Award, Users, Star } from "lucide-react";
 import SEO from "@/components/SEO";
+import PageHero from "@/components/PageHero";
+import DotGrid from "@/components/reactbits/DotGrid";
+import PageBackdrop from "@/components/PageBackdrop";
 import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const COACHES = [
@@ -26,23 +29,23 @@ const COACHES = [
 export default function Coaches({ onBookTrial }) {
   useScrollReveal();
   return (
-    <div className="pt-24 min-h-screen bg-obsidian">
+    <div className="relative isolate pt-24 min-h-screen bg-obsidian">
       <SEO title="Our Coaches" description="Meet the expert calisthenics coaches at Cali Terrain, Secunderabad." path="/coaches" />
-      <div className="bg-[#0D0D0D] border-b border-white/5 py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <p className="section-tag mb-2">The Team</p>
-          <h1 className="font-heading text-6xl md:text-8xl text-white leading-none mb-4">MEET THE<br /><span className="text-[#2EC4B6]">COACHES</span></h1>
-          <p className="text-zinc-400 text-base max-w-2xl leading-relaxed">Expert bodyweight training coaches dedicated to transforming your fitness journey.</p>
-        </div>
-      </div>
+      <PageBackdrop />
+      <PageHero
+        eyebrow="The Team"
+        lines={["MEET THE", "COACHES"]}
+        ghost="COACH"
+        sub="Expert bodyweight training coaches dedicated to transforming your fitness journey."
+      />
       <div className="max-w-7xl mx-auto px-6 py-20 space-y-20">
         {COACHES.map((coach, i) => (
           <div key={i} className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start scroll-fade">
             <div className={`relative ${i % 2 === 1 ? "lg:order-2" : ""}`}>
-              <div className="aspect-[4/5] overflow-hidden bg-[#121212]">
-                <img src={coach.image} alt={coach.name} className="w-full h-full object-cover object-top" onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#1A1A1A"; }} />
+              <div className="group aspect-[4/5] overflow-hidden bg-[#131B25]">
+                <img src={coach.image} alt={coach.name} className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#1A2230"; }} />
               </div>
-              <div className="absolute -bottom-4 -right-4 bg-[#2EC4B6] p-4 hidden md:block">
+              <div className="absolute -bottom-4 -right-4 bg-[#2E8DFF] p-4 hidden md:block">
                 <p className="font-heading text-xl text-white">{coach.experience}</p>
                 <p className="text-white/70 text-xs uppercase tracking-widest">Experience</p>
               </div>
@@ -50,49 +53,54 @@ export default function Coaches({ onBookTrial }) {
             <div className={i % 2 === 1 ? "lg:order-1" : ""}>
               <p className="section-tag mb-2">Coach {i + 1}</p>
               <h2 className="font-heading text-4xl text-white tracking-wide mb-1">{coach.name}</h2>
-              <p className="text-[#2EC4B6] font-bold text-sm uppercase tracking-widest mb-6">{coach.role}</p>
-              <p className="text-zinc-400 text-base leading-relaxed mb-8">{coach.bio}</p>
+              <p className="text-[#2E8DFF] font-bold text-sm uppercase tracking-widest mb-6">{coach.role}</p>
+              <p className="text-[#9AA7B6] text-base leading-relaxed mb-8">{coach.bio}</p>
               <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-[#121212] border border-white/5 p-4 text-center">
-                  <Award className="w-5 h-5 text-[#2EC4B6] mx-auto mb-2" />
+                <div className="bg-[#131B25] border border-white/5 p-4 text-center">
+                  <Award className="w-5 h-5 text-[#2E8DFF] mx-auto mb-2" />
                   <p className="font-heading text-xl text-white">{coach.experience}</p>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Experience</p>
+                  <p className="text-[#8A99AB] text-xs uppercase tracking-wider">Experience</p>
                 </div>
-                <div className="bg-[#121212] border border-white/5 p-4 text-center">
-                  <Users className="w-5 h-5 text-[#2EC4B6] mx-auto mb-2" />
+                <div className="bg-[#131B25] border border-white/5 p-4 text-center">
+                  <Users className="w-5 h-5 text-[#2E8DFF] mx-auto mb-2" />
                   <p className="font-heading text-xl text-white">{coach.members}</p>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Impact</p>
+                  <p className="text-[#8A99AB] text-xs uppercase tracking-wider">Impact</p>
                 </div>
               </div>
               <div className="mb-6">
-                <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3">Specialties</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-3">Specialties</p>
                 <div className="flex flex-wrap gap-2">
-                  {coach.specialties.map((s, j) => (<span key={j} className="bg-[#2EC4B6]/10 border border-[#2EC4B6]/30 text-[#2EC4B6] text-xs font-bold uppercase tracking-wider px-3 py-1">{s}</span>))}
+                  {coach.specialties.map((s, j) => (<span key={j} className="bg-[#2E8DFF]/10 border border-[#2E8DFF]/30 text-[#2E8DFF] text-xs font-bold uppercase tracking-wider px-3 py-1">{s}</span>))}
                 </div>
               </div>
               <div className="mb-8">
-                <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3">Certifications</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-3">Certifications</p>
                 <div className="space-y-2">
-                  {coach.certifications.map((c, j) => (<div key={j} className="flex items-center gap-2 text-sm text-zinc-400"><Star className="w-3 h-3 text-[#2EC4B6] flex-shrink-0" /> {c}</div>))}
+                  {coach.certifications.map((c, j) => (<div key={j} className="flex items-center gap-2 text-sm text-[#9AA7B6]"><Star className="w-3 h-3 text-[#2E8DFF] flex-shrink-0" /> {c}</div>))}
                 </div>
               </div>
-              <blockquote className="border-l-4 border-[#2EC4B6] pl-4 mb-8">
-                <p className="text-zinc-300 text-sm italic leading-relaxed">"{coach.philosophy}"</p>
+              <blockquote className="relative bg-[#2E8DFF]/[0.06] border border-[#2E8DFF]/20 px-5 pt-7 pb-5 mb-8">
+                <span aria-hidden="true" className="absolute top-1 left-4 font-heading text-4xl text-[#2E8DFF] leading-none select-none">"</span>
+                <p className="text-[#C9D5E3] text-sm italic leading-relaxed">{coach.philosophy}</p>
               </blockquote>
               <button onClick={onBookTrial} className="btn-primary text-sm">Train with this Coach <ChevronRight className="w-4 h-4" /></button>
             </div>
           </div>
         ))}
       </div>
-      <div className="bg-[#0D0D0D] border-y border-white/5 py-20 px-6">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative overflow-hidden bg-[#0E141C] border-y border-white/5 py-20 px-6">
+        {/* React Bits DotGrid: interactive blueprint dots behind the closing band */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <DotGrid dotSize={3} gap={28} baseColor="#1A2534" activeColor="#2E8DFF" proximity={140} />
+        </div>
+        <div className="relative max-w-7xl mx-auto">
           <h2 className="font-heading text-4xl md:text-5xl text-white mb-10 text-center scroll-fade">WHY TRAIN WITH OUR COACHES</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[{ icon: Users, title: "Beginner-Friendly", desc: "Patient, progressive coaching for complete beginners." }, { icon: Award, title: "Calisthenics Specialists", desc: "Coaches who specialize exclusively in bodyweight training." }, { icon: Star, title: "Proven Results", desc: "Hundreds of members transformed. Real results." }].map(({ icon: Icon, title, desc }, i) => (
-              <div key={i} className="bg-[#121212] border border-white/5 p-6 scroll-fade" style={{ transitionDelay: `${i * 0.1}s` }}>
-                <Icon className="w-6 h-6 text-[#2EC4B6] mb-4" />
+              <div key={i} className="bg-[#131B25] border border-white/5 p-6 scroll-fade card-glow" style={{ transitionDelay: `${i * 0.1}s` }}>
+                <Icon className="w-6 h-6 text-[#2E8DFF] mb-4" />
                 <h3 className="font-heading text-xl text-white tracking-wide mb-2">{title}</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed">{desc}</p>
+                <p className="text-[#8A99AB] text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>

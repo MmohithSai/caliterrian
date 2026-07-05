@@ -31,7 +31,7 @@ export default class ErrorBoundary extends Component {
         <div className="min-h-screen bg-obsidian flex flex-col items-center justify-center px-6 text-center">
           <p className="section-tag">Something broke</p>
           <h1 className="font-heading text-6xl sm:text-7xl text-white leading-none mb-4">
-            OUR <span className="text-[#2EC4B6]">BAD.</span>
+            OUR <span className="text-[#2E8DFF]">BAD.</span>
           </h1>
           <p className="text-zinc-400 text-base max-w-md mx-auto mb-8">
             An unexpected error stopped this page from loading. Reload to try again.

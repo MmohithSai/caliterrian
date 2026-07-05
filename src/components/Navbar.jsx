@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -18,6 +19,7 @@ export default function Navbar({ onBookTrial }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -53,31 +55,42 @@ export default function Navbar({ onBookTrial }) {
 
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-1">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              data-testid={`nav-link-${link.label.toLowerCase()}`}
-              className={`text-xs font-bold uppercase tracking-widest px-3 py-2 transition-colors duration-200 ${
-                location.pathname === link.to
-                  ? "text-[#2EC4B6]"
-                  : "text-zinc-400 hover:text-white"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const active = location.pathname === link.to;
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                data-testid={`nav-link-${link.label.toLowerCase()}`}
+                className={`relative text-xs font-bold uppercase tracking-widest px-3 py-2 transition-colors duration-200 ${
+                  active ? "text-[#2E8DFF]" : "text-zinc-400 hover:text-white"
+                }`}
+              >
+                {link.label}
+                {/* Shared layoutId → the underline glides to the active link */}
+                {active && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-[#2E8DFF]"
+                    transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 34 }}
+                  />
+                )}
+              </Link>
+            );
+          })}
         </div>
 
         {/* CTA + Mobile Toggle */}
         <div className="flex items-center gap-3">
-          <button
+          <motion.button
             data-testid="navbar-book-trial-btn"
             onClick={onBookTrial}
-            className="hidden sm:flex items-center gap-2 bg-[#2EC4B6] hover:bg-[#25A599] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 transition-all duration-200"
+            whileHover={reduce ? undefined : { scale: 1.04 }}
+            whileTap={reduce ? undefined : { scale: 0.96 }}
+            className="hidden sm:flex items-center gap-2 bg-[#2E8DFF] hover:bg-[#1F6FE0] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 transition-colors duration-200"
           >
             Book Free Trial <ChevronRight className="w-3 h-3" />
-          </button>
+          </motion.button>
           <button
             data-testid="navbar-mobile-toggle"
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -89,34 +102,47 @@ export default function Navbar({ onBookTrial }) {
       </div>
 
       {/* Mobile Menu */}
-      {mobileOpen && (
-        <div
-          data-testid="navbar-mobile-menu"
-          className="lg:hidden bg-obsidian/98 backdrop-blur-lg border-t border-white/5"
-        >
-          <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-1">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`text-sm font-bold uppercase tracking-widest py-3 border-b border-white/5 transition-colors duration-200 ${
-                  location.pathname === link.to
-                    ? "text-[#2EC4B6]"
-                    : "text-zinc-400 hover:text-white"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <button
-              onClick={onBookTrial}
-              className="mt-4 btn-primary text-xs w-full justify-center"
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            data-testid="navbar-mobile-menu"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:hidden overflow-hidden bg-obsidian/98 backdrop-blur-lg border-t border-white/5"
+          >
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } } }}
+              className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-1"
             >
-              Book Free Trial <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-      )}
+              {NAV_LINKS.map((link) => (
+                <motion.div key={link.to} variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0 } }}>
+                  <Link
+                    to={link.to}
+                    className={`block text-sm font-bold uppercase tracking-widest py-3 border-b border-white/5 transition-colors duration-200 ${
+                      location.pathname === link.to
+                        ? "text-[#2E8DFF]"
+                        : "text-zinc-400 hover:text-white"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+              <motion.button
+                variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0 } }}
+                onClick={onBookTrial}
+                className="mt-4 btn-primary text-xs w-full justify-center"
+              >
+                Book Free Trial <ChevronRight className="w-3 h-3" />
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
