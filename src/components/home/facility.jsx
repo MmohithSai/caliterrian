@@ -50,7 +50,8 @@ export function FacilitySection() {
             </button>
           ))}
           <span className="pointer-events-none absolute bottom-3 left-3 z-10 text-[10px] uppercase tracking-widest text-white/60">
-            Hover a zone to explore
+            <span className="sm:hidden">Tap a zone to explore</span>
+            <span className="hidden sm:inline">Hover a zone to explore</span>
           </span>
         </MediaSlot>
 
@@ -68,6 +69,17 @@ export function FacilitySection() {
           <p className="mt-2 text-[11px] leading-snug text-[#9AA7B6]">{activeZone.desc}</p>
         </div>
       </motion.div>
+
+      {/* Hotspot detail card (mobile — shown in-flow below the panorama since taps have no hover overlay to rely on) */}
+      <div className="mt-3 border border-[#2E8DFF]/40 bg-[#0B1016]/90 p-3 sm:hidden">
+        <div className="flex items-center gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-sm border border-[#2E8DFF]/40 text-[#2E8DFF]">
+            <ActiveIcon className="h-3.5 w-3.5" />
+          </span>
+          <h3 className="font-heading text-base tracking-wide text-white">{activeZone.name}</h3>
+        </div>
+        <p className="mt-2 text-[11px] leading-snug text-[#9AA7B6]">{activeZone.desc}</p>
+      </div>
 
       {/* Immersive 3D zone gallery — drag to orbit, click a card to step inside */}
       <GalleryMount />
