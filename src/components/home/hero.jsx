@@ -104,7 +104,7 @@ export function HeroSection({ onBookTrial }) {
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             poster={HERO.img}
             initial={{ scale: 1.12, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

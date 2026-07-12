@@ -8,7 +8,7 @@
 # conditioning corner → calisthenics bars (pull-up, parallel, rings).
 # The whole clip is stabilized (vidstab two-pass) and lightly graded; the
 # tail dissolves back into the head so the loop is seamless.
-# Output: public/hero/facility-cinematic.mp4 + .webm + facility-cinematic-poster.jpg
+# Output: public/hero/facility-cinematic.mp4 + facility-cinematic-poster.jpg
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -58,18 +58,13 @@ LOFF="$(awk -v d="$DC" -v l="$LOOP" 'BEGIN{printf "%.3f", d-2*l}')"
 
 echo ">> Final H.264 MP4..."
 "$FF" -y -loglevel error -i "$TMP/loop.mp4" \
-  -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 21 -preset slow \
-  -maxrate 4500k -bufsize 9000k -movflags +faststart -an \
+  -c:v libx264 -profile:v high -level 4.1 -pix_fmt yuv420p -crf 25 -preset slow \
+  -maxrate 2200k -bufsize 4400k -movflags +faststart -an \
   "$OUT/facility-cinematic.mp4"
-
-echo ">> WebM (VP9)..."
-"$FF" -y -loglevel error -i "$TMP/loop.mp4" \
-  -c:v libvpx-vp9 -b:v 0 -crf 32 -row-mt 1 -deadline good -cpu-used 3 -an \
-  "$OUT/facility-cinematic.webm"
 
 echo ">> Poster (first loop frame)..."
 "$FF" -y -loglevel error -i "$OUT/facility-cinematic.mp4" \
   -frames:v 1 -q:v 3 -update 1 "$OUT/facility-cinematic-poster.jpg"
 
 echo ">> Done:"
-ls -la "$OUT/facility-cinematic.mp4" "$OUT/facility-cinematic.webm" "$OUT/facility-cinematic-poster.jpg"
+ls -la "$OUT/facility-cinematic.mp4" "$OUT/facility-cinematic-poster.jpg"

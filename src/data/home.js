@@ -39,16 +39,16 @@ export const HERO = {
   reassure: "No experience needed. Day one starts wherever you are.",
   // Reuses the real headline stats from site.js — no invented figures.
   trust: STATS,
-  // Seamless FULL UNCUT facility tour from the real walkthrough footage
+  // Seamless FULL UNCUT facility tour from the real walkthrough footage,
+  // re-encoded for fast first playback without changing its 1080p/24fps look.
   // (scripts/build-hero-cinematic.sh) — every shot, nothing trimmed:
   // performance lane, freestyle crash mats + climbing rope, functional rig,
   // stretching runway, squat racks + platform, dumbbell rack, conditioning
   // corner, and the calisthenics bars. Stabilized and lightly graded so the
   // floor stays clearly visible. `img` doubles as the <video> poster / LCP
   // image and the reduced-motion fallback.
-  video: "/hero/facility-cinematic.mp4?v=4",
-  webm: "/hero/facility-cinematic.webm?v=4",
-  img: "/hero/facility-cinematic-poster.jpg?v=4",
+  video: "/hero/facility-cinematic.mp4?v=5",
+  img: "/hero/facility-cinematic-poster.jpg?v=5",
 };
 
 // ── SECTION 2 · The Caliterrain Path ──────────────────────────────────────
