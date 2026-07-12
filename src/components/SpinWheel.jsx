@@ -56,7 +56,12 @@ export default function SpinWheel({ open, onClose }) {
         className="relative bg-[#0E141C] border border-white/10 p-6 sm:p-8 max-w-md w-full text-center"
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} data-testid="spin-wheel-close" className="absolute top-4 right-4 text-[#8A99AB] hover:text-white">
+        <button
+          onClick={onClose}
+          data-testid="spin-wheel-close"
+          aria-label="Close"
+          className="absolute top-3 right-3 z-20 grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-[#1A2230] text-white/80 transition-colors duration-200 hover:border-[#2E8DFF]/60 hover:bg-[#2E8DFF] hover:text-white"
+        >
           <X className="w-5 h-5" />
         </button>
 

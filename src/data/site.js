@@ -33,13 +33,13 @@ export const NAP = {
 };
 
 // ── Opening hours ───────────────────────────────────────────────────────────
-// Two batches per day, all seven days.
+// Two weekday batches per day.
 export const HOURS = {
   morning: "5:00 AM – 11:00 AM",
   evening: "5:00 PM – 10:00 PM",
-  days: "Mon – Sun",
+  days: "Mon – Fri",
   // schema.org openingHours strings.
-  schema: ["Mo-Su 05:00-11:00", "Mo-Su 17:00-22:00"],
+  schema: ["Mo-Fr 05:00-11:00", "Mo-Fr 17:00-22:00"],
 };
 
 // ── Headline stats (consistent across Home / Transformations / About) ────────

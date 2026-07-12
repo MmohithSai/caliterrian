@@ -33,7 +33,30 @@ function Node({ gold }) {
   );
 }
 
-// Stacked silhouette + ghost number (used in both desktop band and mobile row).
+// Stage visual: real coaching photo when the stage has one, otherwise the
+// hand-drawn silhouette fallback.
+function StageFigure({ stage }) {
+  if (stage.img) {
+    return (
+      <img
+        src={stage.img}
+        alt={`${stage.title} — coaching session at Cali Terrain`}
+        loading="lazy"
+        className={`journey-figure journey-figure--photo ${stage.gold ? "journey-figure--gold" : ""}`}
+      />
+    );
+  }
+  return (
+    <AthleteSilhouette
+      pose={stage.pose}
+      tone={stage.gold ? "gold" : "blue"}
+      title={`${stage.title} — ${stage.pose} silhouette`}
+      className={`journey-figure ${stage.gold ? "journey-figure--gold" : ""}`}
+    />
+  );
+}
+
+// Stacked figure + ghost number (used in both desktop band and mobile row).
 function Athlete({ stage }) {
   return (
     <div className="journey-figwrap" data-jathlete>
@@ -45,12 +68,7 @@ function Athlete({ stage }) {
       >
         {stage.n}
       </span>
-      <AthleteSilhouette
-        pose={stage.pose}
-        tone={stage.gold ? "gold" : "blue"}
-        title={`${stage.title} — ${stage.pose} silhouette`}
-        className={`journey-figure ${stage.gold ? "journey-figure--gold" : ""}`}
-      />
+      <StageFigure stage={stage} />
     </div>
   );
 }
@@ -193,12 +211,7 @@ export function JourneySection() {
                   <div className="flex items-center gap-4">
                     <div className="journey-vfig relative shrink-0">
                       <span className={`journey-num journey-num--sm ${s.gold ? "journey-num--gold" : ""}`} aria-hidden="true">{s.n}</span>
-                      <AthleteSilhouette
-                        pose={s.pose}
-                        tone={s.gold ? "gold" : "blue"}
-                        title={`${s.title} — ${s.pose} silhouette`}
-                        className={`journey-figure ${s.gold ? "journey-figure--gold" : ""}`}
-                      />
+                      <StageFigure stage={s} />
                     </div>
                     <Label stage={s} />
                   </div>

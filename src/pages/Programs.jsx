@@ -97,7 +97,7 @@ export default function Programs({ onBookTrial }) {
       </div>
 
       {/* CTA Banner */}
-      <div className="relative overflow-hidden bg-[#2E8DFF] py-20 px-6">
+      <div className="relative overflow-hidden bg-[#1F6FE0] py-20 px-6">
         {/* React Bits DotGrid: white interactive dots over the blue band */}
         <div className="absolute inset-0 pointer-events-none opacity-60" aria-hidden="true">
           <DotGrid dotSize={3} gap={30} baseColor="#57A4FF" activeColor="#FFFFFF" proximity={150} />

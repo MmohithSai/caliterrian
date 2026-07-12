@@ -1457,6 +1457,23 @@ html {
   filter: drop-shadow(0 6px 16px rgba(242, 184, 75, 0.45)) drop-shadow(0 0 26px rgba(242, 184, 75, 0.28));
 }
 
+/* Real coaching photos in place of the silhouettes */
+.journey-figure--photo {
+  height: auto;
+  max-width: 150px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(47, 128, 255, 0.35);
+  filter: none;
+  box-shadow: 0 6px 18px rgba(47, 128, 255, 0.28), 0 0 26px rgba(47, 128, 255, 0.14);
+}
+.journey-figure--photo.journey-figure--gold {
+  border-color: rgba(242, 184, 75, 0.55);
+  filter: none;
+  box-shadow: 0 6px 18px rgba(242, 184, 75, 0.35), 0 0 28px rgba(242, 184, 75, 0.2);
+}
+
 /* Mastery light rays + soft glow */
 .journey-rays {
   position: absolute;
@@ -1615,6 +1632,7 @@ html {
   height: 116px;
 }
 .journey-vfig .journey-figure { height: 116px; max-width: 88px; }
+.journey-vfig .journey-figure--photo { height: 116px; width: 88px; aspect-ratio: auto; }
 .journey-vrail .journey-label {
   align-items: flex-start;
   text-align: left;

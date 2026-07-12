@@ -27,7 +27,7 @@ export default function Transformations({ onBookTrial }) {
         sub="Real members, real results. From weight loss to first pull-ups to handstands."
       />
 
-      <div className="bg-[#2E8DFF] py-12 px-6">
+      <div className="bg-[#1F6FE0] py-12 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-3 gap-8 text-center">
           {[{ icon: Trophy, value: MEMBERS_TRAINED, label: "Members Transformed" }, { icon: Zap, value: "90%", label: "Achieve First Pull-Up" }, { icon: Users, value: "15kg", label: "Avg Weight Lost" }].map(({ icon: Icon, value, label }, i) => {
             const num = parseInt(value, 10);

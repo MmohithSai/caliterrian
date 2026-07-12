@@ -1,7 +1,7 @@
 // Sections 4–6: Skill Tree · Hall of Firsts · Member Journeys  (image-first)
-import { lazy, Suspense, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
-import { ArrowRight, Circle, CircleDot, Clock, Compass, Flame, Gauge, Map, Play, Quote } from "lucide-react";
+import { ArrowRight, Circle, CircleDot, Clock, Compass, Flame, Gauge, Map, Maximize2, Play, Quote, X } from "lucide-react";
 import { Header, MediaSlot, Section } from "./ui";
 import { reveal, stagger, vpOnce, fade } from "./anim";
 import { SKILLS, HALL_OF_FIRSTS, COMMUNITY } from "@/data/home";
@@ -33,6 +33,7 @@ export function SkillTreeSection({ onBookTrial }) {
   const byId = useMemo(() => Object.fromEntries(nodes.map((n) => [n.id, n])), [nodes]);
 
   const [activeId, setActiveId] = useState("muscle-up");
+  const [openVideo, setOpenVideo] = useState(null);
   const active = byId[activeId];
   const nameOf = (id) => byId[id]?.name;
 
@@ -46,6 +47,10 @@ export function SkillTreeSection({ onBookTrial }) {
   const unlocks = nodes.filter((n) => n.prereq.includes(activeId));
 
   const LevelIcon = LEVEL_META[active.difficulty].icon;
+
+  useEffect(() => {
+    setOpenVideo(null);
+  }, [activeId]);
 
   return (
     <Section id="skill-tree" className="bg-[#0E141C]">
@@ -100,12 +105,8 @@ export function SkillTreeSection({ onBookTrial }) {
               transition={{ duration: 0.3 }}
               className="ct-card p-5"
             >
-              <motion.div variants={itemV} className="group relative mb-4 overflow-hidden rounded-sm">
-                <MediaSlot media={{ label: `${active.name} demo`, hint: "", ratio: "16/9" }} img={active.img} align="items-center">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-black/40 backdrop-blur transition-transform group-hover:scale-110">
-                    <Play className="h-5 w-5 fill-white text-white" />
-                  </span>
-                </MediaSlot>
+              <motion.div variants={itemV} className="mb-4">
+                <SkillDemoMedia skill={active} onOpen={() => setOpenVideo(active)} />
               </motion.div>
 
               <motion.div variants={itemV} className="flex items-center justify-between gap-3">
@@ -176,7 +177,115 @@ export function SkillTreeSection({ onBookTrial }) {
           </AnimatePresence>
         </div>
       </div>
+
+      {openVideo && <SkillVideoOverlay skill={openVideo} onClose={() => setOpenVideo(null)} />}
     </Section>
+  );
+}
+
+function SkillDemoMedia({ skill, onOpen }) {
+  const poster = skill.poster || skill.img;
+  const media = { label: `${skill.name} demo`, hint: "", ratio: "16/9" };
+
+  if (!skill.video) {
+    return (
+      <div className="group relative overflow-hidden rounded-sm">
+        <MediaSlot media={media} img={poster} align="items-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-black/40 backdrop-blur transition-transform group-hover:scale-110">
+            <Play className="h-5 w-5 fill-white text-white" />
+          </span>
+        </MediaSlot>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label={`Open ${skill.name} video`}
+      title={`Open ${skill.name} video`}
+      className="group relative block w-full overflow-hidden rounded-sm text-left outline-none focus-visible:ring-1 focus-visible:ring-[#2E8DFF]/70"
+    >
+      <MediaSlot media={media} img={poster} align="items-center" imgClassName="brightness-[0.92]">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/40 bg-black/45 backdrop-blur transition-transform group-hover:scale-110">
+          <Play className="h-6 w-6 fill-white text-white" />
+        </span>
+      </MediaSlot>
+    </button>
+  );
+}
+
+function SkillVideoOverlay({ skill, onClose }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    const video = videoRef.current;
+    if (video) {
+      video.defaultPlaybackRate = 1;
+      video.playbackRate = 1;
+      video.play?.().catch(() => {});
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onClose]);
+
+  const toggleFullscreen = () => {
+    const target = videoRef.current;
+    if (!target) return;
+
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.();
+      return;
+    }
+
+    target.defaultPlaybackRate = 1;
+    target.playbackRate = 1;
+    target.requestFullscreen?.().then(() => target.play?.().catch(() => {})).catch(() => {});
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-black" role="dialog" aria-modal="true" aria-label={`${skill.name} video`}>
+      <div className="relative z-10 flex h-[100dvh] w-screen bg-black">
+        <video
+          ref={videoRef}
+          className="h-full w-full bg-black object-contain"
+          src={skill.video}
+          poster={skill.poster || skill.img}
+          controls
+          autoPlay
+          loop
+          playsInline
+          preload="metadata"
+          onLoadedMetadata={(event) => {
+            event.currentTarget.defaultPlaybackRate = 1;
+            event.currentTarget.playbackRate = 1;
+          }}
+        />
+        <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-3 bg-gradient-to-b from-black/70 to-transparent p-3">
+          <p className="font-heading text-lg tracking-wide text-white drop-shadow">{skill.name} Demo</p>
+          <div className="pointer-events-auto flex items-center gap-2">
+            <button type="button" onClick={toggleFullscreen} className="grid h-10 w-10 place-items-center border border-white/15 bg-black/55 text-white backdrop-blur transition-colors hover:border-[#2E8DFF]/70" aria-label="Watch full screen" title="Watch full screen">
+              <Maximize2 className="h-4 w-4" />
+            </button>
+            <button type="button" onClick={onClose} className="grid h-10 w-10 place-items-center border border-white/15 bg-black/55 text-white backdrop-blur transition-colors hover:border-[#2E8DFF]/70" aria-label="Close video" title="Close video">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
