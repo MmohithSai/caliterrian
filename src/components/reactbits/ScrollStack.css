@@ -55,11 +55,11 @@
 /* Contained scroll region: cards stack within this box, page scroll stays put. */
 .ct-community-stack {
   height: clamp(500px, 78vh, 720px);
-  border: 1px solid #1e2a38;
+  border: 1px solid #16324E;
   border-radius: 4px;
   background:
-    radial-gradient(120% 80% at 50% -10%, rgba(46, 141, 255, 0.08), transparent 60%),
-    #0b1016;
+    radial-gradient(120% 80% at 50% -10%, rgba(141, 182, 215, 0.08), transparent 60%),
+    #051220;
 }
 
 .ct-community-stack .scroll-stack-inner {
@@ -70,13 +70,13 @@
   min-height: clamp(15rem, 40vh, 19rem);
   padding: clamp(1.5rem, 3vw, 2.5rem);
   border-radius: 22px;
-  border: 1px solid #1e2a38;
+  border: 1px solid #16324E;
   background:
-    radial-gradient(140% 120% at 100% 0%, rgba(46, 141, 255, 0.12), transparent 55%),
-    linear-gradient(180deg, #131b25 0%, #0d141d 100%);
+    radial-gradient(140% 120% at 100% 0%, rgba(141, 182, 215, 0.12), transparent 55%),
+    linear-gradient(180deg, #0A1D31 0%, #081727 100%);
   box-shadow:
     0 24px 60px -30px rgba(0, 0, 0, 0.9),
-    0 0 0 1px rgba(46, 141, 255, 0.04) inset;
+    0 0 0 1px rgba(141, 182, 215, 0.04) inset;
   overflow: hidden;
 }
 
@@ -99,7 +99,7 @@
   font-family: var(--font-heading, "Bebas Neue", sans-serif);
   font-size: clamp(2.5rem, 6vw, 4rem);
   line-height: 1;
-  color: rgba(46, 141, 255, 0.18);
+  color: rgba(141, 182, 215, 0.18);
   letter-spacing: 0.02em;
 }
 
@@ -110,9 +110,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  border: 1px solid rgba(46, 141, 255, 0.4);
-  background: rgba(11, 16, 22, 0.7);
-  color: #2e8dff;
+  border: 1px solid rgba(141, 182, 215, 0.4);
+  background: rgba(5, 18, 32, 0.7);
+  color: #8DB6D7;
   backdrop-filter: blur(6px);
 }
 
@@ -130,7 +130,7 @@
   max-width: 34ch;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #9aa7b6;
+  color: #92ABC4;
 }
 
 .ct-community-card__media {

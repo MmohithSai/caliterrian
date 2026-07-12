@@ -10,8 +10,8 @@ export default function ProtectedRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A]">
-        <Loader2 className="w-6 h-6 text-[#2EC4B6] animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[#051220]">
+        <Loader2 className="w-6 h-6 text-[#8DB6D7] animate-spin" />
       </div>
     );
   }
@@ -22,9 +22,9 @@ export default function ProtectedRoute({ children }) {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#0A0A0A] text-center px-6">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#051220] text-center px-6">
         <h1 className="font-heading text-2xl text-white mb-2">Not authorized</h1>
-        <p className="text-zinc-400 text-sm max-w-sm">
+        <p className="text-[#92ABC4] text-sm max-w-sm">
           This account isn't an admin. Ask the owner to enable admin access, then sign in again.
         </p>
       </div>

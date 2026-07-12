@@ -7,8 +7,8 @@ import "./ElectricBorder.css";
 
 export default function ElectricBorder({
   children,
-  color = "#2E8DFF",
-  lightColor = "#6FB0FF",
+  color = "#8DB6D7",
+  lightColor = "#C9DCEC",
   speed = 1,
   chaos = 0.1,
   borderRadius = 2,

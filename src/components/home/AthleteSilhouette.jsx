@@ -125,8 +125,8 @@ export default function AthleteSilhouette({ pose, tone = "blue", className = "",
   const gradId = `fig-${uid}`;
   const fill = `url(#${gradId})`;
   const Pose = POSES[pose] || Standing;
-  const top = tone === "gold" ? "#5a4a22" : "#27313f";
-  const bottom = tone === "gold" ? "#0a0805" : "#05080d";
+  const top = tone === "gold" ? "#324E6C" : "#1B3A59";
+  const bottom = tone === "gold" ? "#02080F" : "#030B14";
 
   return (
     <svg

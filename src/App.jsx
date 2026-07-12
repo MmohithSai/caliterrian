@@ -50,7 +50,7 @@ function AppContent({ bookingOpen, setBookingOpen }) {
   // The /admin area is a self-contained app: no public Navbar/Footer/ChatBot.
   if (location.pathname.startsWith("/admin")) {
     return (
-      <Suspense fallback={<div className="min-h-screen bg-[#0B1016]" />}>
+      <Suspense fallback={<div className="min-h-screen bg-[#051220]" />}>
         <Routes>
           <Route path="/admin/*" element={<AdminApp />} />
         </Routes>

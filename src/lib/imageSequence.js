@@ -57,7 +57,7 @@ function drawCinematicFrame(ctx, canvas, image, opts = {}) {
   // ── L0: Solid base ──
   ctx.globalCompositeOperation = "source-over";
   ctx.globalAlpha = 1;
-  ctx.fillStyle = "#0A0A0A";
+  ctx.fillStyle = "#051220";
   ctx.fillRect(0, 0, cw, ch);
 
   // ── L1: Atmospheric background ──
@@ -80,7 +80,7 @@ function drawCinematicFrame(ctx, canvas, image, opts = {}) {
 
   // Subtle blue tint over background
   ctx.globalAlpha = 0.08;
-  ctx.fillStyle = "#1a6b63";
+  ctx.fillStyle = "#0E2740";
   ctx.fillRect(0, 0, cw, ch);
   ctx.globalAlpha = 1;
   ctx.restore();
@@ -104,9 +104,9 @@ function drawCinematicFrame(ctx, canvas, image, opts = {}) {
     cw * 0.52, ch * 0.4, 0,
     cw * 0.52, ch * 0.4, ch * 0.7
   );
-  glowGrad.addColorStop(0, `rgba(46, 141, 255, ${glowIntensity})`);
-  glowGrad.addColorStop(0.4, `rgba(46, 141, 255, ${glowIntensity * 0.3})`);
-  glowGrad.addColorStop(1, "rgba(46, 141, 255, 0)");
+  glowGrad.addColorStop(0, `rgba(141, 182, 215, ${glowIntensity})`);
+  glowGrad.addColorStop(0.4, `rgba(141, 182, 215, ${glowIntensity * 0.3})`);
+  glowGrad.addColorStop(1, "rgba(141, 182, 215, 0)");
   ctx.fillStyle = glowGrad;
   ctx.fillRect(0, 0, cw, ch);
   ctx.restore();
@@ -142,34 +142,34 @@ function drawCinematicFrame(ctx, canvas, image, opts = {}) {
   // ── Edge blending masks ──
   // Left edge fade
   const leftGrad = ctx.createLinearGradient(fgX, 0, fgX + fgFit.width * 0.18, 0);
-  leftGrad.addColorStop(0, "rgba(10, 10, 10, 0.85)");
-  leftGrad.addColorStop(0.5, "rgba(10, 10, 10, 0.3)");
-  leftGrad.addColorStop(1, "rgba(10, 10, 10, 0)");
+  leftGrad.addColorStop(0, "rgba(5, 18, 32, 0.85)");
+  leftGrad.addColorStop(0.5, "rgba(5, 18, 32, 0.3)");
+  leftGrad.addColorStop(1, "rgba(5, 18, 32, 0)");
   ctx.fillStyle = leftGrad;
   ctx.fillRect(fgX, fgY, fgFit.width * 0.18, fgFit.height);
 
   // Right edge fade
   const rightX = fgX + fgFit.width * 0.82;
   const rightGrad = ctx.createLinearGradient(rightX, 0, fgX + fgFit.width, 0);
-  rightGrad.addColorStop(0, "rgba(10, 10, 10, 0)");
-  rightGrad.addColorStop(0.5, "rgba(10, 10, 10, 0.3)");
-  rightGrad.addColorStop(1, "rgba(10, 10, 10, 0.85)");
+  rightGrad.addColorStop(0, "rgba(5, 18, 32, 0)");
+  rightGrad.addColorStop(0.5, "rgba(5, 18, 32, 0.3)");
+  rightGrad.addColorStop(1, "rgba(5, 18, 32, 0.85)");
   ctx.fillStyle = rightGrad;
   ctx.fillRect(rightX, fgY, fgFit.width * 0.18, fgFit.height);
 
   // Bottom edge fade
   const bottomY = fgY + fgFit.height * 0.78;
   const bottomGrad = ctx.createLinearGradient(0, bottomY, 0, fgY + fgFit.height);
-  bottomGrad.addColorStop(0, "rgba(10, 10, 10, 0)");
-  bottomGrad.addColorStop(0.4, "rgba(10, 10, 10, 0.35)");
-  bottomGrad.addColorStop(1, "rgba(10, 10, 10, 0.95)");
+  bottomGrad.addColorStop(0, "rgba(5, 18, 32, 0)");
+  bottomGrad.addColorStop(0.4, "rgba(5, 18, 32, 0.35)");
+  bottomGrad.addColorStop(1, "rgba(5, 18, 32, 0.95)");
   ctx.fillStyle = bottomGrad;
   ctx.fillRect(fgX, bottomY, fgFit.width, fgFit.height * 0.22);
 
   // Top edge fade
   const topGrad = ctx.createLinearGradient(0, fgY, 0, fgY + fgFit.height * 0.12);
-  topGrad.addColorStop(0, "rgba(10, 10, 10, 0.7)");
-  topGrad.addColorStop(1, "rgba(10, 10, 10, 0)");
+  topGrad.addColorStop(0, "rgba(5, 18, 32, 0.7)");
+  topGrad.addColorStop(1, "rgba(5, 18, 32, 0)");
   ctx.fillStyle = topGrad;
   ctx.fillRect(fgX, fgY, fgFit.width, fgFit.height * 0.12);
 
@@ -183,9 +183,9 @@ function drawCinematicFrame(ctx, canvas, image, opts = {}) {
       cw * 0.5, ch * 0.35, fgFit.width * 0.15,
       cw * 0.5, ch * 0.45, fgFit.width * 0.6
     );
-    rimGrad.addColorStop(0, `rgba(46, 141, 255, ${bloomStrength})`);
-    rimGrad.addColorStop(0.5, `rgba(46, 141, 255, ${bloomStrength * 0.3})`);
-    rimGrad.addColorStop(1, "rgba(46, 141, 255, 0)");
+    rimGrad.addColorStop(0, `rgba(141, 182, 215, ${bloomStrength})`);
+    rimGrad.addColorStop(0.5, `rgba(141, 182, 215, ${bloomStrength * 0.3})`);
+    rimGrad.addColorStop(1, "rgba(141, 182, 215, 0)");
     ctx.fillStyle = rimGrad;
     ctx.fillRect(0, 0, cw, ch);
     ctx.restore();

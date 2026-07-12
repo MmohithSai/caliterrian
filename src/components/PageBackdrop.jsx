@@ -11,7 +11,7 @@ import DotGrid from "@/components/reactbits/DotGrid";
 export default function PageBackdrop(props) {
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none" aria-hidden="true">
-      <DotGrid dotSize={3} gap={30} baseColor="#141D28" activeColor="#2E8DFF" proximity={150} {...props} />
+      <DotGrid dotSize={3} gap={30} baseColor="#0C2035" activeColor="#8DB6D7" proximity={150} {...props} />
     </div>
   );
 }

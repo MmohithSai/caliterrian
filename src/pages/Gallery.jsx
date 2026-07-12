@@ -29,7 +29,7 @@ export default function Gallery() {
       <div className="max-w-7xl mx-auto px-6 pt-10 pb-4">
         <div className="flex flex-wrap gap-2">
           {CATEGORIES.map((cat) => (
-            <button key={cat} onClick={() => setFilter(cat)} className={`text-xs font-bold uppercase tracking-widest px-4 py-2 border transition-colors duration-200 ${filter === cat ? "bg-[#2E8DFF] border-[#2E8DFF] text-white shadow-[0_0_18px_rgba(46,141,255,0.35)]" : "bg-transparent border-white/20 text-[#9AA7B6] hover:border-[#2E8DFF]/60 hover:text-white"}`}>{cat}</button>
+            <button key={cat} onClick={() => setFilter(cat)} className={`text-xs font-bold uppercase tracking-widest px-4 py-2 border transition-colors duration-200 ${filter === cat ? "bg-[#8DB6D7] border-[#8DB6D7] text-[#041C38] shadow-[0_0_18px_rgba(141,182,215,0.35)]" : "bg-transparent border-white/20 text-[#92ABC4] hover:border-[#8DB6D7]/60 hover:text-white"}`}>{cat}</button>
           ))}
         </div>
       </div>
@@ -37,20 +37,20 @@ export default function Gallery() {
       <div className="max-w-7xl mx-auto px-6 py-10">
         {filtered.length === 0 ? (
           <div className="text-center py-20 flex flex-col items-center gap-4">
-            <ImageIcon className="w-12 h-12 text-[#5C6B7C]" />
-            <p className="text-[#8A99AB] text-sm">No images found for this category.</p>
+            <ImageIcon className="w-12 h-12 text-[#5A7896]" />
+            <p className="text-[#86A2BC] text-sm">No images found for this category.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {filtered.map((img, i) => (
-              <div key={img.id} className="aspect-square overflow-hidden bg-[#131B25] cursor-pointer group relative scroll-fade" style={{ transitionDelay: `${(i % 4) * 0.05}s` }} onClick={() => setLightbox(img)}>
-                <img src={img.url} alt={img.caption || "Gallery"} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#1A2230"; }} />
+              <div key={img.id} className="aspect-square overflow-hidden bg-[#0A1D31] cursor-pointer group relative scroll-fade" style={{ transitionDelay: `${(i % 4) * 0.05}s` }} onClick={() => setLightbox(img)}>
+                <img src={img.url} alt={img.caption || "Gallery"} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#0E2740"; }} />
                 {img.caption && (
                   <div className="absolute inset-0 bg-obsidian/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                     <p className="text-white text-xs font-medium">{img.caption}</p>
                   </div>
                 )}
-                <span className="absolute top-2 right-2 bg-[#2E8DFF] text-white text-xs font-bold uppercase tracking-wider px-2 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{img.category}</span>
+                <span className="absolute top-2 right-2 bg-[#8DB6D7] text-[#041C38] text-xs font-bold uppercase tracking-wider px-2 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{img.category}</span>
               </div>
             ))}
           </div>
@@ -76,8 +76,8 @@ export default function Gallery() {
               onClick={(e) => e.stopPropagation()}
             >
               <img src={lightbox.url} alt={lightbox.caption} className="w-full max-h-[80vh] object-contain" />
-              {lightbox.caption && <p className="text-[#9AA7B6] text-sm text-center mt-4">{lightbox.caption}</p>}
-              <button onClick={() => setLightbox(null)} className="mt-4 mx-auto block text-[#9AA7B6] hover:text-white text-xs uppercase tracking-widest font-bold transition-colors duration-200">Close</button>
+              {lightbox.caption && <p className="text-[#92ABC4] text-sm text-center mt-4">{lightbox.caption}</p>}
+              <button onClick={() => setLightbox(null)} className="mt-4 mx-auto block text-[#92ABC4] hover:text-white text-xs uppercase tracking-widest font-bold transition-colors duration-200">Close</button>
             </motion.div>
           </motion.div>
         )}

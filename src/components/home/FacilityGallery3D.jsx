@@ -57,8 +57,8 @@ const STEP = THREE.MathUtils.degToRad(32); // angular gap between cards
 const RADIUS = 10;
 const CARD_W = 6.8;
 const CARD_H = 5.12; // matches the 1445×1088 source aspect
-const BG = 0x05080d;
-const ACCENT = new THREE.Color("#2E8DFF");
+const BG = 0x030B14;
+const ACCENT = new THREE.Color("#8DB6D7");
 
 // ── Card shader: rounded corners, cinematic grade, hover light, edge glow ──
 const cardVert = /* glsl */ `
@@ -120,8 +120,8 @@ function makeDotTexture() {
   c.width = c.height = 64;
   const ctx = c.getContext("2d");
   const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-  g.addColorStop(0, "rgba(190,220,255,1)");
-  g.addColorStop(0.4, "rgba(120,170,255,0.45)");
+  g.addColorStop(0, "rgba(201,220,236,1)");
+  g.addColorStop(0.4, "rgba(141,182,215,0.45)");
   g.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, 64, 64);
@@ -137,7 +137,7 @@ function makeStreakTexture() {
   const ctx = c.getContext("2d");
   const g = ctx.createLinearGradient(0, 0, 256, 0);
   g.addColorStop(0, "rgba(0,0,0,0)");
-  g.addColorStop(0.5, "rgba(110,170,255,0.9)");
+  g.addColorStop(0.5, "rgba(141,182,215,0.9)");
   g.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, 256, 8);
@@ -152,8 +152,8 @@ function makeFloorTexture() {
   c.width = c.height = 512;
   const ctx = c.getContext("2d");
   const g = ctx.createRadialGradient(256, 256, 0, 256, 256, 256);
-  g.addColorStop(0, "rgba(30,52,82,0.55)");
-  g.addColorStop(0.5, "rgba(14,24,38,0.22)");
+  g.addColorStop(0, "rgba(22,50,78,0.55)");
+  g.addColorStop(0.5, "rgba(8,23,39,0.22)");
   g.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, 512, 512);
@@ -706,11 +706,11 @@ export default function FacilityGallery3D() {
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {CARDS.map((c) => (
-          <div key={c.id} className="overflow-hidden rounded-xl border border-[#1E2A38]">
+          <div key={c.id} className="overflow-hidden rounded-xl border border-[#16324E]">
             <img src={c.img} alt={c.title} loading="lazy" className="aspect-[4/3] w-full object-cover" />
             <div className="p-4">
               <h3 className="font-heading text-lg text-white">{c.title}</h3>
-              <p className="mt-1 text-sm text-[#9AA7B6]">{c.desc}</p>
+              <p className="mt-1 text-sm text-[#92ABC4]">{c.desc}</p>
             </div>
           </div>
         ))}
@@ -725,29 +725,29 @@ export default function FacilityGallery3D() {
       role="region"
       aria-label="Facility zones 3D gallery. Use arrow keys to browse, Enter to open."
       onKeyDown={onKeyNav}
-      className="group relative h-[78vh] min-h-[540px] w-full overflow-hidden rounded-lg border border-[#1E2A38] bg-[#05080D] outline-none focus-visible:ring-1 focus-visible:ring-[#2E8DFF]/60 sm:h-[86vh]"
+      className="group relative h-[78vh] min-h-[540px] w-full overflow-hidden rounded-lg border border-[#16324E] bg-[#030B14] outline-none focus-visible:ring-1 focus-visible:ring-[#8DB6D7]/60 sm:h-[86vh]"
     >
       {/* WebGL stage */}
       <div ref={canvasHostRef} className="absolute inset-0" aria-hidden="true" />
 
       {/* Atmosphere grade on top of the canvas */}
       <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
-        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#0B1016]/70 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0B1016]/60 to-transparent" />
-        <div className="absolute inset-0 [background:radial-gradient(120%_90%_at_50%_50%,transparent_70%,rgba(3,6,10,0.3)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#051220]/70 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#051220]/60 to-transparent" />
+        <div className="absolute inset-0 [background:radial-gradient(120%_90%_at_50%_50%,transparent_70%,rgba(2,8,15,0.3)_100%)]" />
       </div>
 
       {/* ── Explore UI ── */}
       <div className={`pointer-events-none absolute inset-0 z-20 transition-opacity duration-500 ${focused ? "opacity-0" : "opacity-100"}`}>
         {/* Featured card info — bottom left */}
         <div key={card.id} className="absolute bottom-6 left-5 max-w-md sm:bottom-10 sm:left-10">
-          <p className="ct-gallery-rise text-[10px] font-bold uppercase tracking-[0.3em] text-[#2E8DFF]" style={{ animationDelay: "0ms" }}>
+          <p className="ct-gallery-rise text-[10px] font-bold uppercase tracking-[0.3em] text-[#8DB6D7]" style={{ animationDelay: "0ms" }}>
             {card.tag}
           </p>
           <h3 className="ct-gallery-rise mt-2 font-heading text-3xl uppercase leading-none tracking-wide text-white sm:text-5xl" style={{ animationDelay: "60ms" }}>
             {card.title}
           </h3>
-          <p className="ct-gallery-rise mt-3 hidden max-w-sm text-sm leading-relaxed text-[#9AA7B6] sm:block" style={{ animationDelay: "120ms" }}>
+          <p className="ct-gallery-rise mt-3 hidden max-w-sm text-sm leading-relaxed text-[#92ABC4] sm:block" style={{ animationDelay: "120ms" }}>
             {card.desc}
           </p>
           <button
@@ -765,7 +765,7 @@ export default function FacilityGallery3D() {
           <span className="font-heading text-sm tracking-widest text-white">{wrapTwo(active)}</span>
           <span className="relative h-px w-16 overflow-hidden bg-white/15">
             <span
-              className="absolute inset-y-0 left-0 bg-[#2E8DFF] transition-all duration-500 ease-out"
+              className="absolute inset-y-0 left-0 bg-[#8DB6D7] transition-all duration-500 ease-out"
               style={{ width: `${((active + 1) / CARDS.length) * 100}%` }}
             />
           </span>
@@ -776,7 +776,7 @@ export default function FacilityGallery3D() {
         <div
           className={`absolute bottom-6 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-white/50 transition-opacity duration-700 lg:flex ${hint ? "opacity-100" : "opacity-0"}`}
         >
-          <Move className="h-3.5 w-3.5 text-[#2E8DFF]" /> Drag to explore
+          <Move className="h-3.5 w-3.5 text-[#8DB6D7]" /> Drag to explore
         </div>
 
         {/* Prev / next — mid edges */}
@@ -784,7 +784,7 @@ export default function FacilityGallery3D() {
           type="button"
           aria-label="Previous zone"
           onClick={() => { apiRef.current?.goBy(-1); setHint(false); }}
-          className="pointer-events-auto absolute left-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#0B1016]/60 text-white backdrop-blur transition hover:border-[#2E8DFF]/60 hover:text-[#2E8DFF] sm:flex"
+          className="pointer-events-auto absolute left-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#051220]/60 text-white backdrop-blur transition hover:border-[#8DB6D7]/60 hover:text-[#8DB6D7] sm:flex"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
@@ -792,7 +792,7 @@ export default function FacilityGallery3D() {
           type="button"
           aria-label="Next zone"
           onClick={() => { apiRef.current?.goBy(1); setHint(false); }}
-          className="pointer-events-auto absolute right-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#0B1016]/60 text-white backdrop-blur transition hover:border-[#2E8DFF]/60 hover:text-[#2E8DFF] sm:flex"
+          className="pointer-events-auto absolute right-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#051220]/60 text-white backdrop-blur transition hover:border-[#8DB6D7]/60 hover:text-[#8DB6D7] sm:flex"
         >
           <ChevronRight className="h-4 w-4" />
         </button>
@@ -806,11 +806,11 @@ export default function FacilityGallery3D() {
               aria-label={`Go to ${c.title}`}
               onClick={() => { apiRef.current?.goTo(i); setHint(false); }}
               className={`relative overflow-hidden rounded-md border transition-all duration-300 ${
-                i === active ? "h-14 w-20 border-[#2E8DFF]" : "h-12 w-16 border-white/15 opacity-50 hover:opacity-90"
+                i === active ? "h-14 w-20 border-[#8DB6D7]" : "h-12 w-16 border-white/15 opacity-50 hover:opacity-90"
               }`}
             >
               <img src={c.img} alt="" className="h-full w-full object-cover" />
-              {i === active && <span className="absolute inset-x-0 bottom-0 h-0.5 bg-[#2E8DFF]" />}
+              {i === active && <span className="absolute inset-x-0 bottom-0 h-0.5 bg-[#8DB6D7]" />}
             </button>
           ))}
         </div>
@@ -823,7 +823,7 @@ export default function FacilityGallery3D() {
               type="button"
               aria-label={`Go to ${c.title}`}
               onClick={() => apiRef.current?.goTo(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? "w-6 bg-[#2E8DFF]" : "w-1.5 bg-white/25"}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? "w-6 bg-[#8DB6D7]" : "w-1.5 bg-white/25"}`}
             />
           ))}
         </div>
@@ -831,33 +831,33 @@ export default function FacilityGallery3D() {
 
       {/* ── Detail view: travel deeper into the selected zone ── */}
       {detail && (
-        <div ref={detailRef} className="absolute inset-0 z-30 overflow-hidden bg-[#05080D]">
+        <div ref={detailRef} className="absolute inset-0 z-30 overflow-hidden bg-[#030B14]">
           <div className="absolute inset-0 overflow-hidden">
             <img ref={detailImgRef} src={detail.img} alt={detail.title} className="h-full w-full scale-[1.12] object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#05080D]/90 via-[#05080D]/15 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#05080D]/70 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#030B14]/90 via-[#030B14]/15 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#030B14]/70 via-transparent to-transparent" />
           </div>
 
           <button
             type="button"
             aria-label="Back to gallery"
             onClick={closeDetail}
-            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#0B1016]/60 text-white backdrop-blur transition hover:rotate-90 hover:border-[#2E8DFF] hover:text-[#2E8DFF] sm:right-8 sm:top-8"
+            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#051220]/60 text-white backdrop-blur transition hover:rotate-90 hover:border-[#8DB6D7] hover:text-[#8DB6D7] sm:right-8 sm:top-8"
             style={{ transitionDuration: "300ms" }}
           >
             <X className="h-4 w-4" />
           </button>
 
           <div ref={detailContentRef} className="absolute bottom-8 left-5 right-5 z-10 max-w-2xl sm:bottom-14 sm:left-12">
-            <p className="inline-flex items-center gap-2 rounded-full border border-[#2E8DFF]/40 bg-[#2E8DFF]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#2E8DFF]">
+            <p className="inline-flex items-center gap-2 rounded-full border border-[#8DB6D7]/40 bg-[#8DB6D7]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#8DB6D7]">
               Facility Zone · {detail.tag}
             </p>
             <h3 className="mt-4 font-heading text-4xl uppercase leading-[0.95] tracking-wide text-white sm:text-7xl">{detail.title}</h3>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#C6D2DF] sm:text-base">{detail.desc}</p>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#C3D6E7] sm:text-base">{detail.desc}</p>
             <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
               {detail.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-xs text-[#9AA7B6]">
-                  <span className="h-1 w-1 rounded-full bg-[#2E8DFF]" /> {f}
+                <li key={f} className="flex items-center gap-2 text-xs text-[#92ABC4]">
+                  <span className="h-1 w-1 rounded-full bg-[#8DB6D7]" /> {f}
                 </li>
               ))}
             </ul>

@@ -53,8 +53,8 @@ export default function FloatingButtons() {
       external: false,
       label: "Call Us",
       icon: <Phone className="h-5 w-5 text-white" />,
-      bg: "bg-[#1A2230]",
-      hoverBg: "#252525",
+      bg: "bg-[#0E2740]",
+      hoverBg: "#16324E",
       border: "border border-white/15",
       shadow: "shadow-[0_4px_20px_rgba(0,0,0,0.4)]",
       testId: "floating-call-btn",
@@ -88,7 +88,7 @@ export default function FloatingButtons() {
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       exit={{ opacity: 0, x: 8, scale: 0.9 }}
                       transition={{ duration: 0.18 }}
-                      className="absolute right-14 whitespace-nowrap rounded bg-[#1A2230] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg border border-white/10"
+                      className="absolute right-14 whitespace-nowrap rounded bg-[#0E2740] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg border border-white/10"
                     >
                       {btn.label}
                     </motion.span>

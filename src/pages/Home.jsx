@@ -17,7 +17,7 @@ export default function Home({ onBookTrial }) {
   useScrollReveal({ threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
 
   return (
-    <div className="min-h-screen bg-[#0B1016]">
+    <div className="min-h-screen bg-[#051220]">
       <SEO path="/" />
 
       <HeroSection onBookTrial={onBookTrial} />            {/* 1  Hero */}

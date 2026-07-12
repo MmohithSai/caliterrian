@@ -24,7 +24,7 @@ export function VisitSection({ onBookTrial }) {
           whileInView="visible"
           viewport={vpOnce}
           variants={reveal}
-          className="overflow-hidden border border-[#1E2A38] lg:col-span-3"
+          className="overflow-hidden border border-[#16324E] lg:col-span-3"
         >
           <iframe
             src={NAP.mapEmbed}
@@ -45,28 +45,28 @@ export function VisitSection({ onBookTrial }) {
           className="ct-card flex flex-col gap-5 p-6 lg:col-span-2"
         >
           <motion.div variants={reveal} className="flex items-start gap-3">
-            <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#2E8DFF]" />
-            <div className="text-sm leading-relaxed text-[#9AA7B6]">
+            <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#8DB6D7]" />
+            <div className="text-sm leading-relaxed text-[#92ABC4]">
               {NAP.addressLines.map((line) => (
                 <div key={line}>{line}</div>
               ))}
             </div>
           </motion.div>
 
-          <motion.div variants={reveal} className="flex items-start gap-3 border-t border-[#1E2A38] pt-5">
-            <Clock className="mt-0.5 h-5 w-5 shrink-0 text-[#2E8DFF]" />
+          <motion.div variants={reveal} className="flex items-start gap-3 border-t border-[#16324E] pt-5">
+            <Clock className="mt-0.5 h-5 w-5 shrink-0 text-[#8DB6D7]" />
             <div className="text-sm">
               <div className="font-semibold text-white">Open {HOURS.days}</div>
-              <div className="text-[#9AA7B6]">Morning {HOURS.morning}</div>
-              <div className="text-[#9AA7B6]">Evening {HOURS.evening}</div>
+              <div className="text-[#92ABC4]">Morning {HOURS.morning}</div>
+              <div className="text-[#92ABC4]">Evening {HOURS.evening}</div>
             </div>
           </motion.div>
 
-          <motion.div variants={reveal} className="flex items-start gap-3 border-t border-[#1E2A38] pt-5">
-            <Tag className="mt-0.5 h-5 w-5 shrink-0 text-[#2E8DFF]" />
+          <motion.div variants={reveal} className="flex items-start gap-3 border-t border-[#16324E] pt-5">
+            <Tag className="mt-0.5 h-5 w-5 shrink-0 text-[#8DB6D7]" />
             <div className="text-sm">
               <div className="font-semibold text-white">Memberships from ₹3,000/mo</div>
-              <div className="text-[#9AA7B6]">Drop-in ₹400 · Free trial assessment included</div>
+              <div className="text-[#92ABC4]">Drop-in ₹400 · Free trial assessment included</div>
             </div>
           </motion.div>
 

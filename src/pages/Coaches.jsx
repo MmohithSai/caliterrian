@@ -42,65 +42,65 @@ export default function Coaches({ onBookTrial }) {
         {COACHES.map((coach, i) => (
           <div key={i} className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start scroll-fade">
             <div className={`relative ${i % 2 === 1 ? "lg:order-2" : ""}`}>
-              <div className="group aspect-[4/5] overflow-hidden bg-[#131B25]">
-                <img src={coach.image} alt={coach.name} className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#1A2230"; }} />
+              <div className="group aspect-[4/5] overflow-hidden bg-[#0A1D31]">
+                <img src={coach.image} alt={coach.name} className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#0E2740"; }} />
               </div>
-              <div className="absolute -bottom-4 -right-4 bg-[#2E8DFF] p-4 hidden md:block">
-                <p className="font-heading text-xl text-white">{coach.experience}</p>
-                <p className="text-white/70 text-xs uppercase tracking-widest">Experience</p>
+              <div className="absolute -bottom-4 -right-4 bg-[#8DB6D7] p-4 hidden md:block">
+                <p className="font-heading text-xl text-[#041C38]">{coach.experience}</p>
+                <p className="text-[#041C38]/70 text-xs uppercase tracking-widest">Experience</p>
               </div>
             </div>
             <div className={i % 2 === 1 ? "lg:order-1" : ""}>
               <p className="section-tag mb-2">Coach {i + 1}</p>
               <h2 className="font-heading text-4xl text-white tracking-wide mb-1">{coach.name}</h2>
-              <p className="text-[#2E8DFF] font-bold text-sm uppercase tracking-widest mb-6">{coach.role}</p>
-              <p className="text-[#9AA7B6] text-base leading-relaxed mb-8">{coach.bio}</p>
+              <p className="text-[#8DB6D7] font-bold text-sm uppercase tracking-widest mb-6">{coach.role}</p>
+              <p className="text-[#92ABC4] text-base leading-relaxed mb-8">{coach.bio}</p>
               <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-[#131B25] border border-white/5 p-4 text-center">
-                  <Award className="w-5 h-5 text-[#2E8DFF] mx-auto mb-2" />
+                <div className="bg-[#0A1D31] border border-white/5 p-4 text-center">
+                  <Award className="w-5 h-5 text-[#8DB6D7] mx-auto mb-2" />
                   <p className="font-heading text-xl text-white">{coach.experience}</p>
-                  <p className="text-[#8A99AB] text-xs uppercase tracking-wider">Experience</p>
+                  <p className="text-[#86A2BC] text-xs uppercase tracking-wider">Experience</p>
                 </div>
-                <div className="bg-[#131B25] border border-white/5 p-4 text-center">
-                  <Users className="w-5 h-5 text-[#2E8DFF] mx-auto mb-2" />
+                <div className="bg-[#0A1D31] border border-white/5 p-4 text-center">
+                  <Users className="w-5 h-5 text-[#8DB6D7] mx-auto mb-2" />
                   <p className="font-heading text-xl text-white">{coach.members}</p>
-                  <p className="text-[#8A99AB] text-xs uppercase tracking-wider">Impact</p>
+                  <p className="text-[#86A2BC] text-xs uppercase tracking-wider">Impact</p>
                 </div>
               </div>
               <div className="mb-6">
-                <p className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-3">Specialties</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-[#86A2BC] mb-3">Specialties</p>
                 <div className="flex flex-wrap gap-2">
-                  {coach.specialties.map((s, j) => (<span key={j} className="bg-[#2E8DFF]/10 border border-[#2E8DFF]/30 text-[#2E8DFF] text-xs font-bold uppercase tracking-wider px-3 py-1">{s}</span>))}
+                  {coach.specialties.map((s, j) => (<span key={j} className="bg-[#8DB6D7]/10 border border-[#8DB6D7]/30 text-[#8DB6D7] text-xs font-bold uppercase tracking-wider px-3 py-1">{s}</span>))}
                 </div>
               </div>
               <div className="mb-8">
-                <p className="text-xs font-bold uppercase tracking-widest text-[#8A99AB] mb-3">Certifications</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-[#86A2BC] mb-3">Certifications</p>
                 <div className="space-y-2">
-                  {coach.certifications.map((c, j) => (<div key={j} className="flex items-center gap-2 text-sm text-[#9AA7B6]"><Star className="w-3 h-3 text-[#2E8DFF] flex-shrink-0" /> {c}</div>))}
+                  {coach.certifications.map((c, j) => (<div key={j} className="flex items-center gap-2 text-sm text-[#92ABC4]"><Star className="w-3 h-3 text-[#8DB6D7] flex-shrink-0" /> {c}</div>))}
                 </div>
               </div>
-              <blockquote className="relative bg-[#2E8DFF]/[0.06] border border-[#2E8DFF]/20 px-5 pt-7 pb-5 mb-8">
-                <span aria-hidden="true" className="absolute top-1 left-4 font-heading text-4xl text-[#2E8DFF] leading-none select-none">"</span>
-                <p className="text-[#C9D5E3] text-sm italic leading-relaxed">{coach.philosophy}</p>
+              <blockquote className="relative bg-[#8DB6D7]/[0.06] border border-[#8DB6D7]/20 px-5 pt-7 pb-5 mb-8">
+                <span aria-hidden="true" className="absolute top-1 left-4 font-heading text-4xl text-[#8DB6D7] leading-none select-none">"</span>
+                <p className="text-[#C9DCEC] text-sm italic leading-relaxed">{coach.philosophy}</p>
               </blockquote>
               <button onClick={onBookTrial} className="btn-primary text-sm">Train with this Coach <ChevronRight className="w-4 h-4" /></button>
             </div>
           </div>
         ))}
       </div>
-      <div className="relative overflow-hidden bg-[#0E141C] border-y border-white/5 py-20 px-6">
+      <div className="relative overflow-hidden bg-[#081727] border-y border-white/5 py-20 px-6">
         {/* React Bits DotGrid: interactive blueprint dots behind the closing band */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <DotGrid dotSize={3} gap={28} baseColor="#1A2534" activeColor="#2E8DFF" proximity={140} />
+          <DotGrid dotSize={3} gap={28} baseColor="#0F2942" activeColor="#8DB6D7" proximity={140} />
         </div>
         <div className="relative max-w-7xl mx-auto">
           <h2 className="font-heading text-4xl md:text-5xl text-white mb-10 text-center scroll-fade">WHY TRAIN WITH OUR COACHES</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[{ icon: Users, title: "Beginner-Friendly", desc: "Patient, progressive coaching for complete beginners." }, { icon: Award, title: "Calisthenics Specialists", desc: "Coaches who specialize exclusively in bodyweight training." }, { icon: Star, title: "Proven Results", desc: "Hundreds of members transformed. Real results." }].map(({ icon: Icon, title, desc }, i) => (
-              <div key={i} className="bg-[#131B25] border border-white/5 p-6 scroll-fade card-glow" style={{ transitionDelay: `${i * 0.1}s` }}>
-                <Icon className="w-6 h-6 text-[#2E8DFF] mb-4" />
+              <div key={i} className="bg-[#0A1D31] border border-white/5 p-6 scroll-fade card-glow" style={{ transitionDelay: `${i * 0.1}s` }}>
+                <Icon className="w-6 h-6 text-[#8DB6D7] mb-4" />
                 <h3 className="font-heading text-xl text-white tracking-wide mb-2">{title}</h3>
-                <p className="text-[#8A99AB] text-sm leading-relaxed">{desc}</p>
+                <p className="text-[#86A2BC] text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>

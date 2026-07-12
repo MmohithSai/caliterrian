@@ -1,15 +1,15 @@
 /* Cali Terrain - App Styles */
-.App { min-height: 100vh; background-color: #0B1016; }
+.App { min-height: 100vh; background-color: #051220; }
 
-.text-volt { color: #2E8DFF; }
-.bg-volt { background-color: #2E8DFF; }
-.border-volt { border-color: #2E8DFF; }
+.text-volt { color: #8DB6D7; }
+.bg-volt { background-color: #8DB6D7; }
+.border-volt { border-color: #8DB6D7; }
 
 .btn-primary {
   position: relative;
   overflow: hidden;
-  background-color: #2E8DFF;
-  color: white;
+  background-color: #8DB6D7;
+  color: #041C38;
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
@@ -21,7 +21,7 @@
   align-items: center;
   gap: 8px;
   transition: background-color 0.2s ease, box-shadow 0.25s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow: 0 0 20px rgba(46, 141, 255,0.3);
+  box-shadow: 0 0 20px rgba(141, 182, 215,0.3);
 }
 /* Light sweep across the face on hover */
 .btn-primary::after {
@@ -35,8 +35,8 @@
 }
 .btn-primary:hover::after { transform: translateX(130%); }
 .btn-primary:hover {
-  background-color: #1F6FE0;
-  box-shadow: 0 8px 30px rgba(46, 141, 255,0.5);
+  background-color: #A9C9E3;
+  box-shadow: 0 8px 30px rgba(141, 182, 215,0.5);
   transform: translateY(-2px);
 }
 .btn-primary:active { transform: translateY(0) scale(0.97); }
@@ -81,13 +81,13 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.28em;
-  color: #2E8DFF;
+  color: #8DB6D7;
   margin-bottom: 12px;
 }
 .section-tag::before {
   content: '';
   width: 1.6rem;
   height: 2px;
-  background: #2E8DFF;
-  box-shadow: 0 0 10px rgba(46, 141, 255, 0.6);
+  background: #8DB6D7;
+  box-shadow: 0 0 10px rgba(141, 182, 215, 0.6);
 }

@@ -7,10 +7,10 @@ export function Toaster(props) {
       className="toaster group"
       toastOptions={{
         classNames: {
-          toast: "group toast bg-[#1A1A1A] border-white/10 text-white",
-          description: "text-zinc-400",
-          actionButton: "bg-[#2E8DFF] text-white",
-          cancelButton: "bg-zinc-700 text-white",
+          toast: "group toast bg-[#0E2740] border-white/10 text-white",
+          description: "text-[#92ABC4]",
+          actionButton: "bg-[#8DB6D7] text-[#041C38]",
+          cancelButton: "bg-[#2E4A66] text-white",
         },
       }}
       {...props}

@@ -8,18 +8,21 @@ Dark, cinematic, facility-first. Near-black blue-tinted base; photography under 
 
 ## Color
 
-Strategy: **Committed** — one electric blue carries the identity across glows, ticks, connectors, and states on a near-black field.
+Strategy: **Committed, logo-derived** — every color comes from the Cali Terrain badge (navy ink, powder blue, ice, white). Neutrals are shades of the badge navy; the powder blue carries the identity across glows, ticks, connectors, and states.
 
-- `--color-obsidian: #0B1016` — page background
-- `--color-surface: #131B25` — cards/surfaces (elevated: `#1A2230`)
-- Border: `#1E2A38`
-- **Caliterrain Blue** `#2E8DFF` (hover `#1F6FE0`, ink `#04101F`, bright tint `#6FB0FF`)
-- Secondary text: `#9AA7B6`; hint text `#5C6B7C`
-- Deep-band background: `#03070D` (hero, journey)
-- Gold `#F2B84B` — reserved for mastery/final-stage moments only
-- Success `#34D399`, danger `#F87171`
+Logo source colors: navy ink `#041C38` · slate `#324E6C` · powder `#8DB6D7` · ice `#C9DCEC` · white.
 
-Rules: blue glow is an accent (shadows, 1px ticks, node rings), never a wash. Gold appears only at journey summits.
+- `--color-obsidian: #051220` — page background (deepened badge navy)
+- `--color-surface: #0A1D31` — cards/surfaces (elevated: `#0E2740`)
+- Border: `#16324E`
+- **Cali Terrain Powder** `#8DB6D7` (hover `#A9C9E3`, ink `#041C38`, bright tint `#C9DCEC`)
+- On powder backgrounds text is always navy ink `#041C38` (mirrors the logo's navy-on-lightblue banner)
+- Secondary text: `#92ABC4`; hint text `#5A7896`
+- Deep-band background: `#02080F` (hero, journey)
+- Ice `#C9DCEC` — reserved for mastery/final-stage moments only (replaces the old gold)
+- Success `#34D399`, danger `#F87171` (semantic only; not brand)
+
+Rules: powder glow is an accent (shadows, 1px ticks, node rings), never a wash. Ice appears only at journey summits and highlight tints.
 
 ## Typography
 

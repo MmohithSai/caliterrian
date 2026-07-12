@@ -30,7 +30,7 @@ export function StatRing({ value, suffix = "", label, size = "h-28 w-28", text =
       <span className={`ct-ring relative grid ${size} place-items-center`} style={{ "--p": `${display}%` }}>
         <span className={`font-heading ${text} text-white`}>{display}{suffix}</span>
       </span>
-      {label && <p className="mt-3 max-w-[12rem] text-sm leading-snug text-[#9AA7B6]">{label}</p>}
+      {label && <p className="mt-3 max-w-[12rem] text-sm leading-snug text-[#92ABC4]">{label}</p>}
     </div>
   );
 }
@@ -147,7 +147,7 @@ export function MediaSlot({
 
       {!hasAsset && showLabel && (
         <span className="ct-media__ph">
-          <ImageIcon className="h-5 w-5 text-[#2E8DFF]/70" aria-hidden="true" />
+          <ImageIcon className="h-5 w-5 text-[#8DB6D7]/70" aria-hidden="true" />
           {media?.label && <span className="tag">{media.label}</span>}
           {media?.hint && <span className="hint">{media.hint}</span>}
         </span>

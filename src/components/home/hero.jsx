@@ -121,12 +121,12 @@ export function HeroSection({ onBookTrial }) {
 
       {/* ── Scrims: kept light so the reel stays clear — just enough dark
             under the copy column and the trust strip for AA contrast. ── */}
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(3,7,13,0.76)_0%,rgba(3,7,13,0.4)_34%,rgba(3,7,13,0.04)_62%,rgba(3,7,13,0)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(3,7,13,0.34)_0%,transparent_20%,transparent_62%,rgba(3,7,13,0.62)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(110%_85%_at_16%_28%,rgba(46,141,255,0.1),transparent_56%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(2,8,15,0.76)_0%,rgba(2,8,15,0.4)_34%,rgba(2,8,15,0.04)_62%,rgba(2,8,15,0)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(2,8,15,0.34)_0%,transparent_20%,transparent_62%,rgba(2,8,15,0.62)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(110%_85%_at_16%_28%,rgba(141,182,215,0.1),transparent_56%)]" />
       {/* Scroll-driven darkening as the hero hands off */}
       <motion.div
-        className="pointer-events-none absolute inset-0 z-[2] bg-[#03070D]"
+        className="pointer-events-none absolute inset-0 z-[2] bg-[#02080F]"
         style={rm ? undefined : { opacity: scrimBoost }}
         aria-hidden="true"
       />
@@ -198,7 +198,7 @@ export function HeroSection({ onBookTrial }) {
           </motion.div>
 
           {/* Reassurance — remove the "am I fit enough?" fear right at the door. */}
-          <motion.p className="mt-6 text-[12px] font-medium tracking-wide text-[#9AA7B6]" {...rise(rm, T.cta + 0.12)}>
+          <motion.p className="mt-6 text-[12px] font-medium tracking-wide text-[#92ABC4]" {...rise(rm, T.cta + 0.12)}>
             {HERO.reassure}
           </motion.p>
         </motion.div>
@@ -224,7 +224,7 @@ export function HeroSection({ onBookTrial }) {
               <span className="font-heading text-3xl leading-none text-white sm:text-4xl">
                 <TrustValue value={s.value} />
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#9AA7B6]">{s.label}</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#92ABC4]">{s.label}</span>
             </div>
           ))}
         </div>

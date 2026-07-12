@@ -32,27 +32,27 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A] px-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#051220] px-6">
       <div className="w-full max-w-sm">
         <div className="flex items-center gap-2 justify-center mb-8">
-          <Lock className="w-5 h-5 text-[#2EC4B6]" />
+          <Lock className="w-5 h-5 text-[#8DB6D7]" />
           <span className="font-heading text-xl text-white tracking-wide">CALI TERRAIN ADMIN</span>
         </div>
-        <form onSubmit={handleSubmit} className="border border-white/10 bg-[#121212] rounded-sm p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="border border-white/10 bg-[#0A1D31] rounded-sm p-6 space-y-4">
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Email</label>
+            <label className="text-xs font-bold uppercase tracking-widest text-[#5A7896] mb-1.5 block">Email</label>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username"
-              className="w-full bg-[#1A1A1A] border border-white/10 focus:border-[#2EC4B6] text-white px-4 py-3 text-sm outline-none rounded-sm" />
+              className="w-full bg-[#0E2740] border border-white/10 focus:border-[#8DB6D7] text-white px-4 py-3 text-sm outline-none rounded-sm" />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1.5 block">Password</label>
+            <label className="text-xs font-bold uppercase tracking-widest text-[#5A7896] mb-1.5 block">Password</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password"
-              className="w-full bg-[#1A1A1A] border border-white/10 focus:border-[#2EC4B6] text-white px-4 py-3 text-sm outline-none rounded-sm" />
+              className="w-full bg-[#0E2740] border border-white/10 focus:border-[#8DB6D7] text-white px-4 py-3 text-sm outline-none rounded-sm" />
           </div>
           <button type="submit" disabled={busy} className="btn-primary text-sm w-full justify-center">
             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
           </button>
-          <button type="button" onClick={handleReset} className="w-full text-center text-xs text-zinc-500 hover:text-[#2EC4B6]">
+          <button type="button" onClick={handleReset} className="w-full text-center text-xs text-[#5A7896] hover:text-[#8DB6D7]">
             Forgot password?
           </button>
         </form>

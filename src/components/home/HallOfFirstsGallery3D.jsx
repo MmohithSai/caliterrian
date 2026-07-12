@@ -40,8 +40,8 @@ const ANG_W = 0.4;                  // card angular width
 const ANG_H = ANG_W * 0.625;        // 16:10
 const LABEL_H = ANG_W * (96 / 768); // matches label canvas aspect
 const PITCH_MAX = 0.55;
-const BG = 0x05080d;
-const ACCENT = new THREE.Color("#2E8DFF");
+const BG = 0x030B14;
+const ACCENT = new THREE.Color("#8DB6D7");
 
 // Bend a plane (in angle-space) onto the inside of the sphere. Rotating the
 // resulting patch about the origin keeps it on the sphere, so one geometry is
@@ -125,10 +125,10 @@ function makeLabelTexture(entry) {
   ctx.fillText(name, 6, 30);
   const nameW = ctx.measureText(name).width;
   ctx.font = "500 30px Inter, system-ui, sans-serif";
-  ctx.fillStyle = "rgba(146,167,189,0.9)";
+  ctx.fillStyle = "rgba(146,171,196,0.9)";
   ctx.fillText(`— ${entry.milestone}`, 6 + nameW + 16, 30);
   ctx.font = "500 26px Inter, system-ui, sans-serif";
-  ctx.fillStyle = "rgba(92,107,124,0.95)";
+  ctx.fillStyle = "rgba(90,120,150,0.95)";
   ctx.fillText(entry.date.toUpperCase(), 6, 74);
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
@@ -590,11 +590,11 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {ENTRIES.slice(0, 8).map((e) => (
-          <div key={e.id} className="overflow-hidden rounded-xl border border-[#1E2A38]">
+          <div key={e.id} className="overflow-hidden rounded-xl border border-[#16324E]">
             <img src={e.img} alt={`${e.name} — ${e.milestone}`} loading="lazy" className="aspect-[16/10] w-full object-cover" />
             <div className="p-3">
               <h3 className="font-heading text-base text-white">{e.milestone}</h3>
-              <p className="mt-0.5 text-xs text-[#9AA7B6]">{e.name} · {e.date}</p>
+              <p className="mt-0.5 text-xs text-[#92ABC4]">{e.name} · {e.date}</p>
             </div>
           </div>
         ))}
@@ -608,16 +608,16 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
       role="region"
       aria-label="Hall of Firsts spherical gallery. Drag to look around, use arrow keys to browse, Enter to open a milestone."
       onKeyDown={onKeyNav}
-      className="group relative h-[80vh] min-h-[560px] w-full overflow-hidden rounded-lg border border-[#1E2A38] bg-[#05080D] outline-none focus-visible:ring-1 focus-visible:ring-[#2E8DFF]/60 sm:h-[88vh]"
+      className="group relative h-[80vh] min-h-[560px] w-full overflow-hidden rounded-lg border border-[#16324E] bg-[#030B14] outline-none focus-visible:ring-1 focus-visible:ring-[#8DB6D7]/60 sm:h-[88vh]"
     >
       {/* WebGL stage */}
       <div ref={canvasHostRef} className="absolute inset-0" aria-hidden="true" />
 
       {/* Atmosphere grade on top of the canvas — the spherical falloff */}
       <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#0B1016] to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0B1016]/90 to-transparent" />
-        <div className="absolute inset-0 [background:radial-gradient(115%_85%_at_50%_50%,transparent_50%,rgba(3,6,10,0.62)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#051220] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#051220]/90 to-transparent" />
+        <div className="absolute inset-0 [background:radial-gradient(115%_85%_at_50%_50%,transparent_50%,rgba(2,8,15,0.62)_100%)]" />
       </div>
 
       {/* ── Explore UI ── */}
@@ -629,9 +629,9 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
 
         {/* Drag hint — bottom centre pill */}
         <div
-          className={`absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-[#0B1016]/70 px-4 py-2 text-[10px] uppercase tracking-[0.26em] text-white/60 backdrop-blur transition-opacity duration-700 ${hint ? "opacity-100" : "opacity-0"}`}
+          className={`absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-[#051220]/70 px-4 py-2 text-[10px] uppercase tracking-[0.26em] text-white/60 backdrop-blur transition-opacity duration-700 ${hint ? "opacity-100" : "opacity-0"}`}
         >
-          <Move className="h-3.5 w-3.5 text-[#2E8DFF]" /> Drag to look around · Click a milestone
+          <Move className="h-3.5 w-3.5 text-[#8DB6D7]" /> Drag to look around · Click a milestone
         </div>
       </div>
 
@@ -639,32 +639,32 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
       {detail && (
         <div
           ref={detailRef}
-          className="absolute inset-0 z-30 overflow-hidden bg-[#05080D]"
+          className="absolute inset-0 z-30 overflow-hidden bg-[#030B14]"
           style={{ clipPath: "inset(100% 0% 0% 0%)" }}
         >
           <div className="absolute inset-0 overflow-hidden">
             <img ref={detailImgRef} src={detail.img} alt={`${detail.name} — ${detail.milestone}`} className="h-full w-full scale-[1.18] object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#05080D] via-[#05080D]/40 to-[#05080D]/25" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#05080D]/85 via-[#05080D]/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#030B14] via-[#030B14]/40 to-[#030B14]/25" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#030B14]/85 via-[#030B14]/30 to-transparent" />
           </div>
 
           <button
             type="button"
             aria-label="Back to the wall"
             onClick={closeDetail}
-            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#0B1016]/60 text-white backdrop-blur transition hover:rotate-90 hover:border-[#2E8DFF] hover:text-[#2E8DFF] sm:right-8 sm:top-8"
+            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#051220]/60 text-white backdrop-blur transition hover:rotate-90 hover:border-[#8DB6D7] hover:text-[#8DB6D7] sm:right-8 sm:top-8"
             style={{ transitionDuration: "300ms" }}
           >
             <X className="h-4 w-4" />
           </button>
 
           <div ref={detailContentRef} className="absolute bottom-8 left-5 right-5 z-10 max-w-2xl sm:bottom-14 sm:left-12">
-            <p className="inline-flex items-center gap-2 rounded-full border border-[#2E8DFF]/40 bg-[#2E8DFF]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#2E8DFF]">
+            <p className="inline-flex items-center gap-2 rounded-full border border-[#8DB6D7]/40 bg-[#8DB6D7]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#8DB6D7]">
               Hall of Firsts · {detail.date}
             </p>
             <h3 className="mt-4 font-heading text-4xl uppercase leading-[0.95] tracking-wide text-white sm:text-7xl">{detail.milestone}</h3>
-            <p className="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#9AA7B6]">{detail.name}</p>
-            <blockquote className="mt-5 max-w-xl border-l-2 border-[#2E8DFF] pl-4 text-sm italic leading-relaxed text-[#C6D2DF] sm:text-base">
+            <p className="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#92ABC4]">{detail.name}</p>
+            <blockquote className="mt-5 max-w-xl border-l-2 border-[#8DB6D7] pl-4 text-sm italic leading-relaxed text-[#C3D6E7] sm:text-base">
               “{detail.quote}”
             </blockquote>
             <div className="mt-7 flex flex-wrap items-center gap-4">

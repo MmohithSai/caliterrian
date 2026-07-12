@@ -102,25 +102,25 @@ function HeroStatic({ onBookTrial }) {
         aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover opacity-60"
       />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/75 via-[#0A0A0A]/45 to-[#0A0A0A]" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#051220]/75 via-[#051220]/45 to-[#051220]" />
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 70% 55% at 50% 45%, rgba(46,141,255,0.14), transparent 70%)",
+            "radial-gradient(ellipse 70% 55% at 50% 45%, rgba(141,182,215,0.14), transparent 70%)",
         }}
       />
       <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
         <h1 className="hero-brand-text font-heading text-white">
-          CALI<span className="text-[#2E8DFF]">TERRAIN</span>
+          CALI<span className="text-[#8DB6D7]">TERRAIN</span>
         </h1>
-        <p className="hero-subtitle max-w-lg text-zinc-300">
+        <p className="hero-subtitle max-w-lg text-[#C3D6E7]">
           Master your body. Redefine your limits.
         </p>
         <div className="mt-2 flex flex-col items-center gap-4 sm:flex-row">
           <button
             onClick={onBookTrial}
-            className="hero-cta-primary kinetic-button inline-flex items-center gap-2 bg-[#2E8DFF] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#1F6FE0]"
+            className="hero-cta-primary kinetic-button inline-flex items-center gap-2 bg-[#8DB6D7] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#041C38] transition-colors duration-200 hover:bg-[#A9C9E3]"
           >
             Book Free Trial <ChevronRight className="h-4 w-4" />
           </button>
@@ -231,17 +231,17 @@ function HeroAnimated({ onBookTrial }) {
         {/* ── Atmospheric overlays (HTML layers on top of canvas) ── */}
 
         {/* Top edge gradient */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-32 bg-gradient-to-b from-[#0A0A0A]/70 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-32 bg-gradient-to-b from-[#051220]/70 to-transparent" />
 
         {/* Bottom edge gradient — intensifies at end */}
         <motion.div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-48 bg-gradient-to-t from-[#0A0A0A] to-transparent"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-48 bg-gradient-to-t from-[#051220] to-transparent"
           style={reduceMotion ? undefined : { opacity: bottomFade }}
         />
 
         {/* Side gradients for widescreen blending */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-24 bg-gradient-to-r from-[#0A0A0A]/50 to-transparent sm:w-40" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-24 bg-gradient-to-l from-[#0A0A0A]/50 to-transparent sm:w-40" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-24 bg-gradient-to-r from-[#051220]/50 to-transparent sm:w-40" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-24 bg-gradient-to-l from-[#051220]/50 to-transparent sm:w-40" />
 
         {/* Blue atmospheric glow — peaks during transition */}
         <motion.div
@@ -253,7 +253,7 @@ function HeroAnimated({ onBookTrial }) {
               : {
                   opacity: glowOpacity,
                   background:
-                    "radial-gradient(ellipse 60% 50% at 50% 42%, rgba(46, 141, 255, 0.25), transparent 70%)",
+                    "radial-gradient(ellipse 60% 50% at 50% 42%, rgba(141, 182, 215, 0.25), transparent 70%)",
                 }
           }
         />
@@ -273,7 +273,7 @@ function HeroAnimated({ onBookTrial }) {
               : {
                   opacity: introBackdropOpacity,
                   background:
-                    "radial-gradient(ellipse 80% 65% at 50% 48%, rgba(46, 141, 255, 0.12) 0%, rgba(10, 10, 10, 0.78) 65%, rgba(10, 10, 10, 0.92) 100%)",
+                    "radial-gradient(ellipse 80% 65% at 50% 48%, rgba(141, 182, 215, 0.12) 0%, rgba(5, 18, 32, 0.78) 65%, rgba(5, 18, 32, 0.92) 100%)",
                 }
           }
         />
@@ -306,10 +306,10 @@ function HeroAnimated({ onBookTrial }) {
             }
           >
             <h1 className="hero-brand-text font-heading text-white">
-              CALI<span className="text-[#2E8DFF]">TERRAIN</span>
+              CALI<span className="text-[#8DB6D7]">TERRAIN</span>
             </h1>
             <motion.p
-              className="hero-subtitle max-w-lg text-center text-zinc-300"
+              className="hero-subtitle max-w-lg text-center text-[#C3D6E7]"
               style={
                 reduceMotion
                   ? undefined
@@ -331,7 +331,7 @@ function HeroAnimated({ onBookTrial }) {
           <div className="flex flex-col items-center gap-4 sm:flex-row">
             <button
               onClick={onBookTrial}
-              className="hero-cta-primary kinetic-button pointer-events-auto inline-flex items-center gap-2 bg-[#2E8DFF] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#1F6FE0]"
+              className="hero-cta-primary kinetic-button pointer-events-auto inline-flex items-center gap-2 bg-[#8DB6D7] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#041C38] transition-colors duration-200 hover:bg-[#A9C9E3]"
             >
               Book Free Trial <ChevronRight className="h-4 w-4" />
             </button>
@@ -375,13 +375,13 @@ function HeroAnimated({ onBookTrial }) {
             className="hero-evolution-mark w-[min(72vw,46rem)] select-none"
             draggable="false"
           />
-          <p className="hero-subtitle max-w-lg text-zinc-300">
+          <p className="hero-subtitle max-w-lg text-[#C3D6E7]">
             Master your body. Redefine your limits.
           </p>
           <div className="mt-2 flex flex-col items-center gap-4 sm:flex-row">
             <button
               onClick={onBookTrial}
-              className="hero-cta-primary kinetic-button pointer-events-auto inline-flex items-center gap-2 bg-[#2E8DFF] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#1F6FE0]"
+              className="hero-cta-primary kinetic-button pointer-events-auto inline-flex items-center gap-2 bg-[#8DB6D7] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#041C38] transition-colors duration-200 hover:bg-[#A9C9E3]"
             >
               Book Free Trial <ChevronRight className="h-4 w-4" />
             </button>
@@ -397,7 +397,7 @@ function HeroAnimated({ onBookTrial }) {
         {/* ── Progress bar ── */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[7] h-[2px] bg-white/5">
           <motion.div
-            className="h-full bg-[#2E8DFF]"
+            className="h-full bg-[#8DB6D7]"
             style={{ scaleX: progressScale, transformOrigin: "0 50%" }}
           />
         </div>

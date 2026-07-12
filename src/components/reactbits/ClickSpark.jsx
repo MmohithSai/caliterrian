@@ -5,7 +5,7 @@
 import { useEffect, useRef } from "react";
 
 export default function ClickSpark({
-  sparkColor = "#2E8DFF",
+  sparkColor = "#8DB6D7",
   sparkSize = 9,
   sparkRadius = 18,
   sparkCount = 8,

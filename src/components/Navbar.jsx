@@ -63,7 +63,7 @@ export default function Navbar({ onBookTrial }) {
                 to={link.to}
                 data-testid={`nav-link-${link.label.toLowerCase()}`}
                 className={`relative text-xs font-bold uppercase tracking-widest px-3 py-2 transition-colors duration-200 ${
-                  active ? "text-[#2E8DFF]" : "text-zinc-400 hover:text-white"
+                  active ? "text-[#8DB6D7]" : "text-[#92ABC4] hover:text-white"
                 }`}
               >
                 {link.label}
@@ -71,7 +71,7 @@ export default function Navbar({ onBookTrial }) {
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-[#2E8DFF]"
+                    className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-[#8DB6D7]"
                     transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 34 }}
                   />
                 )}
@@ -87,7 +87,7 @@ export default function Navbar({ onBookTrial }) {
             onClick={onBookTrial}
             whileHover={reduce ? undefined : { scale: 1.04 }}
             whileTap={reduce ? undefined : { scale: 0.96 }}
-            className="hidden sm:flex items-center gap-2 bg-[#2E8DFF] hover:bg-[#1F6FE0] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 transition-colors duration-200"
+            className="hidden sm:flex items-center gap-2 bg-[#8DB6D7] hover:bg-[#A9C9E3] text-[#041C38] text-xs font-bold uppercase tracking-widest px-5 py-2.5 transition-colors duration-200"
           >
             Book Free Trial <ChevronRight className="w-3 h-3" />
           </motion.button>
@@ -124,8 +124,8 @@ export default function Navbar({ onBookTrial }) {
                     to={link.to}
                     className={`block text-sm font-bold uppercase tracking-widest py-3 border-b border-white/5 transition-colors duration-200 ${
                       location.pathname === link.to
-                        ? "text-[#2E8DFF]"
-                        : "text-zinc-400 hover:text-white"
+                        ? "text-[#8DB6D7]"
+                        : "text-[#92ABC4] hover:text-white"
                     }`}
                   >
                     {link.label}

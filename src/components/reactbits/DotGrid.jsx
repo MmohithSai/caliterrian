@@ -37,8 +37,8 @@ const prefersReducedMotion = () =>
 export default function DotGrid({
   dotSize = 3,
   gap = 26,
-  baseColor = "#1E2A38",
-  activeColor = "#2E8DFF",
+  baseColor = "#16324E",
+  activeColor = "#8DB6D7",
   proximity = 130,
   speedTrigger = 100,
   shockRadius = 220,

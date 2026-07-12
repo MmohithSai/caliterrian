@@ -16,7 +16,7 @@ import MuscleUp3D from "@/components/home/MuscleUp3D";
 // Consolidates the old Why-Stay, Member-Journeys and Testimonials sections.
 export function ResultsSection() {
   return (
-    <Section id="results" className="bg-[#0E141C]">
+    <Section id="results" className="bg-[#081727]">
       <Header eyebrow={RESULTS.eyebrow} lines={RESULTS.title} sub={RESULTS.sub} maxSub="max-w-2xl" />
 
       {/* Outcome rings + supporting reasons */}
@@ -36,9 +36,9 @@ export function ResultsSection() {
               <motion.div key={r.title} variants={reveal}>
                 {/* React Bits SpotlightCard: cursor-tracking blue glow */}
                 <SpotlightCard className="ct-card h-full p-5">
-                  <Icon className="h-6 w-6 text-[#2E8DFF]" />
+                  <Icon className="h-6 w-6 text-[#8DB6D7]" />
                   <h3 className="mt-3 font-heading text-lg tracking-wide text-white">{r.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-[#9AA7B6]">{r.desc}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-[#92ABC4]">{r.desc}</p>
                 </SpotlightCard>
               </motion.div>
             );
@@ -47,7 +47,7 @@ export function ResultsSection() {
       </div>
 
       {/* Member video stories — "I thought I couldn't." */}
-      <div className="mt-14 border-t border-[#1E2A38] pt-10">
+      <div className="mt-14 border-t border-[#16324E] pt-10">
         <div className="mb-6">
           <Eyebrow>{RESULTS.storiesEyebrow}</Eyebrow>
           <h3 className="ct-display mt-3 text-3xl sm:text-4xl">
@@ -72,12 +72,12 @@ export function ResultsSection() {
                     </span>
                   </MediaSlot>
                 </GlareHover>
-                <span className="absolute left-3 top-3 inline-flex items-center gap-1 bg-[#2E8DFF] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+                <span className="absolute left-3 top-3 inline-flex items-center gap-1 bg-[#8DB6D7] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#041C38]">
                   <Trophy className="h-2.5 w-2.5" /> {s.achieved}
                 </span>
               </div>
               <figcaption className="p-5">
-                <Quote className="h-5 w-5 text-[#2E8DFF]" />
+                <Quote className="h-5 w-5 text-[#8DB6D7]" />
                 <p className="mt-2 text-sm leading-relaxed text-white">“{s.quote}”</p>
                 <p className="mt-3 text-sm font-bold text-white">{s.name}</p>
               </figcaption>
@@ -106,29 +106,29 @@ export function MembershipsSection({ onBookTrial }) {
           <motion.div key={tier.name} variants={reveal} className="relative">
             {/* Badge lives outside the SpotlightCard — its overflow:hidden would clip the -top offset */}
             {tier.badge && (
-              <span className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 bg-[#2E8DFF] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-white">
+              <span className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 bg-[#8DB6D7] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#041C38]">
                 {tier.badge}
               </span>
             )}
             {/* React Bits SpotlightCard: cursor-tracking glow, stronger on the featured tier */}
             <SpotlightCard
-              spotlightColor={tier.featured ? "rgba(46, 141, 255, 0.22)" : "rgba(46, 141, 255, 0.12)"}
+              spotlightColor={tier.featured ? "rgba(141, 182, 215, 0.22)" : "rgba(141, 182, 215, 0.12)"}
               className={`flex h-full flex-col p-6 ${
                 tier.featured
-                  ? "border-2 border-[#2E8DFF] bg-[#131B25] shadow-[0_0_40px_rgba(46,141,255,0.18)]"
+                  ? "border-2 border-[#8DB6D7] bg-[#0A1D31] shadow-[0_0_40px_rgba(141,182,215,0.18)]"
                   : "ct-card"
               }`}
             >
             <h3 className="font-heading text-2xl tracking-wide text-white">{tier.name}</h3>
-            <p className="text-xs uppercase tracking-widest text-[#9AA7B6]">{tier.caption}</p>
+            <p className="text-xs uppercase tracking-widest text-[#92ABC4]">{tier.caption}</p>
             <p className="mt-4 font-heading text-4xl text-white">
-              <span className={tier.featured ? "text-[#2E8DFF]" : undefined}>{tier.price}</span>
-              <span className="text-sm text-[#9AA7B6]">{tier.period}</span>
+              <span className={tier.featured ? "text-[#8DB6D7]" : undefined}>{tier.price}</span>
+              <span className="text-sm text-[#92ABC4]">{tier.period}</span>
             </p>
             <ul className="mt-5 flex-1 space-y-2.5">
               {tier.features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-[#9AA7B6]">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2E8DFF]" /> {f}
+                <li key={f} className="flex items-start gap-2 text-sm text-[#92ABC4]">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#8DB6D7]" /> {f}
                 </li>
               ))}
             </ul>
@@ -151,9 +151,9 @@ export function MembershipsSection({ onBookTrial }) {
         whileInView="visible"
         viewport={vpOnce}
         variants={reveal}
-        className="mt-6 flex items-center justify-center gap-3 border border-[#2E8DFF]/30 bg-[#2E8DFF]/5 px-6 py-4 text-center"
+        className="mt-6 flex items-center justify-center gap-3 border border-[#8DB6D7]/30 bg-[#8DB6D7]/5 px-6 py-4 text-center"
       >
-        <Sparkles className="h-5 w-5 shrink-0 text-[#2E8DFF]" />
+        <Sparkles className="h-5 w-5 shrink-0 text-[#8DB6D7]" />
         <p className="text-sm text-white">{MEMBERSHIPS.assessmentNote}</p>
       </motion.div>
     </Section>
@@ -164,7 +164,7 @@ export function MembershipsSection({ onBookTrial }) {
 export function FaqSection({ onBookTrial }) {
   const [open, setOpen] = useState(0);
   return (
-    <Section id="faq" className="bg-[#0E141C]">
+    <Section id="faq" className="bg-[#081727]">
       <Header eyebrow={FAQ.eyebrow} lines={FAQ.title} sub={FAQ.sub} center maxSub="max-w-2xl" />
 
       <motion.div
@@ -175,17 +175,17 @@ export function FaqSection({ onBookTrial }) {
         className="mx-auto max-w-3xl space-y-3"
       >
         {FAQ.items.map((item, i) => (
-          <motion.div key={item.q} variants={reveal} className="faq-panel border border-[#1E2A38] bg-[#131B25]">
+          <motion.div key={item.q} variants={reveal} className="faq-panel border border-[#16324E] bg-[#0A1D31]">
             <button
               onClick={() => setOpen(open === i ? null : i)}
               className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left"
               aria-expanded={open === i}
             >
               <span className="text-sm font-medium text-white">{item.q}</span>
-              <ChevronDown className={`h-4 w-4 shrink-0 text-[#2E8DFF] transition-transform duration-200 ${open === i ? "rotate-180" : ""}`} />
+              <ChevronDown className={`h-4 w-4 shrink-0 text-[#8DB6D7] transition-transform duration-200 ${open === i ? "rotate-180" : ""}`} />
             </button>
             <div className={`faq-answer px-6 ${open === i ? "is-open" : ""}`}>
-              <p className="pb-4 text-sm leading-relaxed text-[#9AA7B6]">{item.a}</p>
+              <p className="pb-4 text-sm leading-relaxed text-[#92ABC4]">{item.a}</p>
             </div>
           </motion.div>
         ))}
@@ -204,13 +204,13 @@ export function FaqSection({ onBookTrial }) {
 // ── SECTION 16 · Final CTA — cinematic background ─────────────────────────
 export function FinalCtaSection({ onBookTrial }) {
   return (
-    <section id="final-cta" className="relative isolate flex min-h-[70vh] items-center overflow-hidden bg-[#0B1016] px-6 py-28">
+    <section id="final-cta" className="relative isolate flex min-h-[70vh] items-center overflow-hidden bg-[#051220] px-6 py-28">
       {/* MuscleUp3D: particle-constellation athlete looping a muscle-up behind
           the headline (replaces the old Orb) — same ink-dot language as the
           Training Programs hero silhouette, but the skeleton is animated
           through the full rep. Reduced motion freezes it at the top. */}
       <MuscleUp3D className="-z-10 opacity-70" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(90%_120%_at_50%_0%,rgba(46,141,255,0.14),transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(90%_120%_at_50%_0%,rgba(141,182,215,0.14),transparent_60%)]" />
       <div className="hero-grain pointer-events-none absolute inset-0 -z-10 opacity-30" />
 
       <motion.div
