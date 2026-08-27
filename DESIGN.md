@@ -8,25 +8,22 @@ Dark, cinematic, facility-first. Near-black blue-tinted base; photography under 
 
 ## Color
 
-Strategy: **Committed, logo-derived** — every color comes from the Cali Terrain badge (navy ink, powder blue, ice, white). Neutrals are shades of the badge navy; the powder blue carries the identity across glows, ticks, connectors, and states.
+Strategy: **Committed** — one electric blue carries the identity across glows, ticks, connectors, and states on a near-black field.
 
-Logo source colors: navy ink `#041C38` · slate `#324E6C` · powder `#8DB6D7` · ice `#C9DCEC` · white.
+- `--color-obsidian: #0B1016` — page background
+- `--color-surface: #131B25` — cards/surfaces (elevated: `#1A2230`)
+- Border: `#1E2A38`
+- **Caliterrain Blue** `#2E8DFF` (hover `#1F6FE0`, ink `#04101F`, bright tint `#6FB0FF`)
+- Secondary text: `#9AA7B6`; hint text `#5C6B7C`
+- Deep-band background: `#03070D` (journey)
+- Gold `#F2B84B` — reserved for mastery/final-stage moments only
+- Success `#34D399`, danger `#F87171`
 
-- `--color-obsidian: #051220` — page background (deepened badge navy)
-- `--color-surface: #0A1D31` — cards/surfaces (elevated: `#0E2740`)
-- Border: `#16324E`
-- **Cali Terrain Powder** `#8DB6D7` (hover `#A9C9E3`, ink `#041C38`, bright tint `#C9DCEC`)
-- On powder backgrounds text is always navy ink `#041C38` (mirrors the logo's navy-on-lightblue banner)
-- Secondary text: `#92ABC4`; hint text `#5A7896`
-- Deep-band background: `#02080F` (hero, journey)
-- Ice `#C9DCEC` — reserved for mastery/final-stage moments only (replaces the old gold)
-- Success `#34D399`, danger `#F87171` (semantic only; not brand)
-
-Rules: powder glow is an accent (shadows, 1px ticks, node rings), never a wash. Ice appears only at journey summits and highlight tints.
+Rules: blue glow is an accent (shadows, 1px ticks, node rings), never a wash. Gold appears only at journey summits.
 
 ## Typography
 
-- Display: **Bebas Neue** — uppercase, line-height 0.85–0.92, tracking 0.01–0.06em, `clamp()` fluid scale up to 11rem in the hero. Two-tone convention: white headline + one blue accent word (`.ct-display .accent`).
+- Display: **Bebas Neue** — uppercase, line-height 0.85–0.92, tracking 0.01–0.06em. Two-tone convention: white headline + one blue accent word (`.ct-display .accent`).
 - Body/UI: **Manrope** 300–800. Uppercase micro-labels at 600–700 weight with 0.22–0.34em tracking.
 - Eyebrow grammar: `.ct-eyebrow` — blue uppercase Manrope with a leading 2px glowing tick.
 - Stats and counters use tabular figures.
@@ -42,7 +39,7 @@ Rules: powder glow is an accent (shadows, 1px ticks, node rings), never a wash. 
 
 ## Motion
 
-- Lenis smooth scroll + GSAP (hero scroll choreography) + framer-motion + React Bits (SplitText, CountUp, SpotlightCard, Magnet, GlareHover, ClickSpark, Particles, DotGrid, ElectricBorder, ShinyText, FuzzyText).
+- Lenis smooth scroll + GSAP (journey timeline, 3D gallery focus transitions) + framer-motion + React Bits (SplitText, CountUp, SpotlightCard, Magnet, GlareHover, ClickSpark, Particles, DotGrid, ElectricBorder, ShinyText, FuzzyText).
 - Atmosphere layers: Particles (cursor-parallax blue specks) behind every PageHero band; interactive DotGrid (proximity glow + inertia scatter + click ripple) behind plain sections (Contact, Blog grid, Coaches/Transformations/Pricing closing bands, Programs blue banner). ElectricBorder is reserved for offer/reward moments only.
 - House easing: `cubic-bezier(0.22, 1, 0.36, 1)` (ease-out-quint family). Durations 220–800ms.
 - Scroll reveals: `.scroll-fade` rise-and-fade with staggered delays.

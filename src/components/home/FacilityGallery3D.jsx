@@ -3,10 +3,10 @@
 // orbit with momentum, hover to light a card up, click to travel into it.
 // Raw Three.js (no R3F) + GSAP for the cinematic focus transition.
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import * as THREE from "three";
 import gsap from "gsap";
 import { ArrowRight, ChevronLeft, ChevronRight, Move, X } from "lucide-react";
+import { HERO } from "@/data/home";
 
 // ── Content ────────────────────────────────────────────────────────────────
 const CARDS = [
@@ -14,6 +14,9 @@ const CARDS = [
     id: "strength-lab",
     title: "Strength Lab",
     tag: "Strength · Power",
+    // Hero slide copy — headline second line renders in accent; pitch sells the join.
+    headline: ["Get Strong.", "Stay Strong."],
+    pitch: "Racks, platforms and free weights with a coach on the floor — build strength that shows up in every skill.",
     desc: "Racks, platforms and free weights for structured strength training — the engine room where heavy work gets done.",
     img: "/facility/cards/strength-lab.jpg?v=2",
     features: ["Competition racks & lifting platform", "Full dumbbell + barbell range", "Sleds, plates & conditioning tools"],
@@ -22,6 +25,8 @@ const CARDS = [
     id: "performance-lane",
     title: "Performance Lane",
     tag: "Speed · Conditioning",
+    headline: ["Faster. Fitter.", "Harder To Tire."],
+    pitch: "Sprints, sled pushes and engine work on a dedicated turf lane — conditioning that carries into everything you do.",
     desc: "A dedicated turf lane for sprints, sled pushes and engine work — built to make you faster and harder to tire out.",
     img: "/facility/cards/performance-lane.jpg?v=2",
     features: ["Sprint + sled turf lane", "Climbing ropes & battle ropes", "Plyo boxes for explosive work"],
@@ -30,6 +35,8 @@ const CARDS = [
     id: "skill-arena",
     title: "Skill Arena",
     tag: "Calisthenics · Skills",
+    headline: ["Earn Your First", "Muscle-Up."],
+    pitch: "Rings, rigs and step-by-step progressions — from pull-ups to levers and handstands, coached at every stage.",
     desc: "Rings, rigs and open floor under the lights — where muscle-ups, levers and handstands are trained, not wished for.",
     img: "/facility/cards/skill-arena.jpg?v=2",
     features: ["Gymnastic rings & pull-up rig", "Skill progressions for every level", "Mirrored wall for movement feedback"],
@@ -38,6 +45,8 @@ const CARDS = [
     id: "freestyle-area",
     title: "Freestyle Area",
     tag: "Flow · Movement",
+    headline: ["Move Like", "You Mean It."],
+    pitch: "Bars, mats and open floor for creative flows and soft landings — training that feels like play and builds real control.",
     desc: "Bars, mats and room to move — an open playground for creative movement, freestyle flows and soft landings.",
     img: "/facility/cards/freestyle-area.jpg?v=2",
     features: ["Monkey bars & parallel bars", "Crash mats for safe skill work", "Open floor for freestyle flow"],
@@ -46,6 +55,8 @@ const CARDS = [
     id: "mobility-zone",
     title: "Mobility Zone",
     tag: "Mobility · Recovery",
+    headline: ["Train Hard.", "Move Well For Life."],
+    pitch: "Turf, mats and wall bars for the work that keeps you moving — restore range and build a body that lasts.",
     desc: "Turf, mats and wall bars for the work that keeps you moving — restore range and build the foundation your body needs.",
     img: "/facility/cards/mobility-zone.jpg?v=2",
     features: ["Open turf + mat space", "Wall bars for deep positions", "Mobility tools & soft landings"],
@@ -57,8 +68,8 @@ const STEP = THREE.MathUtils.degToRad(32); // angular gap between cards
 const RADIUS = 10;
 const CARD_W = 6.8;
 const CARD_H = 5.12; // matches the 1445×1088 source aspect
-const BG = 0x030B14;
-const ACCENT = new THREE.Color("#8DB6D7");
+const BG = 0x05080d;
+const ACCENT = new THREE.Color("#2E8DFF");
 
 // ── Card shader: rounded corners, cinematic grade, hover light, edge glow ──
 const cardVert = /* glsl */ `
@@ -120,8 +131,8 @@ function makeDotTexture() {
   c.width = c.height = 64;
   const ctx = c.getContext("2d");
   const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-  g.addColorStop(0, "rgba(201,220,236,1)");
-  g.addColorStop(0.4, "rgba(141,182,215,0.45)");
+  g.addColorStop(0, "rgba(190,220,255,1)");
+  g.addColorStop(0.4, "rgba(120,170,255,0.45)");
   g.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, 64, 64);
@@ -137,7 +148,7 @@ function makeStreakTexture() {
   const ctx = c.getContext("2d");
   const g = ctx.createLinearGradient(0, 0, 256, 0);
   g.addColorStop(0, "rgba(0,0,0,0)");
-  g.addColorStop(0.5, "rgba(141,182,215,0.9)");
+  g.addColorStop(0.5, "rgba(110,170,255,0.9)");
   g.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, 256, 8);
@@ -152,8 +163,8 @@ function makeFloorTexture() {
   c.width = c.height = 512;
   const ctx = c.getContext("2d");
   const g = ctx.createRadialGradient(256, 256, 0, 256, 256, 256);
-  g.addColorStop(0, "rgba(22,50,78,0.55)");
-  g.addColorStop(0.5, "rgba(8,23,39,0.22)");
+  g.addColorStop(0, "rgba(30,52,82,0.55)");
+  g.addColorStop(0.5, "rgba(14,24,38,0.22)");
   g.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, 512, 512);
@@ -165,7 +176,7 @@ function makeFloorTexture() {
 const wrapTwo = (n, pad = 2) => String(n + 1).padStart(pad, "0");
 
 // ── Component ──────────────────────────────────────────────────────────────
-export default function FacilityGallery3D() {
+export default function FacilityGallery3D({ onBookTrial }) {
   const wrapRef = useRef(null);
   const canvasHostRef = useRef(null);
   const apiRef = useRef(null); // imperative bridge into the three scene
@@ -704,16 +715,21 @@ export default function FacilityGallery3D() {
   // Static fallback if WebGL is unavailable
   if (!webgl) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {CARDS.map((c) => (
-          <div key={c.id} className="overflow-hidden rounded-xl border border-[#16324E]">
-            <img src={c.img} alt={c.title} loading="lazy" className="aspect-[4/3] w-full object-cover" />
-            <div className="p-4">
-              <h3 className="font-heading text-lg text-white">{c.title}</h3>
-              <p className="mt-1 text-sm text-[#92ABC4]">{c.desc}</p>
-            </div>
+      <div className="h-full w-full overflow-y-auto px-6 pb-8 pt-28">
+        <div className="mx-auto max-w-7xl">
+          <SlideCopy card={CARDS[0]} onBookTrial={onBookTrial} />
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {CARDS.map((c) => (
+              <div key={c.id} className="overflow-hidden rounded-xl border border-[#1E2A38]">
+                <img src={c.img} alt={c.title} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                <div className="p-4">
+                  <h3 className="font-heading text-lg text-white">{c.title}</h3>
+                  <p className="mt-1 text-sm text-[#9AA7B6]">{c.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     );
   }
@@ -725,153 +741,176 @@ export default function FacilityGallery3D() {
       role="region"
       aria-label="Facility zones 3D gallery. Use arrow keys to browse, Enter to open."
       onKeyDown={onKeyNav}
-      className="group relative h-[78vh] min-h-[540px] w-full overflow-hidden rounded-lg border border-[#16324E] bg-[#030B14] outline-none focus-visible:ring-1 focus-visible:ring-[#8DB6D7]/60 sm:h-[86vh]"
+      className="group relative h-full w-full overflow-hidden bg-[#05080D] outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[#2E8DFF]/60"
     >
       {/* WebGL stage */}
       <div ref={canvasHostRef} className="absolute inset-0" aria-hidden="true" />
 
-      {/* Atmosphere grade on top of the canvas */}
+      {/* Atmosphere grade — deeper at the top (fixed navbar) and left (slide copy) */}
       <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
-        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#051220]/70 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#051220]/60 to-transparent" />
-        <div className="absolute inset-0 [background:radial-gradient(120%_90%_at_50%_50%,transparent_70%,rgba(2,8,15,0.3)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#05080D]/85 to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-[62%] bg-gradient-to-r from-[#05080D]/85 via-[#05080D]/35 to-transparent" />
+        <div className="absolute inset-0 bg-[#05080D]/55 sm:hidden" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#05080D]/80 to-transparent" />
+        <div className="absolute inset-0 [background:radial-gradient(120%_90%_at_50%_50%,transparent_70%,rgba(3,6,10,0.3)_100%)]" />
       </div>
 
-      {/* ── Explore UI ── */}
+      {/* ── Explore UI — everything sits in the same max-w-7xl column as the navbar ── */}
       <div className={`pointer-events-none absolute inset-0 z-20 transition-opacity duration-500 ${focused ? "opacity-0" : "opacity-100"}`}>
-        {/* Featured card info — bottom left */}
-        <div key={card.id} className="absolute bottom-6 left-5 max-w-md sm:bottom-10 sm:left-10">
-          <p className="ct-gallery-rise text-[10px] font-bold uppercase tracking-[0.3em] text-[#8DB6D7]" style={{ animationDelay: "0ms" }}>
-            {card.tag}
-          </p>
-          <h3 className="ct-gallery-rise mt-2 font-heading text-3xl uppercase leading-none tracking-wide text-white sm:text-5xl" style={{ animationDelay: "60ms" }}>
-            {card.title}
-          </h3>
-          <p className="ct-gallery-rise mt-3 hidden max-w-sm text-sm leading-relaxed text-[#92ABC4] sm:block" style={{ animationDelay: "120ms" }}>
-            {card.desc}
-          </p>
-          <button
-            type="button"
-            onClick={() => !focused && apiRef.current?.focusCard(active)}
-            className="ct-gallery-rise btn-secondary pointer-events-auto mt-5 text-xs"
-            style={{ animationDelay: "180ms" }}
+        <div className="relative mx-auto h-full max-w-7xl">
+          {/* Slide copy — left, vertically centred; every swipe swaps the whole message */}
+          <div className="absolute left-6 top-1/2 max-w-lg -translate-y-1/2">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="font-heading text-sm tracking-widest text-white">{wrapTwo(active)}</span>
+              <span className="relative h-px w-16 overflow-hidden bg-white/15">
+                <span
+                  className="absolute inset-y-0 left-0 bg-[#2E8DFF] transition-all duration-500 ease-out"
+                  style={{ width: `${((active + 1) / CARDS.length) * 100}%` }}
+                />
+              </span>
+              <span className="font-heading text-sm tracking-widest text-white/40">{wrapTwo(CARDS.length - 1)}</span>
+            </div>
+            <div key={card.id}>
+              <SlideCopy card={card} onBookTrial={onBookTrial} onExplore={() => !focused && apiRef.current?.focusCard(active)} />
+            </div>
+          </div>
+
+          {/* Drag hint — bottom center */}
+          <div
+            className={`absolute bottom-8 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-white/50 transition-opacity duration-700 lg:flex ${hint ? "opacity-100" : "opacity-0"}`}
           >
-            Step Inside <ArrowRight className="h-3.5 w-3.5" />
-          </button>
-        </div>
+            <Move className="h-3.5 w-3.5 text-[#2E8DFF]" /> Drag or swipe to explore the zones
+          </div>
 
-        {/* Index + progress — top left */}
-        <div className="absolute left-5 top-5 flex items-center gap-3 sm:left-10 sm:top-8">
-          <span className="font-heading text-sm tracking-widest text-white">{wrapTwo(active)}</span>
-          <span className="relative h-px w-16 overflow-hidden bg-white/15">
-            <span
-              className="absolute inset-y-0 left-0 bg-[#8DB6D7] transition-all duration-500 ease-out"
-              style={{ width: `${((active + 1) / CARDS.length) * 100}%` }}
-            />
-          </span>
-          <span className="font-heading text-sm tracking-widest text-white/40">{wrapTwo(CARDS.length - 1)}</span>
-        </div>
-
-        {/* Drag hint — center bottom */}
-        <div
-          className={`absolute bottom-6 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-white/50 transition-opacity duration-700 lg:flex ${hint ? "opacity-100" : "opacity-0"}`}
-        >
-          <Move className="h-3.5 w-3.5 text-[#8DB6D7]" /> Drag to explore
-        </div>
-
-        {/* Prev / next — mid edges */}
-        <button
-          type="button"
-          aria-label="Previous zone"
-          onClick={() => { apiRef.current?.goBy(-1); setHint(false); }}
-          className="pointer-events-auto absolute left-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#051220]/60 text-white backdrop-blur transition hover:border-[#8DB6D7]/60 hover:text-[#8DB6D7] sm:flex"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          aria-label="Next zone"
-          onClick={() => { apiRef.current?.goBy(1); setHint(false); }}
-          className="pointer-events-auto absolute right-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#051220]/60 text-white backdrop-blur transition hover:border-[#8DB6D7]/60 hover:text-[#8DB6D7] sm:flex"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-
-        {/* Thumbnails — bottom right */}
-        <div className="pointer-events-auto absolute bottom-6 right-5 hidden items-end gap-2 sm:bottom-10 sm:right-10 lg:flex">
-          {CARDS.map((c, i) => (
+          {/* Prev / next + thumbnails — bottom right, inset to clear the floating buttons */}
+          <div className="pointer-events-auto absolute bottom-16 right-24 hidden items-center gap-3 sm:flex 2xl:right-6">
             <button
-              key={c.id}
               type="button"
-              aria-label={`Go to ${c.title}`}
-              onClick={() => { apiRef.current?.goTo(i); setHint(false); }}
-              className={`relative overflow-hidden rounded-md border transition-all duration-300 ${
-                i === active ? "h-14 w-20 border-[#8DB6D7]" : "h-12 w-16 border-white/15 opacity-50 hover:opacity-90"
-              }`}
+              aria-label="Previous zone"
+              onClick={() => { apiRef.current?.goBy(-1); setHint(false); }}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#0B1016]/60 text-white backdrop-blur transition hover:border-[#2E8DFF]/60 hover:text-[#2E8DFF]"
             >
-              <img src={c.img} alt="" className="h-full w-full object-cover" />
-              {i === active && <span className="absolute inset-x-0 bottom-0 h-0.5 bg-[#8DB6D7]" />}
+              <ChevronLeft className="h-4 w-4" />
             </button>
-          ))}
-        </div>
-
-        {/* Mobile dots — centered so they clear the floating WhatsApp button */}
-        <div className="pointer-events-auto absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-1.5 lg:hidden">
-          {CARDS.map((c, i) => (
+            <div className="hidden items-end gap-2 lg:flex">
+              {CARDS.map((c, i) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  aria-label={`Go to ${c.title}`}
+                  onClick={() => { apiRef.current?.goTo(i); setHint(false); }}
+                  className={`relative overflow-hidden rounded-md border transition-all duration-300 ${
+                    i === active ? "h-14 w-20 border-[#2E8DFF]" : "h-12 w-16 border-white/15 opacity-50 hover:opacity-90"
+                  }`}
+                >
+                  <img src={c.img} alt="" className="h-full w-full object-cover" />
+                  {i === active && <span className="absolute inset-x-0 bottom-0 h-0.5 bg-[#2E8DFF]" />}
+                </button>
+              ))}
+            </div>
             <button
-              key={c.id}
               type="button"
-              aria-label={`Go to ${c.title}`}
-              onClick={() => apiRef.current?.goTo(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? "w-6 bg-[#8DB6D7]" : "w-1.5 bg-white/25"}`}
-            />
-          ))}
+              aria-label="Next zone"
+              onClick={() => { apiRef.current?.goBy(1); setHint(false); }}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#0B1016]/60 text-white backdrop-blur transition hover:border-[#2E8DFF]/60 hover:text-[#2E8DFF]"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Mobile dots — centered so they clear the chat bubble and floating buttons */}
+          <div className="pointer-events-auto absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-1.5 lg:hidden">
+            {CARDS.map((c, i) => (
+              <button
+                key={c.id}
+                type="button"
+                aria-label={`Go to ${c.title}`}
+                onClick={() => apiRef.current?.goTo(i)}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? "w-6 bg-[#2E8DFF]" : "w-1.5 bg-white/25"}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
       {/* ── Detail view: travel deeper into the selected zone ── */}
       {detail && (
-        <div ref={detailRef} className="absolute inset-0 z-30 overflow-hidden bg-[#030B14]">
+        <div ref={detailRef} className="absolute inset-0 z-30 overflow-hidden bg-[#05080D]">
           <div className="absolute inset-0 overflow-hidden">
             <img ref={detailImgRef} src={detail.img} alt={detail.title} className="h-full w-full scale-[1.12] object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#030B14]/90 via-[#030B14]/15 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#030B14]/70 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#05080D]/90 via-[#05080D]/15 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#05080D]/70 via-transparent to-transparent" />
           </div>
 
-          <button
-            type="button"
-            aria-label="Back to gallery"
-            onClick={closeDetail}
-            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#051220]/60 text-white backdrop-blur transition hover:rotate-90 hover:border-[#8DB6D7] hover:text-[#8DB6D7] sm:right-8 sm:top-8"
-            style={{ transitionDuration: "300ms" }}
-          >
-            <X className="h-4 w-4" />
-          </button>
+          <div className="relative mx-auto h-full max-w-7xl">
+            <button
+              type="button"
+              aria-label="Back to gallery"
+              onClick={closeDetail}
+              className="absolute right-6 top-24 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#0B1016]/60 text-white backdrop-blur transition hover:rotate-90 hover:border-[#2E8DFF] hover:text-[#2E8DFF] sm:top-28"
+              style={{ transitionDuration: "300ms" }}
+            >
+              <X className="h-4 w-4" />
+            </button>
 
-          <div ref={detailContentRef} className="absolute bottom-8 left-5 right-5 z-10 max-w-2xl sm:bottom-14 sm:left-12">
-            <p className="inline-flex items-center gap-2 rounded-full border border-[#8DB6D7]/40 bg-[#8DB6D7]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#8DB6D7]">
-              Facility Zone · {detail.tag}
-            </p>
-            <h3 className="mt-4 font-heading text-4xl uppercase leading-[0.95] tracking-wide text-white sm:text-7xl">{detail.title}</h3>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#C3D6E7] sm:text-base">{detail.desc}</p>
-            <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
-              {detail.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-xs text-[#92ABC4]">
-                  <span className="h-1 w-1 rounded-full bg-[#8DB6D7]" /> {f}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-7 flex flex-wrap items-center gap-4">
-              <Link to="/contact" className="btn-primary text-xs">
-                Book a Free Trial <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-              <button type="button" onClick={closeDetail} className="btn-secondary text-xs">
-                Back to Gallery
-              </button>
+            <div ref={detailContentRef} className="absolute bottom-20 left-6 right-6 z-10 max-w-2xl sm:bottom-24">
+              <p className="inline-flex items-center gap-2 rounded-full border border-[#2E8DFF]/40 bg-[#2E8DFF]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#2E8DFF]">
+                Facility Zone · {detail.tag}
+              </p>
+              <h3 className="mt-4 font-heading text-4xl uppercase leading-[0.95] tracking-wide text-white sm:text-7xl">{detail.title}</h3>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#C6D2DF] sm:text-base">{detail.desc}</p>
+              <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+                {detail.features.map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-xs text-[#9AA7B6]">
+                    <span className="h-1 w-1 rounded-full bg-[#2E8DFF]" /> {f}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+                <button type="button" onClick={onBookTrial} className="btn-primary text-xs">
+                  Book a Free Trial <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+                <button type="button" onClick={closeDetail} className="btn-secondary text-xs">
+                  Back to Gallery
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// One slide of hero copy: zone eyebrow, two-tone headline, join-the-gym pitch,
+// trial CTA (+ optional zone tour), and the reassurance line under it.
+function SlideCopy({ card, onBookTrial, onExplore }) {
+  return (
+    <div>
+      <p className="ct-gallery-rise ct-eyebrow" style={{ animationDelay: "0ms" }}>
+        {card.title}<span className="hidden sm:inline"> · {card.tag}</span>
+      </p>
+      <h2 className="ct-gallery-rise ct-display mt-3 text-4xl sm:text-5xl lg:text-6xl" style={{ animationDelay: "60ms" }}>
+        {card.headline.map((line, i) => (
+          <span key={line} className={`block ${i === card.headline.length - 1 ? "accent" : ""}`}>{line}</span>
+        ))}
+      </h2>
+      <p className="ct-gallery-rise ct-sub mt-4 max-w-md text-sm sm:text-base" style={{ animationDelay: "120ms" }}>
+        {card.pitch}
+      </p>
+      <div className="ct-gallery-rise mt-6 flex flex-wrap items-center gap-3" style={{ animationDelay: "180ms" }}>
+        <button type="button" onClick={onBookTrial} className="btn-primary pointer-events-auto text-xs sm:text-sm">
+          Book Free Trial <ArrowRight className="h-4 w-4" />
+        </button>
+        {onExplore && (
+          <button type="button" onClick={onExplore} className="btn-secondary pointer-events-auto text-xs sm:text-sm">
+            Explore This Zone <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
+      <p className="ct-gallery-rise mt-4 pr-20 text-xs text-white/55 sm:pr-0" style={{ animationDelay: "240ms" }}>
+        {HERO.reassure}
+      </p>
     </div>
   );
 }
