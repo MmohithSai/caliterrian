@@ -12,6 +12,7 @@ import TrialBookingModal from "@/components/TrialBookingModal";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ClickSpark from "@/components/reactbits/ClickSpark";
 import { trackBookTrial } from "@/lib/analytics";
+import IntroOverlay from "@/components/IntroOverlay";
 
 // Each public page is code-split into its own chunk so the initial load only
 // ships the shell + the landing route, not all 10 pages at once.
@@ -61,6 +62,8 @@ function AppContent({ bookingOpen, setBookingOpen }) {
 
   return (
     <>
+      {/* Intro — homepage only, every page load; masks the hero chunk load */}
+      {location.pathname === "/" && <IntroOverlay />}
       <Navbar onBookTrial={openBooking} />
       <AnimatePresence mode="wait" initial={false}>
         <motion.main

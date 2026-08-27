@@ -54,6 +54,24 @@ export const STATS = [
 // headline number stays identical across pages.
 export const MEMBERS_TRAINED = STATS[0].value;
 
+// ── Intro overlay (plays on every homepage load) ────────────────────────────
+// Copy + the five zone thumbs for components/IntroOverlay.jsx. Zone images are
+// the exact URLs the 3D hero loads (incl. ?v=2) so the intro warms its cache.
+// Lives here (not data/home.js) to keep home.js + its icons out of the entry chunk.
+export const INTRO = {
+  eyebrow: "Calisthenics Gym · Secunderabad · Est. 2021",
+  tagline: ["Master Your Body.", "Redefine Your Limits."],
+  brief: "A coached calisthenics facility built for every stage — from your first pull-up to skills you'll own for life.",
+  zones: [
+    { name: "Mobility Zone",    img: "/facility/cards/mobility-zone.jpg?v=2" },
+    { name: "Strength Lab",     img: "/facility/cards/strength-lab.jpg?v=2" },
+    { name: "Performance Lane", img: "/facility/cards/performance-lane.jpg?v=2" },
+    { name: "Skill Arena",      img: "/facility/cards/skill-arena.jpg?v=2" },
+    { name: "Freestyle Area",   img: "/facility/cards/freestyle-area.jpg?v=2" },
+  ],
+  stats: STATS,
+};
+
 export const RATING = { value: "4.9", count: 137 };
 export const PRICE_RANGE = "₹₹";
 
