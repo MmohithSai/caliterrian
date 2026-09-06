@@ -8,11 +8,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingButtons from "@/components/FloatingButtons";
 import ChatBot from "@/components/ChatBot";
-import TrialBookingModal from "@/components/TrialBookingModal";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ClickSpark from "@/components/reactbits/ClickSpark";
 import { trackBookTrial } from "@/lib/analytics";
-import IntroOverlay from "@/components/IntroOverlay";
 
 // Each public page is code-split into its own chunk so the initial load only
 // ships the shell + the landing route, not all 10 pages at once.
@@ -30,6 +28,10 @@ const NotFound = lazy(() => import("@/pages/NotFound"));
 // Admin is code-split out of the public bundle.
 const AdminApp = lazy(() => import("@/admin/AdminApp"));
 
+// The booking modal pulls in supabase-js (~120 KB). Nobody needs it until the
+// first "Book Trial" click, so it stays out of the entry chunk entirely.
+const TrialBookingModal = lazy(() => import("@/components/TrialBookingModal"));
+
 // Shown while a route chunk loads — a quiet brand-colored screen, no flash.
 const PageSkeleton = () => <div className="min-h-screen bg-obsidian" />;
 
@@ -38,7 +40,7 @@ function AppContent({ bookingOpen, setBookingOpen }) {
   const reduce = useReducedMotion();
   // Whole-page crossfade on every route change. Reduced motion → opacity only.
   const pageMotion = reduce
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
+    ? { initial: { opacity: 0, y: 0 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: 0 } }
     : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -8 } };
 
   // Single entry point for every "Book Trial" CTA — tracks the click (tagged
@@ -51,7 +53,7 @@ function AppContent({ bookingOpen, setBookingOpen }) {
   // The /admin area is a self-contained app: no public Navbar/Footer/ChatBot.
   if (location.pathname.startsWith("/admin")) {
     return (
-      <Suspense fallback={<div className="min-h-screen bg-[#051220]" />}>
+      <Suspense fallback={<div className="min-h-screen bg-[#0B1016]" />}>
         <Routes>
           <Route path="/admin/*" element={<AdminApp />} />
         </Routes>
@@ -62,8 +64,6 @@ function AppContent({ bookingOpen, setBookingOpen }) {
 
   return (
     <>
-      {/* Intro — homepage only, every page load; masks the hero chunk load */}
-      {location.pathname === "/" && <IntroOverlay />}
       <Navbar onBookTrial={openBooking} />
       <AnimatePresence mode="wait" initial={false}>
         <motion.main
@@ -93,7 +93,11 @@ function AppContent({ bookingOpen, setBookingOpen }) {
       <Footer />
       <FloatingButtons onBookTrial={openBooking} />
       <ChatBot />
-      <TrialBookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
+      {bookingOpen && (
+        <Suspense fallback={null}>
+          <TrialBookingModal open onClose={() => setBookingOpen(false)} />
+        </Suspense>
+      )}
       <Toaster position="top-right" />
       {/* React Bits ClickSpark: blue spark burst on every click (public site only) */}
       <ClickSpark />
@@ -101,18 +105,27 @@ function AppContent({ bookingOpen, setBookingOpen }) {
   );
 }
 
-function App() {
+// Everything below the router. Exported on its own so the build-time
+// prerenderer (scripts/prerender.mjs) can mount it under a StaticRouter while
+// the browser mounts it under BrowserRouter — same tree, same markup.
+export function AppShell() {
   const [bookingOpen, setBookingOpen] = useState(false);
   return (
     <div className="App min-h-screen bg-obsidian text-white">
       <HelmetProvider>
-        <BrowserRouter>
-          <ErrorBoundary>
-            <AppContent bookingOpen={bookingOpen} setBookingOpen={setBookingOpen} />
-          </ErrorBoundary>
-        </BrowserRouter>
+        <ErrorBoundary>
+          <AppContent bookingOpen={bookingOpen} setBookingOpen={setBookingOpen} />
+        </ErrorBoundary>
       </HelmetProvider>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppShell />
+    </BrowserRouter>
   );
 }
 

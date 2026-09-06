@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist/server && node scripts/prerender.mjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:client": "vite build"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
@@ -42,5 +43,8 @@
     "shadcn": "^4.13.0",
     "tailwindcss": "^4.2.4",
     "vite": "^8.0.10"
+  },
+  "engines": {
+    "node": ">=22.7"
   }
 }

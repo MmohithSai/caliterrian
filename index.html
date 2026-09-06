@@ -2,19 +2,56 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Cali Terrain — Premium Calisthenics & Bodyweight Training Gym in Secunderabad, Hyderabad. Build real strength with expert coaching." />
-    <meta name="theme-color" content="#051220" />
-    <title>Cali Terrain | Calisthenics Gym in Secunderabad</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <meta name="theme-color" content="#0B1016" />
 
-    <!-- Google Analytics 4. Replace G-XXXXXXXXXX with the real Measurement ID at launch. -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <!-- Fonts: preconnect + a single stylesheet link. Loading these here (not
+         via an @import inside index.css) removes a request-chain hop that
+         blocked first paint on mobile. Only the weights actually used. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap"
+    />
+
+    <!-- Everything between these markers is replaced per route by
+         scripts/prerender.mjs with that page's real title, meta and canonical.
+         What's here is the fallback the /admin shell (200.html) ships with. -->
+    <!--seo-->
+    <title>Calisthenics Gym in Hyderabad &amp; Secunderabad | Cali Terrain</title>
+    <meta name="description" content="Cali Terrain is a coached calisthenics and bodyweight training gym in Bowenpally, Secunderabad. Kids &amp; adult batches, 5 AM–10 PM, from ₹3,000/month. Book a free trial." />
+    <link rel="canonical" href="https://caliterrain.in/" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta property="og:site_name" content="Cali Terrain" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:url" content="https://caliterrain.in/" />
+    <meta property="og:title" content="Calisthenics Gym in Hyderabad &amp; Secunderabad | Cali Terrain" />
+    <meta property="og:description" content="Coached calisthenics and bodyweight training in Bowenpally, Secunderabad. Kids &amp; adult batches, from ₹3,000/month. Book a free trial." />
+    <meta property="og:image" content="https://caliterrain.in/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!--/seo-->
+
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
+      // GA4 loads only when VITE_GA_ID is set at build time; otherwise the
+      // placeholder fails the test and no request goes out.
+      (function () {
+        var id = "%VITE_GA_ID%";
+        if (!/^G-[A-Z0-9]+$/i.test(id)) return;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        gtag("js", new Date());
+        gtag("config", id);
+        var s = document.createElement("script");
+        s.async = true;
+        s.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
+        document.head.appendChild(s);
+      })();
     </script>
   </head>
   <body>
