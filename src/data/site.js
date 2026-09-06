@@ -27,6 +27,9 @@ export const NAP = {
 
   geo: { lat: 17.46405843617763, lng: 78.48165189088192 },
 
+  // Public Google Maps link (schema hasMap, "get directions" buttons).
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=Cali+Terrain+Bowenpally+Secunderabad",
+
   // Google Maps embed (shared by Contact + any "Visit Us" strip).
   mapEmbed:
     "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15223.636890171589!2d78.48165189088192!3d17.46405843617763!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9ba4c0920139%3A0x802664c3d60b7e12!2sCali%20Terrain!5e0!3m2!1sen!2sin!4v1772995355729!5m2!1sen!2sin",
@@ -63,11 +66,11 @@ export const INTRO = {
   tagline: ["Master Your Body.", "Redefine Your Limits."],
   brief: "A coached calisthenics facility built for every stage — from your first pull-up to skills you'll own for life.",
   zones: [
-    { name: "Mobility Zone",    img: "/facility/cards/mobility-zone.jpg?v=2" },
-    { name: "Strength Lab",     img: "/facility/cards/strength-lab.jpg?v=2" },
-    { name: "Performance Lane", img: "/facility/cards/performance-lane.jpg?v=2" },
-    { name: "Skill Arena",      img: "/facility/cards/skill-arena.jpg?v=2" },
-    { name: "Freestyle Area",   img: "/facility/cards/freestyle-area.jpg?v=2" },
+    { name: "Mobility Zone",    img: "/facility/cards/mobility-zone.webp?v=2" },
+    { name: "Strength Lab",     img: "/facility/cards/strength-lab.webp?v=2" },
+    { name: "Performance Lane", img: "/facility/cards/performance-lane.webp?v=2" },
+    { name: "Skill Arena",      img: "/facility/cards/skill-arena.webp?v=2" },
+    { name: "Freestyle Area",   img: "/facility/cards/freestyle-area.webp?v=2" },
   ],
   stats: STATS,
 };
@@ -85,3 +88,8 @@ export const SOCIAL = {
 export const telLink = () => `tel:${NAP.phoneTel}`;
 export const waLink = (text = "Hi, I want to know more about Cali Terrain.") =>
   `https://wa.me/${NAP.phoneRaw}?text=${encodeURIComponent(text)}`;
+
+// ── Canonical origin ────────────────────────────────────────────────────────
+// One source for canonicals, OG urls and the generated sitemap. Override per
+// environment with VITE_SITE_URL (e.g. a staging domain).
+export const SITE_URL = import.meta.env.VITE_SITE_URL || "https://caliterrain.in";
