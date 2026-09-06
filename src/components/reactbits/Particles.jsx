@@ -3,9 +3,10 @@
 // prefers-reduced-motion: renders a single static frame instead of animating.
 import { useEffect, useRef } from "react";
 import { Renderer, Camera, Geometry, Program, Mesh } from "ogl";
+import { coarsePointer, lowPower, reducedMotion } from "@/lib/device";
 import "./Particles.css";
 
-const defaultColors = ["#8DB6D7", "#C9DCEC", "#92ABC4"];
+const defaultColors = ["#2E8DFF", "#6FB0FF", "#9AA7B6"];
 
 const hexToRgb = (hex) => {
   hex = hex.replace(/^#/, "");
@@ -106,7 +107,10 @@ export default function Particles({
     const container = containerRef.current;
     if (!container) return;
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Decorative atmosphere only — never worth a WebGL context on a phone or a
+    // low-power device. The container div still renders, so layout is identical.
+    if (lowPower() || coarsePointer()) return;
+    const reduceMotion = reducedMotion();
 
     const renderer = new Renderer({ dpr: pixelRatio, depth: false, alpha: true });
     const gl = renderer.gl;

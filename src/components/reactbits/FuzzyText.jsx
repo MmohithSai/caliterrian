@@ -2,6 +2,7 @@
 // intensifying on hover. Used for the 404 display figure.
 // prefers-reduced-motion: draws the text once, cleanly, with no animation.
 import React, { useEffect, useRef } from "react";
+import { lowPower } from "@/lib/device";
 
 export default function FuzzyText({
   children,
@@ -24,7 +25,7 @@ export default function FuzzyText({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduceMotion = lowPower();
 
     const init = async () => {
       const ctx = canvas.getContext("2d");

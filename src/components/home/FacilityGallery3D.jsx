@@ -7,6 +7,7 @@ import * as THREE from "three";
 import gsap from "gsap";
 import { ArrowRight, ChevronLeft, ChevronRight, Move, X } from "lucide-react";
 import { HERO } from "@/data/home";
+import { lowPower } from "@/lib/device";
 
 // ── Content ────────────────────────────────────────────────────────────────
 const CARDS = [
@@ -14,51 +15,45 @@ const CARDS = [
     id: "strength-lab",
     title: "Strength Lab",
     tag: "Strength · Power",
-    // Hero slide copy — headline second line renders in accent; pitch sells the join.
-    headline: ["Get Strong.", "Stay Strong."],
     pitch: "Racks, platforms and free weights with a coach on the floor — build strength that shows up in every skill.",
     desc: "Racks, platforms and free weights for structured strength training — the engine room where heavy work gets done.",
-    img: "/facility/cards/strength-lab.jpg?v=2",
+    img: "/facility/cards/strength-lab.webp?v=2",
     features: ["Competition racks & lifting platform", "Full dumbbell + barbell range", "Sleds, plates & conditioning tools"],
   },
   {
     id: "performance-lane",
     title: "Performance Lane",
     tag: "Speed · Conditioning",
-    headline: ["Faster. Fitter.", "Harder To Tire."],
     pitch: "Sprints, sled pushes and engine work on a dedicated turf lane — conditioning that carries into everything you do.",
     desc: "A dedicated turf lane for sprints, sled pushes and engine work — built to make you faster and harder to tire out.",
-    img: "/facility/cards/performance-lane.jpg?v=2",
+    img: "/facility/cards/performance-lane.webp?v=2",
     features: ["Sprint + sled turf lane", "Climbing ropes & battle ropes", "Plyo boxes for explosive work"],
   },
   {
     id: "skill-arena",
     title: "Skill Arena",
     tag: "Calisthenics · Skills",
-    headline: ["Earn Your First", "Muscle-Up."],
     pitch: "Rings, rigs and step-by-step progressions — from pull-ups to levers and handstands, coached at every stage.",
     desc: "Rings, rigs and open floor under the lights — where muscle-ups, levers and handstands are trained, not wished for.",
-    img: "/facility/cards/skill-arena.jpg?v=2",
+    img: "/facility/cards/skill-arena.webp?v=2",
     features: ["Gymnastic rings & pull-up rig", "Skill progressions for every level", "Mirrored wall for movement feedback"],
   },
   {
     id: "freestyle-area",
     title: "Freestyle Area",
     tag: "Flow · Movement",
-    headline: ["Move Like", "You Mean It."],
     pitch: "Bars, mats and open floor for creative flows and soft landings — training that feels like play and builds real control.",
     desc: "Bars, mats and room to move — an open playground for creative movement, freestyle flows and soft landings.",
-    img: "/facility/cards/freestyle-area.jpg?v=2",
+    img: "/facility/cards/freestyle-area.webp?v=2",
     features: ["Monkey bars & parallel bars", "Crash mats for safe skill work", "Open floor for freestyle flow"],
   },
   {
     id: "mobility-zone",
     title: "Mobility Zone",
     tag: "Mobility · Recovery",
-    headline: ["Train Hard.", "Move Well For Life."],
     pitch: "Turf, mats and wall bars for the work that keeps you moving — restore range and build a body that lasts.",
     desc: "Turf, mats and wall bars for the work that keeps you moving — restore range and build the foundation your body needs.",
-    img: "/facility/cards/mobility-zone.jpg?v=2",
+    img: "/facility/cards/mobility-zone.webp?v=2",
     features: ["Open turf + mat space", "Wall bars for deep positions", "Mobility tools & soft landings"],
   },
 ];
@@ -190,6 +185,7 @@ export default function FacilityGallery3D({ onBookTrial }) {
   const [hint, setHint] = useState(true);
   const [webgl, setWebgl] = useState(() => {
     try {
+      if (lowPower()) return false; // reduced motion / save-data / low RAM → fallback UI
       const c = document.createElement("canvas");
       return Boolean(window.WebGLRenderingContext && (c.getContext("webgl2") || c.getContext("webgl")));
     } catch {
@@ -749,9 +745,11 @@ export default function FacilityGallery3D({ onBookTrial }) {
       {/* Atmosphere grade — deeper at the top (fixed navbar) and left (slide copy) */}
       <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#05080D]/85 to-transparent" />
-        <div className="absolute inset-y-0 left-0 w-[62%] bg-gradient-to-r from-[#05080D]/85 via-[#05080D]/35 to-transparent" />
-        <div className="absolute inset-0 bg-[#05080D]/55 sm:hidden" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#05080D]/80 to-transparent" />
+        {/* Desktop: copy sits left, so the left edge is graded. Phone: copy sits at the
+            bottom, so the photo stays clear up top and a tall bottom scrim beds the text. */}
+        <div className="absolute inset-y-0 left-0 hidden w-[62%] bg-gradient-to-r from-[#05080D]/85 via-[#05080D]/35 to-transparent sm:block" />
+        <div className="absolute inset-x-0 bottom-0 h-[72%] bg-gradient-to-t from-[#05080D] via-[#05080D]/75 to-transparent sm:hidden" />
+        <div className="absolute inset-x-0 bottom-0 hidden h-40 bg-gradient-to-t from-[#05080D]/80 to-transparent sm:block" />
         <div className="absolute inset-0 [background:radial-gradient(120%_90%_at_50%_50%,transparent_70%,rgba(3,6,10,0.3)_100%)]" />
       </div>
 
@@ -759,7 +757,7 @@ export default function FacilityGallery3D({ onBookTrial }) {
       <div className={`pointer-events-none absolute inset-0 z-20 transition-opacity duration-500 ${focused ? "opacity-0" : "opacity-100"}`}>
         <div className="relative mx-auto h-full max-w-7xl">
           {/* Slide copy — left, vertically centred; every swipe swaps the whole message */}
-          <div className="absolute left-6 top-1/2 max-w-lg -translate-y-1/2">
+          <div className="absolute bottom-32 left-6 right-6 max-w-lg sm:bottom-auto sm:right-auto sm:top-1/2 sm:-translate-y-1/2">
             <div className="mb-4 flex items-center gap-3">
               <span className="font-heading text-sm tracking-widest text-white">{wrapTwo(active)}</span>
               <span className="relative h-px w-16 overflow-hidden bg-white/15">
@@ -818,8 +816,8 @@ export default function FacilityGallery3D({ onBookTrial }) {
             </button>
           </div>
 
-          {/* Mobile dots — centered so they clear the chat bubble and floating buttons */}
-          <div className="pointer-events-auto absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-1.5 lg:hidden">
+          {/* Mobile dots — lifted above the phone action bar (--ct-bar) */}
+          <div className="pointer-events-auto absolute bottom-20 left-1/2 flex -translate-x-1/2 gap-1.5 sm:bottom-8 lg:hidden">
             {CARDS.map((c, i) => (
               <button
                 key={c.id}
@@ -853,7 +851,7 @@ export default function FacilityGallery3D({ onBookTrial }) {
               <X className="h-4 w-4" />
             </button>
 
-            <div ref={detailContentRef} className="absolute bottom-20 left-6 right-6 z-10 max-w-2xl sm:bottom-24">
+            <div ref={detailContentRef} className="absolute bottom-24 left-6 right-6 z-10 max-w-2xl">
               <p className="inline-flex items-center gap-2 rounded-full border border-[#2E8DFF]/40 bg-[#2E8DFF]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#2E8DFF]">
                 Facility Zone · {detail.tag}
               </p>
@@ -882,17 +880,18 @@ export default function FacilityGallery3D({ onBookTrial }) {
   );
 }
 
-// One slide of hero copy: zone eyebrow, two-tone headline, join-the-gym pitch,
-// trial CTA (+ optional zone tour), and the reassurance line under it.
+// One slide of hero copy: zone eyebrow, the zone name as a two-tone display
+// heading, join-the-gym pitch, trial CTA (+ optional zone tour), reassurance.
 function SlideCopy({ card, onBookTrial, onExplore }) {
+  const words = card.title.split(" "); // last word takes the accent colour
   return (
     <div>
       <p className="ct-gallery-rise ct-eyebrow" style={{ animationDelay: "0ms" }}>
-        {card.title}<span className="hidden sm:inline"> · {card.tag}</span>
+        {card.tag}
       </p>
-      <h2 className="ct-gallery-rise ct-display mt-3 text-4xl sm:text-5xl lg:text-6xl" style={{ animationDelay: "60ms" }}>
-        {card.headline.map((line, i) => (
-          <span key={line} className={`block ${i === card.headline.length - 1 ? "accent" : ""}`}>{line}</span>
+      <h2 className="ct-gallery-rise ct-display mt-3 text-5xl sm:text-6xl lg:text-7xl" style={{ animationDelay: "60ms" }}>
+        {words.map((w, i) => (
+          <span key={w} className={`block ${i === words.length - 1 ? "accent" : ""}`}>{w}</span>
         ))}
       </h2>
       <p className="ct-gallery-rise ct-sub mt-4 max-w-md text-sm sm:text-base" style={{ animationDelay: "120ms" }}>
@@ -908,7 +907,7 @@ function SlideCopy({ card, onBookTrial, onExplore }) {
           </button>
         )}
       </div>
-      <p className="ct-gallery-rise mt-4 pr-20 text-xs text-white/55 sm:pr-0" style={{ animationDelay: "240ms" }}>
+      <p className="ct-gallery-rise mt-4 text-xs text-white/55" style={{ animationDelay: "240ms" }}>
         {HERO.reassure}
       </p>
     </div>

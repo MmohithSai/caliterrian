@@ -6,6 +6,7 @@
 import { useRef, useEffect, useCallback, useMemo } from "react";
 import { gsap } from "gsap";
 import { InertiaPlugin } from "gsap/InertiaPlugin";
+import { coarsePointer, reducedMotion } from "@/lib/device";
 import "./DotGrid.css";
 
 gsap.registerPlugin(InertiaPlugin);
@@ -31,14 +32,16 @@ function hexToRgb(hex) {
   };
 }
 
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// This canvas is purely mouse-driven: on a touch device the rAF loop and the
+// mousemove listener burn battery to render a frame identical to the last one.
+// Static mode draws once and stops. (PageBackdrop puts this on eight pages.)
+const isStatic = () => reducedMotion() || coarsePointer();
 
 export default function DotGrid({
   dotSize = 3,
   gap = 26,
-  baseColor = "#16324E",
-  activeColor = "#8DB6D7",
+  baseColor = "#1E2A38",
+  activeColor = "#2E8DFF",
   proximity = 130,
   speedTrigger = 100,
   shockRadius = 220,
@@ -53,6 +56,8 @@ export default function DotGrid({
   const canvasRef = useRef(null);
   const dotsRef = useRef([]);
   const pointerRef = useRef({ x: -9999, y: -9999, vx: 0, vy: 0, speed: 0, lastTime: 0, lastX: 0, lastY: 0 });
+
+  const drawRef = useRef(null);
 
   const baseRgb = useMemo(() => hexToRgb(baseColor), [baseColor]);
   const activeRgb = useMemo(() => hexToRgb(activeColor), [activeColor]);
@@ -70,7 +75,8 @@ export default function DotGrid({
     if (!wrap || !canvas) return;
 
     const { width, height } = wrap.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+    // 3× DPR phones would otherwise allocate a 9× bitmap for flat dots.
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -96,12 +102,15 @@ export default function DotGrid({
       }
     }
     dotsRef.current = dots;
+    // buildGrid resizes (and therefore clears) the canvas, so a static grid has
+    // to be repainted here — there's no loop coming to do it.
+    drawRef.current?.();
   }, [dotSize, gap]);
 
   useEffect(() => {
     if (!circlePath) return;
 
-    const reduce = prefersReducedMotion();
+    const reduce = isStatic();
     let rafId;
     const proxSq = proximity * proximity;
 
@@ -139,6 +148,8 @@ export default function DotGrid({
       }
     };
 
+    drawRef.current = drawFrame;
+
     const loop = () => {
       drawFrame();
       rafId = requestAnimationFrame(loop);
@@ -150,7 +161,10 @@ export default function DotGrid({
     } else {
       loop();
     }
-    return () => cancelAnimationFrame(rafId);
+    return () => {
+      cancelAnimationFrame(rafId);
+      drawRef.current = null;
+    };
   }, [proximity, baseColor, activeRgb, baseRgb, circlePath]);
 
   useEffect(() => {
@@ -169,7 +183,7 @@ export default function DotGrid({
   }, [buildGrid]);
 
   useEffect(() => {
-    if (prefersReducedMotion()) return;
+    if (isStatic()) return;
 
     const onMove = (e) => {
       const canvas = canvasRef.current;

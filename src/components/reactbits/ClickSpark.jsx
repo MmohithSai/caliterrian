@@ -3,9 +3,10 @@
 // would allocate a page-height bitmap; this version listens on window so every
 // click anywhere sparks, and skips entirely under prefers-reduced-motion.
 import { useEffect, useRef } from "react";
+import { coarsePointer, reducedMotion } from "@/lib/device";
 
 export default function ClickSpark({
-  sparkColor = "#8DB6D7",
+  sparkColor = "#2E8DFF",
   sparkSize = 9,
   sparkRadius = 18,
   sparkCount = 8,
@@ -17,7 +18,9 @@ export default function ClickSpark({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    // Touch has no cursor to spark from, and the loop below cleared a
+    // full-viewport bitmap every frame for the entire session.
+    if (reducedMotion() || coarsePointer()) return;
     const ctx = canvas.getContext("2d");
 
     const resize = () => {
@@ -28,7 +31,7 @@ export default function ClickSpark({
     window.addEventListener("resize", resize);
 
     const ease = (t) => t * (2 - t);
-    let raf;
+    let raf = 0;
     const draw = (ts) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       sparksRef.current = sparksRef.current.filter((s) => {
@@ -47,9 +50,9 @@ export default function ClickSpark({
         ctx.stroke();
         return true;
       });
-      raf = requestAnimationFrame(draw);
+      // Idle between clicks instead of looping forever over an empty list.
+      raf = sparksRef.current.length ? requestAnimationFrame(draw) : 0;
     };
-    raf = requestAnimationFrame(draw);
 
     const onClick = (e) => {
       const now = performance.now();
@@ -61,6 +64,7 @@ export default function ClickSpark({
           start: now,
         });
       }
+      if (!raf) raf = requestAnimationFrame(draw);
     };
     window.addEventListener("click", onClick);
 

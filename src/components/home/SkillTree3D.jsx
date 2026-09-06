@@ -9,9 +9,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 import { Move } from "lucide-react";
+import { lowPower } from "@/lib/device";
 
-const BG = 0x051220;
-const ACCENT = new THREE.Color("#8DB6D7");
+const BG = 0x0b1016;
+const ACCENT = new THREE.Color("#2E8DFF");
 // How much of the node core is filled with accent, per difficulty — mirrors
 // the ct-skill--* treatments (beginner solid, advanced tinted, mid outlined).
 const FILL = { Beginner: 1.0, Intermediate: 0.14, Advanced: 0.45 };
@@ -113,7 +114,7 @@ function makeLabel(node) {
     ctx.fillText(node.name.toUpperCase(), 320, 58);
     try { ctx.letterSpacing = "6px"; } catch { /* older engines */ }
     ctx.font = "700 24px Manrope, Inter, sans-serif";
-    ctx.fillStyle = "rgba(90,120,150,1)";
+    ctx.fillStyle = "rgba(92,107,124,1)";
     ctx.fillText(node.tier.toUpperCase(), 320, 122);
   };
   draw();
@@ -128,7 +129,7 @@ function FallbackGraph({ nodes, edges, activeId, pathSet, onSelect }) {
   const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
   const mod = { Beginner: "beginner", Intermediate: "intermediate", Advanced: "advanced" };
   return (
-    <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-sm border border-[#16324E] bg-[#051220] p-2">
+    <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-sm border border-[#1E2A38] bg-[#0B1016] p-2">
       <div className="relative mx-auto h-[420px] min-w-[560px]">
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           {edges.map((e) => {
@@ -138,7 +139,7 @@ function FallbackGraph({ nodes, edges, activeId, pathSet, onSelect }) {
               <line
                 key={`${e.from}-${e.to}`}
                 x1={a.pos.x} y1={a.pos.y} x2={b.pos.x} y2={b.pos.y}
-                stroke={lit ? "#8DB6D7" : "#16324E"}
+                stroke={lit ? "#2E8DFF" : "#1E2A38"}
                 strokeWidth={lit ? 2 : 1.25}
                 vectorEffect="non-scaling-stroke"
               />
@@ -158,7 +159,7 @@ function FallbackGraph({ nodes, edges, activeId, pathSet, onSelect }) {
               className={`ct-skill ct-skill--${mod[node.difficulty]} h-12 w-12 rounded-full`}
             />
             <span className="whitespace-nowrap font-heading text-sm tracking-wide text-white">{node.name}</span>
-            <span className="whitespace-nowrap text-[9px] font-bold uppercase tracking-widest text-[#5A7896]">{node.tier}</span>
+            <span className="whitespace-nowrap text-[9px] font-bold uppercase tracking-widest text-[#5C6B7C]">{node.tier}</span>
           </button>
         ))}
       </div>
@@ -176,6 +177,7 @@ export default function SkillTree3D({ nodes, activeId, pathSet, onSelect }) {
   const [hint, setHint] = useState(true);
   const [webgl, setWebgl] = useState(() => {
     try {
+      if (lowPower()) return false; // reduced motion / save-data / low RAM → fallback UI
       const c = document.createElement("canvas");
       return Boolean(window.WebGLRenderingContext && (c.getContext("webgl2") || c.getContext("webgl")));
     } catch {
@@ -607,13 +609,13 @@ export default function SkillTree3D({ nodes, activeId, pathSet, onSelect }) {
       role="region"
       aria-label="Interactive 3D skill tree. Drag to orbit, click a skill to inspect it, use arrow keys to step through the progression."
       onKeyDown={onKeyNav}
-      className="relative h-[440px] w-full overflow-hidden rounded-sm border border-[#16324E] bg-[#051220] outline-none focus-visible:ring-1 focus-visible:ring-[#8DB6D7]/60 sm:h-[500px]"
+      className="relative h-[440px] w-full overflow-hidden rounded-sm border border-[#1E2A38] bg-[#0B1016] outline-none focus-visible:ring-1 focus-visible:ring-[#2E8DFF]/60 sm:h-[500px]"
     >
       <div ref={hostRef} className="absolute inset-0" aria-hidden="true" />
 
       {/* Atmosphere grade over the canvas */}
       <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
-        <div className="absolute inset-0 [background:radial-gradient(120%_95%_at_50%_45%,transparent_55%,rgba(2,8,15,0.6)_100%)]" />
+        <div className="absolute inset-0 [background:radial-gradient(120%_95%_at_50%_45%,transparent_55%,rgba(4,7,11,0.6)_100%)]" />
       </div>
 
       {/* Overlay UI */}
@@ -622,9 +624,9 @@ export default function SkillTree3D({ nodes, activeId, pathSet, onSelect }) {
           {nodes.length} Skills · 3D
         </div>
         <div
-          className={`absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-[#051220]/70 px-4 py-2 text-[10px] uppercase tracking-[0.22em] text-white/60 backdrop-blur transition-opacity duration-700 ${hint ? "opacity-100" : "opacity-0"}`}
+          className={`absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-[#0B1016]/70 px-4 py-2 text-[10px] uppercase tracking-[0.22em] text-white/60 backdrop-blur transition-opacity duration-700 ${hint ? "opacity-100" : "opacity-0"}`}
         >
-          <Move className="h-3.5 w-3.5 text-[#8DB6D7]" /> Drag to orbit · Click a skill
+          <Move className="h-3.5 w-3.5 text-[#2E8DFF]" /> Drag to orbit · Click a skill
         </div>
       </div>
     </div>

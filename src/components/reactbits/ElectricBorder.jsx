@@ -4,11 +4,12 @@
 // prefers-reduced-motion: draws one static frame; the soft glows remain.
 import { useEffect, useRef, useCallback } from "react";
 import "./ElectricBorder.css";
+import { lowPower } from "@/lib/device";
 
 export default function ElectricBorder({
   children,
-  color = "#8DB6D7",
-  lightColor = "#C9DCEC",
+  color = "#2E8DFF",
+  lightColor = "#6FB0FF",
   speed = 1,
   chaos = 0.1,
   borderRadius = 2,
@@ -138,7 +139,7 @@ export default function ElectricBorder({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduceMotion = lowPower();
 
     const octaves = 10;
     const lacunarity = 1.6;

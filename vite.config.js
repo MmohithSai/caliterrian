@@ -18,6 +18,7 @@ export default defineConfig({
         // biggest single dependency, so it gets its own chunk.
         manualChunks(id) {
           if (!id.includes('node_modules')) return
+          if (id.includes('/three/')) return 'three'
           if (id.includes('framer-motion') || id.includes('/motion-')) return 'framer-motion'
           if (id.includes('react-router') || id.includes('/@remix-run/')) return 'router'
           if (id.includes('/@radix-ui/')) return 'radix'

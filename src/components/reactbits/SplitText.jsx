@@ -33,7 +33,7 @@ export default function SplitText({
 
     let splitter;
     try {
-      splitter = new GSAPSplitText(el, { type: splitType });
+      splitter = new GSAPSplitText(el, { type: splitType, aria: "none" });
     } catch {
       return;
     }

@@ -1,6 +1,7 @@
 // React Bits "Magnet" — magnetic hover pull. Defaults tuned down (strength 4,
 // padding 80) so CTAs nudge toward the cursor instead of chasing it.
 import { useEffect, useRef, useState } from "react";
+import { coarsePointer, reducedMotion } from "@/lib/device";
 
 export default function Magnet({
   children,
@@ -18,7 +19,7 @@ export default function Magnet({
   const magnetRef = useRef(null);
 
   useEffect(() => {
-    if (disabled || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    if (disabled || reducedMotion() || coarsePointer()) return;
 
     const handleMouseMove = (e) => {
       if (!magnetRef.current) return;
