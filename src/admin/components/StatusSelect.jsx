@@ -19,11 +19,11 @@ export default function StatusSelect({ value, options, onChange }) {
       onChange={handle}
       disabled={busy}
       onClick={(e) => e.stopPropagation()}
-      className="bg-[#0E2740] border text-xs font-semibold uppercase tracking-wide px-2 py-1.5 rounded-sm outline-none cursor-pointer disabled:opacity-50"
+      className="bg-[#1A1A1A] border text-xs font-semibold uppercase tracking-wide px-2 py-1.5 rounded-sm outline-none cursor-pointer disabled:opacity-50"
       style={{ color: opt?.color, borderColor: `${opt?.color}55` }}
     >
       {options.map((o) => (
-        <option key={o.value} value={o.value} className="bg-[#0E2740] text-white">
+        <option key={o.value} value={o.value} className="bg-[#1A1A1A] text-white">
           {o.label}
         </option>
       ))}

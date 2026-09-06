@@ -1,5 +1,5 @@
 export default function StatusBadge({ value, options }) {
-  const opt = options.find((o) => o.value === value) || { label: value, color: "#5A7896" };
+  const opt = options.find((o) => o.value === value) || { label: value, color: "#71717a" };
   return (
     <span
       className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold uppercase tracking-wide rounded-sm"
