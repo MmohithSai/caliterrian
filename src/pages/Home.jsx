@@ -1,9 +1,10 @@
-import SEO from "@/components/SEO";
+import SEO, { faqSchema } from "@/components/SEO";
+import { FAQ } from "@/data/home";
 import { HeroSection } from "@/components/home/hero";
 import { JourneySection } from "@/components/home/journey";
 import { SkillTreeSection, HallOfFirstsSection } from "@/components/home/skills";
-import { FirstSessionSection, DisciplinesSection, CoachesSection } from "@/components/home/training";
-import { FacilitySection } from "@/components/home/facility";
+import { DisciplinesSection, CoachesSection } from "@/components/home/training";
+import { FacilitySection, FacilityGallerySection } from "@/components/home/facility";
 import { ResultsSection, MembershipsSection, FaqSection, FinalCtaSection } from "@/components/home/proof";
 import { VisitSection } from "@/components/home/visit";
 import { useScrollReveal } from "@/lib/useScrollReveal";
@@ -17,22 +18,22 @@ export default function Home({ onBookTrial }) {
   useScrollReveal({ threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
 
   return (
-    <div className="min-h-screen bg-[#051220]">
-      <SEO path="/" />
+    <div className="min-h-screen bg-[#0B1016]">
+      <SEO type="gym" path="/" schema={[faqSchema(FAQ.items)]} />
 
       <HeroSection onBookTrial={onBookTrial} />            {/* 1  Hero */}
       <JourneySection />                                   {/* 2  A Journey That Builds You */}
       <SkillTreeSection onBookTrial={onBookTrial} />       {/* 4  Skill Tree */}
       <HallOfFirstsSection onBookTrial={onBookTrial} />    {/* 5  Hall of Firsts (+ Community) */}
-      <FirstSessionSection onBookTrial={onBookTrial} />    {/* 6  First Session */}
-      <DisciplinesSection />                               {/* 7  Training Disciplines */}
-      <CoachesSection />                                   {/* 8  Coaches */}
-      <FacilitySection />                                  {/* 9  Facility Experience */}
-      <ResultsSection />                                   {/* 10 Results (rings + stories) */}
-      <MembershipsSection onBookTrial={onBookTrial} />     {/* 11 Memberships */}
-      <FaqSection onBookTrial={onBookTrial} />             {/* 12 FAQ */}
-      <VisitSection onBookTrial={onBookTrial} />           {/* 13 Visit Us (decision strip) */}
-      <FinalCtaSection onBookTrial={onBookTrial} />        {/* 14 Final CTA */}
+      <DisciplinesSection />                               {/* 6  Training Disciplines */}
+      <CoachesSection />                                   {/* 7  Coaches */}
+      <FacilitySection />                                  {/* 8  Facility Experience */}
+      <FacilityGallerySection onBookTrial={onBookTrial} /> {/* 8b Zone Gallery (3D) */}
+      <ResultsSection />                                   {/* 9  Results (rings + stories) */}
+      <MembershipsSection onBookTrial={onBookTrial} />     {/* 10 Memberships */}
+      <FaqSection onBookTrial={onBookTrial} />             {/* 11 FAQ */}
+      <VisitSection onBookTrial={onBookTrial} />           {/* 12 Visit Us (decision strip) */}
+      <FinalCtaSection onBookTrial={onBookTrial} />        {/* 13 Final CTA */}
     </div>
   );
 }
