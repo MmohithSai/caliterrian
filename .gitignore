@@ -21,7 +21,7 @@ out
 
 # Build-only source frames (4K facility renders → public/hero/facility-loop.*)
 # Kept local; never committed. Regenerate outputs via scripts/build-hero-loop.ps1
-assets/
+/assets/
 
 # OS
 Thumbs.db
