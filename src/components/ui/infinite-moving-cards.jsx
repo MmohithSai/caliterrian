@@ -52,7 +52,7 @@ export const InfiniteMovingCards = ({
 // Default card — the original Aceternity testimonial layout, dark variant.
 function QuoteCard({ item }) {
   return (
-    <blockquote className="relative w-[350px] max-w-full rounded-2xl border border-b-0 border-[#2E4A66] bg-[linear-gradient(180deg,#0E2740,#0A1D31)] px-8 py-6 md:w-[450px]">
+    <blockquote className="relative w-[350px] max-w-full rounded-2xl border border-b-0 border-zinc-700 bg-[linear-gradient(180deg,#1A2230,#131B25)] px-8 py-6 md:w-[450px]">
       <span className="relative z-20 text-sm leading-[1.6] font-normal text-gray-100">
         {item.quote}
       </span>

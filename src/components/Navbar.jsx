@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X, ChevronRight } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 
 const NAV_LINKS = [
   { to: "/", label: "Home" },
@@ -32,8 +32,26 @@ export default function Navbar({ onBookTrial }) {
     // external change (the URL), not a render-derived value.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
+    // Deep links like /programs#kids-calisthenics (footer, blog posts) must
+    // land on the section, not at the top of the page.
+    const target = location.hash && document.querySelector(location.hash);
+    if (target) target.scrollIntoView();
+    else window.scrollTo(0, 0);
+  }, [location.pathname, location.hash]);
+
+  // While the mobile menu is open: lock the page behind it and let Escape close
+  // it, the two things a full-screen overlay owes a keyboard/touch user.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => e.key === "Escape" && setMobileOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [mobileOpen]);
 
   return (
     <nav
@@ -47,7 +65,7 @@ export default function Navbar({ onBookTrial }) {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" data-testid="navbar-logo" className="flex items-center gap-3">
-          <img src={logo} alt="Cali Terrain" className="h-10 w-auto" />
+          <img src={logo} alt="Cali Terrain" width="100" height="96" className="h-10 w-auto" />
           <span className="font-heading text-2xl text-white tracking-wider hidden sm:block">
             CALI TERRAIN
           </span>
@@ -63,7 +81,7 @@ export default function Navbar({ onBookTrial }) {
                 to={link.to}
                 data-testid={`nav-link-${link.label.toLowerCase()}`}
                 className={`relative text-xs font-bold uppercase tracking-widest px-3 py-2 transition-colors duration-200 ${
-                  active ? "text-[#8DB6D7]" : "text-[#92ABC4] hover:text-white"
+                  active ? "text-[#2E8DFF]" : "text-zinc-400 hover:text-white"
                 }`}
               >
                 {link.label}
@@ -71,7 +89,7 @@ export default function Navbar({ onBookTrial }) {
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-[#8DB6D7]"
+                    className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-[#2E8DFF]"
                     transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 34 }}
                   />
                 )}
@@ -87,14 +105,17 @@ export default function Navbar({ onBookTrial }) {
             onClick={onBookTrial}
             whileHover={reduce ? undefined : { scale: 1.04 }}
             whileTap={reduce ? undefined : { scale: 0.96 }}
-            className="hidden sm:flex items-center gap-2 bg-[#8DB6D7] hover:bg-[#A9C9E3] text-[#041C38] text-xs font-bold uppercase tracking-widest px-5 py-2.5 transition-colors duration-200"
+            className="hidden sm:flex items-center gap-2 bg-[#2E8DFF] hover:bg-[#1F6FE0] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 transition-colors duration-200"
           >
             Book Free Trial <ChevronRight className="w-3 h-3" />
           </motion.button>
           <button
             data-testid="navbar-mobile-toggle"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden text-white p-2"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
+            className="lg:hidden text-white p-2.5 -mr-2.5"
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -105,12 +126,13 @@ export default function Navbar({ onBookTrial }) {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            id="mobile-nav"
             data-testid="navbar-mobile-menu"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: reduce ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:hidden overflow-hidden bg-obsidian/98 backdrop-blur-lg border-t border-white/5"
+            className="lg:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain bg-obsidian/98 backdrop-blur-lg border-t border-white/5"
           >
             <motion.div
               initial="hidden"
@@ -124,8 +146,8 @@ export default function Navbar({ onBookTrial }) {
                     to={link.to}
                     className={`block text-sm font-bold uppercase tracking-widest py-3 border-b border-white/5 transition-colors duration-200 ${
                       location.pathname === link.to
-                        ? "text-[#8DB6D7]"
-                        : "text-[#92ABC4] hover:text-white"
+                        ? "text-[#2E8DFF]"
+                        : "text-zinc-400 hover:text-white"
                     }`}
                   >
                     {link.label}

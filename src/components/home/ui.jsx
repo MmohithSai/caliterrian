@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useScroll, useTransform } from "framer-motion";
 import { ImageIcon } from "lucide-react";
 import { reveal, stagger, vpOnce } from "./anim";
+import { lowPower } from "@/lib/device";
 
 // ── Animated outcome ring ─────────────────────────────────────────────────
 // Counts up the number and fills the conic `.ct-ring` in sync when scrolled
@@ -30,7 +31,7 @@ export function StatRing({ value, suffix = "", label, size = "h-28 w-28", text =
       <span className={`ct-ring relative grid ${size} place-items-center`} style={{ "--p": `${display}%` }}>
         <span className={`font-heading ${text} text-white`}>{display}{suffix}</span>
       </span>
-      {label && <p className="mt-3 max-w-[12rem] text-sm leading-snug text-[#92ABC4]">{label}</p>}
+      {label && <p className="mt-3 max-w-[12rem] text-sm leading-snug text-[#9AA7B6]">{label}</p>}
     </div>
   );
 }
@@ -44,6 +45,34 @@ export function Section({ id, className = "", children, bleading = true }) {
   );
 }
 
+// ── Chip strip: tappable picker that stands in for the 3D widgets on phones ─
+// Bleeds to the section edges and snap-scrolls sideways (.ct-scroll-x).
+export function ChipStrip({ label, className = "", children }) {
+  return (
+    // min-w-0: as a grid/flex item the strip must not widen its column to fit every chip
+    <div className={`-mx-6 min-w-0 ${className}`}>
+      <div role="tablist" aria-label={label} className="ct-scroll-x gap-2 px-6 pb-1 scroll-pl-6">
+        {children}
+      </div>
+    </div>
+  );
+}
+export function Chip({ active, onClick, children }) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={active}
+      onClick={onClick}
+      className={`inline-flex h-11 items-center gap-2 whitespace-nowrap border px-4 text-xs font-bold uppercase tracking-wider transition-colors ${
+        active ? "border-[#2E8DFF] bg-[#2E8DFF]/15 text-white" : "border-[#1E2A38] bg-[#0B1016] text-[#9AA7B6]"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
 // ── Eyebrow (blue, ticked) ────────────────────────────────────────────────
 export function Eyebrow({ children, center = false, light = false }) {
   return (
@@ -54,17 +83,18 @@ export function Eyebrow({ children, center = false, light = false }) {
 }
 
 // ── Two-tone display heading ──────────────────────────────────────────────
-export function Heading({ lines, accent, center = false, size = "text-4xl sm:text-5xl lg:text-6xl", className = "" }) {
+export function Heading({ lines, accent, as = "h2", center = false, size = "text-4xl sm:text-5xl lg:text-6xl", className = "" }) {
   const arr = Array.isArray(lines) ? lines : [lines];
   const accentIdx = accent ?? arr.length - 1;
+  const Tag = motion[as];
   return (
-    <motion.h2 variants={reveal} className={`ct-display ${size} ${center ? "text-center" : ""} ${className}`}>
+    <Tag variants={reveal} className={`ct-display ${size} ${center ? "text-center" : ""} ${className}`}>
       {arr.map((line, i) => (
         <span key={i} className="block">
           <span className={i === accentIdx ? "accent" : undefined}>{line}</span>
         </span>
       ))}
-    </motion.h2>
+    </Tag>
   );
 }
 
@@ -108,35 +138,45 @@ export function MediaSlot({
   const videoRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-7%", "7%"]);
+  const imageSrc = img || media?.img;
+  const videoSrc = video || media?.video;
   const style = media?.ratio ? { aspectRatio: media.ratio.replace("/", " / ") } : undefined;
-  const hasAsset = Boolean(img || video);
+  const hasAsset = Boolean(imageSrc || videoSrc);
 
   // React doesn't reliably set the `muted` *attribute* on <video>, so Chrome's
   // autoplay gate can block muted-autoplay and the element just sits on its
   // (dark) poster. Force the property and kick off play() once mounted.
+  // `preload="none"` + no autoPlay attribute means the clip costs zero bytes
+  // until this effect asks for it — which only happens once the slot is near
+  // the viewport and the device isn't on reduced motion / save-data / low RAM.
+  // (Before this, a below-the-fold story video pulled 1.6 MB on every homepage
+  // load, whatever the device.)
+  const near = useInView(ref, { once: true, margin: "300px 0px" });
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return;
+    if (!v || !near || lowPower()) return;
     v.muted = true;
     v.defaultMuted = true;
+    v.preload = "auto";
+    v.load();
     const p = v.play();
     if (p && typeof p.catch === "function") p.catch(() => {});
-  }, [video, videoWebm]);
+  }, [videoSrc, videoWebm, near]);
   const Layer = parallax ? motion.div : "div";
   const layerProps = parallax ? { style: { y } } : {};
 
   return (
     <div ref={ref} className={`ct-media group/media ${hasAsset ? "" : "ct-media--placeholder"} ${className}`} style={style}>
       <Layer {...layerProps} className={`ct-media__layer ${parallax ? "ct-media__layer--parallax" : ""}`}>
-        {video ? (
-          <video ref={videoRef} className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""} ${imgClassName}`} autoPlay muted loop playsInline preload="auto" poster={img}>
+        {videoSrc ? (
+          <video ref={videoRef} className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""} ${imgClassName}`} muted loop playsInline preload="none" poster={imageSrc}>
             {/* H.264 MP4 first — universally hardware-decodable, most reliable
                 first paint. WebM offered second for browsers that prefer it. */}
-            <source src={video} type="video/mp4" />
+            <source src={videoSrc} type="video/mp4" />
             {videoWebm && <source src={videoWebm} type="video/webm" />}
           </video>
-        ) : img ? (
-          <img src={img} alt="" loading="lazy" className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""} ${imgClassName}`} />
+        ) : imageSrc ? (
+          <img src={imageSrc} alt="" loading="lazy" className={`ct-media__img ${zoom ? "ct-media__img--zoom" : ""} ${imgClassName}`} />
         ) : (
           <span className="ct-media__grid" aria-hidden="true" />
         )}
@@ -147,7 +187,7 @@ export function MediaSlot({
 
       {!hasAsset && showLabel && (
         <span className="ct-media__ph">
-          <ImageIcon className="h-5 w-5 text-[#8DB6D7]/70" aria-hidden="true" />
+          <ImageIcon className="h-5 w-5 text-[#2E8DFF]/70" aria-hidden="true" />
           {media?.label && <span className="tag">{media.label}</span>}
           {media?.hint && <span className="hint">{media.hint}</span>}
         </span>

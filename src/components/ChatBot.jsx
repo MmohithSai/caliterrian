@@ -61,6 +61,17 @@ export default function ChatBot() {
 
   useEffect(() => { scrollToBottom(); }, [messages]);
 
+  // On phones the launcher lives in the sticky action bar (FloatingButtons),
+  // which fires this event instead of owning chat state.
+  useEffect(() => {
+    const onBar = () => {
+      setOpen((o) => !o);
+      setMessages((m) => (m.length ? m : [WELCOME_MESSAGE]));
+    };
+    window.addEventListener("ct:chat", onBar);
+    return () => window.removeEventListener("ct:chat", onBar);
+  }, []);
+
   const sendMessage = async (text) => {
     if (!text.trim() || loading) return;
     setShowOptions(false);
@@ -91,30 +102,33 @@ export default function ChatBot() {
       <button
         data-testid="chatbot-toggle-btn"
         onClick={toggleOpen}
-        className={`fixed bottom-4 left-4 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-md shadow-black/25 transition-all duration-300 ${
-          open ? "bg-[#0E2740] border border-white/20" : "bg-[#8DB6D7]"
+        className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-50 hidden h-14 w-14 items-center justify-center rounded-full shadow-md shadow-black/25 transition-all duration-300 sm:flex ${
+          open ? "bg-[#1A2230] border border-white/20" : "bg-[#2E8DFF]"
         }`}
         aria-label="Open chat"
       >
-        {open ? <X className="w-5 h-5 text-white" /> : <MessageCircle className="w-6 h-6 text-[#041C38]" />}
+        {open ? <X className="w-5 h-5 text-white" /> : <MessageCircle className="w-6 h-6 text-white" />}
       </button>
 
       {/* Chat Window */}
       {open && (
         <div
           data-testid="chatbot-window"
-          className="fixed bottom-20 left-4 z-50 w-80 sm:w-96 bg-[#081727] border border-white/10 shadow-2xl flex flex-col"
-          style={{ height: "480px", maxHeight: "calc(100vh - 120px)" }}
+          className="fixed bottom-[calc(var(--ct-bar)+0.75rem)] left-4 right-4 z-50 flex flex-col border border-white/10 bg-[#111111] shadow-2xl sm:bottom-[calc(max(1rem,env(safe-area-inset-bottom))+4rem)] sm:right-auto sm:w-96"
+          style={{ height: "480px", maxHeight: "calc(100dvh - 7rem - var(--ct-bar))" }}
         >
           {/* Header */}
-          <div className="bg-[#8DB6D7] px-4 py-3 flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#041C38]/15 rounded-full flex items-center justify-center">
-              <MessageCircle className="w-4 h-4 text-[#041C38]" />
+          <div className="bg-[#2E8DFF] px-4 py-3 flex items-center gap-3">
+            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <MessageCircle className="w-4 h-4 text-white" />
             </div>
             <div>
-              <p className="text-[#041C38] font-bold text-sm font-heading tracking-wide">CALI TERRAIN</p>
-              <p className="text-[#041C38]/70 text-xs">AI Assistant • Usually replies instantly</p>
+              <p className="text-white font-bold text-sm font-heading tracking-wide">CALI TERRAIN</p>
+              <p className="text-white/70 text-xs">AI Assistant • Usually replies instantly</p>
             </div>
+            <button type="button" onClick={toggleOpen} aria-label="Close chat" className="ml-auto grid h-9 w-9 place-items-center rounded-full text-white/80 hover:bg-white/15 hover:text-white">
+              <X className="h-4 w-4" />
+            </button>
           </div>
 
           {/* Messages */}
@@ -123,8 +137,8 @@ export default function ChatBot() {
               <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[85%] px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === "user"
-                    ? "bg-[#8DB6D7] text-[#041C38]"
-                    : "bg-[#0E2740] border border-white/10 text-[#D9E6F2]"
+                    ? "bg-[#2E8DFF] text-white"
+                    : "bg-[#1A2230] border border-white/10 text-zinc-200"
                 }`}>
                   {msg.content}
                 </div>
@@ -133,10 +147,10 @@ export default function ChatBot() {
 
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-[#0E2740] border border-white/10 px-4 py-3 flex gap-1 items-center">
-                  <span className="w-1.5 h-1.5 bg-[#8DB6D7] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="w-1.5 h-1.5 bg-[#8DB6D7] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="w-1.5 h-1.5 bg-[#8DB6D7] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                <div className="bg-[#1A2230] border border-white/10 px-4 py-3 flex gap-1 items-center">
+                  <span className="w-1.5 h-1.5 bg-[#2E8DFF] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 bg-[#2E8DFF] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 bg-[#2E8DFF] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                 </div>
               </div>
             )}
@@ -148,10 +162,10 @@ export default function ChatBot() {
                   <button
                     key={opt.label}
                     onClick={() => sendMessage(opt.value)}
-                    className="flex items-center justify-between text-left text-xs text-white bg-[#0E2740] border border-white/10 hover:border-[#8DB6D7] px-3 py-2 transition-colors duration-200"
+                    className="flex items-center justify-between text-left text-xs text-white bg-[#1A2230] border border-white/10 hover:border-[#2E8DFF] px-3 py-2 transition-colors duration-200"
                   >
                     {opt.label}
-                    <ChevronRight className="w-3 h-3 text-[#8DB6D7] flex-shrink-0" />
+                    <ChevronRight className="w-3 h-3 text-[#2E8DFF] flex-shrink-0" />
                   </button>
                 ))}
               </div>
@@ -168,16 +182,16 @@ export default function ChatBot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 bg-[#0E2740] border border-white/10 text-white text-sm px-3 py-2 outline-none focus:border-[#8DB6D7] placeholder-[#5A7896] transition-colors duration-200"
+              className="flex-1 bg-[#1A2230] border border-white/10 text-white text-sm px-3 py-2 outline-none focus:border-[#2E8DFF] placeholder-[#5C6B7C] transition-colors duration-200"
               disabled={loading}
             />
             <button
               data-testid="chatbot-send-btn"
               type="submit"
               disabled={loading || !input.trim()}
-              className="w-10 h-10 bg-[#8DB6D7] hover:bg-[#A9C9E3] disabled:opacity-50 flex items-center justify-center transition-colors duration-200"
+              className="w-10 h-10 bg-[#2E8DFF] hover:bg-[#1F6FE0] disabled:opacity-50 flex items-center justify-center transition-colors duration-200"
             >
-              <Send className="w-4 h-4 text-[#041C38]" />
+              <Send className="w-4 h-4 text-white" />
             </button>
           </form>
         </div>

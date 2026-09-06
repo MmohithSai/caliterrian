@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { InstagramIcon as Instagram, WhatsAppIcon as WhatsApp } from "@/components/icons";
-import { Phone } from "lucide-react";
+import { ArrowRight, MessageCircle, Phone } from "lucide-react";
 import { SOCIAL, telLink, waLink } from "@/data/site";
 import { trackWhatsApp, trackCall } from "@/lib/analytics";
 
@@ -24,7 +24,7 @@ const buttonVariants = {
   }),
 };
 
-export default function FloatingButtons() {
+export default function FloatingButtons({ onBookTrial }) {
   const [visible, setVisible] = useState(false);
   const [hoveredBtn, setHoveredBtn] = useState(null);
 
@@ -53,8 +53,8 @@ export default function FloatingButtons() {
       external: false,
       label: "Call Us",
       icon: <Phone className="h-5 w-5 text-white" />,
-      bg: "bg-[#0E2740]",
-      hoverBg: "#16324E",
+      bg: "bg-[#1A2230]",
+      hoverBg: "#252525",
       border: "border border-white/15",
       shadow: "shadow-[0_4px_20px_rgba(0,0,0,0.4)]",
       testId: "floating-call-btn",
@@ -73,9 +73,51 @@ export default function FloatingButtons() {
   ];
 
   return (
+    <>
+      {/* Phone: one sticky action bar. The stack of floating circles below
+          covered the page's own CTAs and copy on a 375px screen, so under sm
+          every contact action (trial · chat · WhatsApp · call) lives here.
+          Height is mirrored in --ct-bar (App.css) for the chat window / footer. */}
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-2 border-t border-white/10 bg-[#0B1016]/95 px-3 pb-[max(0.625rem,env(safe-area-inset-bottom))] pt-2.5 backdrop-blur-md sm:hidden">
+        <button
+          type="button"
+          onClick={onBookTrial}
+          data-testid="mobile-bar-book-trial"
+          className="flex h-11 min-w-0 flex-1 items-center justify-center gap-2 bg-[#2E8DFF] text-[13px] font-bold uppercase tracking-wider text-white active:bg-[#1F6FE0]"
+        >
+          Book Free Trial <ArrowRight className="h-4 w-4 shrink-0" />
+        </button>
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event("ct:chat"))}
+          aria-label="Chat with us"
+          className="grid h-11 w-11 shrink-0 place-items-center border border-[#2E8DFF]/40 bg-[#2E8DFF]/10 text-[#2E8DFF]"
+        >
+          <MessageCircle className="h-5 w-5" />
+        </button>
+        <a
+          href={WA_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackWhatsApp("mobile_bar")}
+          aria-label="Chat on WhatsApp"
+          className="grid h-11 w-11 shrink-0 place-items-center border border-[#25D366]/40 bg-[#25D366]/10 text-[#25D366]"
+        >
+          <WhatsApp className="h-5 w-5" />
+        </a>
+        <a
+          href={CALL_LINK}
+          onClick={() => trackCall("mobile_bar")}
+          aria-label="Call us"
+          className="grid h-11 w-11 shrink-0 place-items-center border border-white/15 bg-[#131B25] text-white"
+        >
+          <Phone className="h-5 w-5" />
+        </a>
+      </div>
+
     <AnimatePresence>
       {visible && (
-        <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-3">
+        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 hidden flex-col items-end gap-3 sm:flex">
           {/* Social buttons */}
           <div className="flex flex-col gap-2">
             {buttons.map((btn, i) => (
@@ -88,7 +130,7 @@ export default function FloatingButtons() {
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       exit={{ opacity: 0, x: 8, scale: 0.9 }}
                       transition={{ duration: 0.18 }}
-                      className="absolute right-14 whitespace-nowrap rounded bg-[#0E2740] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg border border-white/10"
+                      className="absolute right-14 whitespace-nowrap rounded bg-[#1A2230] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg border border-white/10"
                     >
                       {btn.label}
                     </motion.span>
@@ -125,5 +167,6 @@ export default function FloatingButtons() {
         </div>
       )}
     </AnimatePresence>
+    </>
   );
 }

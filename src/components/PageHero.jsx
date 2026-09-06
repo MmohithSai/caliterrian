@@ -5,7 +5,7 @@ const EASE = [0.22, 1, 0.36, 1];
 
 /**
  * Shared cinematic header band for inner pages.
- * Matches the homepage system: deep #02080F band, blueprint grid, blue
+ * Matches the homepage system: deep #03070D band, blueprint grid, blue
  * atmosphere, ct-eyebrow kicker, giant two-tone Bebas display whose lines
  * rise out of clip masks, and a ghost outline word anchored to the edge.
  *

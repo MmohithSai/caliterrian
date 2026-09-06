@@ -21,7 +21,7 @@ export default function NotFound() {
             fontFamily="'Bebas Neue', sans-serif"
             fontWeight={400}
             fontSize="clamp(7rem, 24vw, 15rem)"
-            color="#8DB6D7"
+            color="#2E8DFF"
             baseIntensity={0.14}
             hoverIntensity={0.42}
           >
@@ -29,9 +29,9 @@ export default function NotFound() {
           </FuzzyText>
         </div>
         <h1 className="font-heading text-4xl sm:text-5xl text-white leading-none mb-4">
-          LOST YOUR <span className="text-[#8DB6D7]">GRIP?</span>
+          LOST YOUR <span className="text-[#2E8DFF]">GRIP?</span>
         </h1>
-        <p className="text-[#92ABC4] text-base max-w-md mx-auto mb-8">
+        <p className="text-[#9AA7B6] text-base max-w-md mx-auto mb-8">
           This page doesn't exist or may have moved. Let's get you back to solid ground.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

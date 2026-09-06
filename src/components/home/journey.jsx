@@ -152,11 +152,11 @@ export function JourneySection() {
             <svg className="journey-line" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true">
               <defs>
                 <linearGradient id="journeyLineGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stopColor="#8DB6D7" stopOpacity="0" />
-                  <stop offset="0.06" stopColor="#8DB6D7" />
-                  <stop offset="0.78" stopColor="#8DB6D7" />
-                  <stop offset="0.9" stopColor="#C9DCEC" />
-                  <stop offset="1" stopColor="#C9DCEC" stopOpacity="0.25" />
+                  <stop offset="0" stopColor="#2F80FF" stopOpacity="0" />
+                  <stop offset="0.06" stopColor="#2F80FF" />
+                  <stop offset="0.78" stopColor="#2F80FF" />
+                  <stop offset="0.9" stopColor="#F2B84B" />
+                  <stop offset="1" stopColor="#F2B84B" stopOpacity="0.25" />
                 </linearGradient>
                 <filter id="journeyLineGlow" x="-5%" y="-200%" width="110%" height="500%">
                   <feGaussianBlur stdDeviation="3" result="b" />
@@ -178,7 +178,7 @@ export function JourneySection() {
                 filter="url(#journeyLineGlow)"
               />
               {/* end arrow */}
-              <path d="M988,25 L1000,30 L988,35" fill="none" stroke="#C9DCEC" strokeWidth="2" strokeOpacity="0.5" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M988,25 L1000,30 L988,35" fill="none" stroke="#F2B84B" strokeWidth="2" strokeOpacity="0.5" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
 
             {stages.map((s, i) => (

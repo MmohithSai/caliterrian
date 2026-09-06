@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -806,6 +805,11 @@ html {
   box-shadow: 0 0 10px rgba(46, 141, 255, 0.6);
 }
 .ct-eyebrow--center::before { display: none; }
+/* 0.28em on 11.5px overflows a phone column and orphans the last word. */
+@media (max-width: 639px) {
+  .ct-eyebrow { font-size: 0.68rem; letter-spacing: 0.22em; gap: 0.45rem; }
+  .ct-eyebrow::before { width: 1.15rem; }
+}
 
 /* Display heading — Bebas, tight, two-tone (white + blue) */
 .ct-display {
@@ -818,8 +822,11 @@ html {
 }
 .ct-display .accent { color: #2E8DFF; }
 
-/* Secondary text */
-.ct-sub { color: #9AA7B6; line-height: 1.7; max-width: 65ch; text-wrap: pretty; }
+/* Secondary text — layered so a caller's `max-w-*` / text utility still wins.
+   Unlayered, the 65ch cap silently beat every max-w-lg on the page. */
+@layer components {
+  .ct-sub { color: #9AA7B6; line-height: 1.7; max-width: 65ch; text-wrap: pretty; }
+}
 
 /* ── Page hero — shared cinematic header band for inner pages ──
    Deep #03070D band, blueprint grid + blue atmosphere, giant two-tone
@@ -865,7 +872,7 @@ html {
   bottom: -0.18em;
   z-index: 0;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(8rem, 24vw, 21rem);
+  font-size: clamp(5rem, 24vw, 21rem);
   line-height: 1;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -1562,4 +1569,16 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .journey-node--gold .journey-node__glow,
   .journey-rays::before { animation: none; }
+}
+
+/* Footer Instagram button — the brand gradient only on real hover (Footer.jsx). */
+.ig-btn {
+  background: rgba(225, 48, 108, 0.1);
+}
+@media (hover: hover) {
+  .ig-btn:hover {
+    background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    border-color: transparent;
+    color: #fff;
+  }
 }
