@@ -1,0 +1,23 @@
+name: Supabase keep-alive
+
+# Backup to the Vercel Cron in vercel.json: pings the free-tier Supabase project
+# so it never sits idle 7 days and gets paused. A failed run emails the repo
+# owner, which is the alarm that the project is paused or a secret is wrong.
+# Note: GitHub disables schedules in public repos after 60 days without a commit.
+on:
+  schedule:
+    - cron: "17 3 * * *" # daily, off the hour (GitHub delays on-the-hour runs)
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl --fail-with-body -sS -X POST "$SUPABASE_URL/rest/v1/rpc/keepalive" \
+            -H "apikey: $SUPABASE_ANON_KEY" -H "Content-Type: application/json"
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
