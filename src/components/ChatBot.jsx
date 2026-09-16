@@ -21,6 +21,12 @@ const BOT_RESPONSES = {
   "default": "Thanks for reaching out! For specific questions, please call us at 8688458907 or visit us at Cali Terrain, Bowenpally. We're always happy to help!",
 };
 
+const WELCOME_MESSAGE = {
+  role: "assistant",
+  content: "Hi! Welcome to Cali Terrain.\n\nHow can we help you today? Choose an option below or type your question.",
+  id: "welcome",
+};
+
 function getBotResponse(text) {
   const lower = text.toLowerCase();
   if (lower.includes("trial") || lower.includes("book")) return BOT_RESPONSES.trial;
@@ -39,27 +45,37 @@ export default function ChatBot() {
   const [loading, setLoading] = useState(false);
   const [showOptions, setShowOptions] = useState(true);
   const messagesEndRef = useRef(null);
+  const idCounter = useRef(0);
+  const nextId = () => `m${++idCounter.current}`;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    if (open && messages.length === 0) {
-      setMessages([{
-        role: "assistant",
-        content: "Hi! Welcome to Cali Terrain.\n\nHow can we help you today? Choose an option below or type your question.",
-        id: "welcome",
-      }]);
-    }
-  }, [open, messages.length]);
+  // Seed the welcome message the first time the panel opens (no effect needed).
+  const toggleOpen = () => {
+    const next = !open;
+    setOpen(next);
+    if (next && messages.length === 0) setMessages([WELCOME_MESSAGE]);
+  };
 
   useEffect(() => { scrollToBottom(); }, [messages]);
+
+  // On phones the launcher lives in the sticky action bar (FloatingButtons),
+  // which fires this event instead of owning chat state.
+  useEffect(() => {
+    const onBar = () => {
+      setOpen((o) => !o);
+      setMessages((m) => (m.length ? m : [WELCOME_MESSAGE]));
+    };
+    window.addEventListener("ct:chat", onBar);
+    return () => window.removeEventListener("ct:chat", onBar);
+  }, []);
 
   const sendMessage = async (text) => {
     if (!text.trim() || loading) return;
     setShowOptions(false);
-    const userMsg = { role: "user", content: text, id: Date.now().toString() };
+    const userMsg = { role: "user", content: text, id: nextId() };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
@@ -69,7 +85,7 @@ export default function ChatBot() {
       const response = getBotResponse(text);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: response, id: `resp-${Date.now()}` },
+        { role: "assistant", content: response, id: nextId() },
       ]);
       setLoading(false);
     }, 800);
@@ -85,9 +101,9 @@ export default function ChatBot() {
       {/* Chat Toggle Button */}
       <button
         data-testid="chatbot-toggle-btn"
-        onClick={() => setOpen(!open)}
-        className={`fixed bottom-4 left-4 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-md shadow-black/25 transition-all duration-300 ${
-          open ? "bg-[#1A1A1A] border border-white/20" : "bg-[#2EC4B6]"
+        onClick={toggleOpen}
+        className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-50 hidden h-14 w-14 items-center justify-center rounded-full shadow-md shadow-black/25 transition-all duration-300 sm:flex ${
+          open ? "bg-[#1A2230] border border-white/20" : "bg-[#2E8DFF]"
         }`}
         aria-label="Open chat"
       >
@@ -98,11 +114,11 @@ export default function ChatBot() {
       {open && (
         <div
           data-testid="chatbot-window"
-          className="fixed bottom-20 left-4 z-50 w-80 sm:w-96 bg-[#111111] border border-white/10 shadow-2xl flex flex-col"
-          style={{ height: "480px", maxHeight: "calc(100vh - 120px)" }}
+          className="fixed bottom-[calc(var(--ct-bar)+0.75rem)] left-4 right-4 z-50 flex flex-col border border-white/10 bg-[#111111] shadow-2xl sm:bottom-[calc(max(1rem,env(safe-area-inset-bottom))+4rem)] sm:right-auto sm:w-96"
+          style={{ height: "480px", maxHeight: "calc(100dvh - 7rem - var(--ct-bar))" }}
         >
           {/* Header */}
-          <div className="bg-[#2EC4B6] px-4 py-3 flex items-center gap-3">
+          <div className="bg-[#2E8DFF] px-4 py-3 flex items-center gap-3">
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
               <MessageCircle className="w-4 h-4 text-white" />
             </div>
@@ -110,6 +126,9 @@ export default function ChatBot() {
               <p className="text-white font-bold text-sm font-heading tracking-wide">CALI TERRAIN</p>
               <p className="text-white/70 text-xs">AI Assistant • Usually replies instantly</p>
             </div>
+            <button type="button" onClick={toggleOpen} aria-label="Close chat" className="ml-auto grid h-9 w-9 place-items-center rounded-full text-white/80 hover:bg-white/15 hover:text-white">
+              <X className="h-4 w-4" />
+            </button>
           </div>
 
           {/* Messages */}
@@ -118,8 +137,8 @@ export default function ChatBot() {
               <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[85%] px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === "user"
-                    ? "bg-[#2EC4B6] text-white"
-                    : "bg-[#1A1A1A] border border-white/10 text-zinc-200"
+                    ? "bg-[#2E8DFF] text-white"
+                    : "bg-[#1A2230] border border-white/10 text-zinc-200"
                 }`}>
                   {msg.content}
                 </div>
@@ -128,10 +147,10 @@ export default function ChatBot() {
 
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-[#1A1A1A] border border-white/10 px-4 py-3 flex gap-1 items-center">
-                  <span className="w-1.5 h-1.5 bg-[#2EC4B6] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="w-1.5 h-1.5 bg-[#2EC4B6] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="w-1.5 h-1.5 bg-[#2EC4B6] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                <div className="bg-[#1A2230] border border-white/10 px-4 py-3 flex gap-1 items-center">
+                  <span className="w-1.5 h-1.5 bg-[#2E8DFF] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 bg-[#2E8DFF] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 bg-[#2E8DFF] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                 </div>
               </div>
             )}
@@ -143,10 +162,10 @@ export default function ChatBot() {
                   <button
                     key={opt.label}
                     onClick={() => sendMessage(opt.value)}
-                    className="flex items-center justify-between text-left text-xs text-white bg-[#1A1A1A] border border-white/10 hover:border-[#2EC4B6] px-3 py-2 transition-colors duration-200"
+                    className="flex items-center justify-between text-left text-xs text-white bg-[#1A2230] border border-white/10 hover:border-[#2E8DFF] px-3 py-2 transition-colors duration-200"
                   >
                     {opt.label}
-                    <ChevronRight className="w-3 h-3 text-[#2EC4B6] flex-shrink-0" />
+                    <ChevronRight className="w-3 h-3 text-[#2E8DFF] flex-shrink-0" />
                   </button>
                 ))}
               </div>
@@ -163,14 +182,14 @@ export default function ChatBot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 bg-[#1A1A1A] border border-white/10 text-white text-sm px-3 py-2 outline-none focus:border-[#2EC4B6] placeholder-zinc-600 transition-colors duration-200"
+              className="flex-1 bg-[#1A2230] border border-white/10 text-white text-sm px-3 py-2 outline-none focus:border-[#2E8DFF] placeholder-[#5C6B7C] transition-colors duration-200"
               disabled={loading}
             />
             <button
               data-testid="chatbot-send-btn"
               type="submit"
               disabled={loading || !input.trim()}
-              className="w-10 h-10 bg-[#2EC4B6] hover:bg-[#25A599] disabled:opacity-50 flex items-center justify-center transition-colors duration-200"
+              className="w-10 h-10 bg-[#2E8DFF] hover:bg-[#1F6FE0] disabled:opacity-50 flex items-center justify-center transition-colors duration-200"
             >
               <Send className="w-4 h-4 text-white" />
             </button>

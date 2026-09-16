@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { InstagramIcon as Instagram, WhatsAppIcon as WhatsApp } from "@/components/icons";
-import { Phone } from "lucide-react";
+import { ArrowRight, MessageCircle, Phone } from "lucide-react";
+import { SOCIAL, telLink, waLink } from "@/data/site";
+import { trackWhatsApp, trackCall } from "@/lib/analytics";
 
-const WA_LINK = "https://wa.me/918688458907?text=Hi%2C%20I%20would%20like%20to%20know%20more%20about%20Cali%20Terrain%20and%20book%20a%20free%20trial.";
-const CALL_LINK = "tel:+918688458907";
-const IG_LINK = "https://instagram.com/caliterrain";
+const WA_LINK = waLink("Hi, I would like to know more about Cali Terrain and book a free trial.");
+const CALL_LINK = telLink();
+const IG_LINK = SOCIAL.instagram;
 
 const buttonVariants = {
   hidden: { opacity: 0, scale: 0.5, y: 20 },
@@ -43,6 +45,7 @@ export default function FloatingButtons({ onBookTrial }) {
       shadow: "shadow-[0_4px_20px_rgba(37,211,102,0.35)]",
       pulse: true,
       testId: "floating-whatsapp-btn",
+      onTrack: () => trackWhatsApp("floating"),
     },
     {
       id: "call",
@@ -50,11 +53,12 @@ export default function FloatingButtons({ onBookTrial }) {
       external: false,
       label: "Call Us",
       icon: <Phone className="h-5 w-5 text-white" />,
-      bg: "bg-[#1A1A1A]",
+      bg: "bg-[#1A2230]",
       hoverBg: "#252525",
       border: "border border-white/15",
       shadow: "shadow-[0_4px_20px_rgba(0,0,0,0.4)]",
       testId: "floating-call-btn",
+      onTrack: () => trackCall("floating"),
     },
     {
       id: "instagram",
@@ -69,24 +73,51 @@ export default function FloatingButtons({ onBookTrial }) {
   ];
 
   return (
+    <>
+      {/* Phone: one sticky action bar. The stack of floating circles below
+          covered the page's own CTAs and copy on a 375px screen, so under sm
+          every contact action (trial · chat · WhatsApp · call) lives here.
+          Height is mirrored in --ct-bar (App.css) for the chat window / footer. */}
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-2 border-t border-white/10 bg-[#0B1016]/95 px-3 pb-[max(0.625rem,env(safe-area-inset-bottom))] pt-2.5 backdrop-blur-md sm:hidden">
+        <button
+          type="button"
+          onClick={onBookTrial}
+          data-testid="mobile-bar-book-trial"
+          className="flex h-11 min-w-0 flex-1 items-center justify-center gap-2 bg-[#2E8DFF] text-[13px] font-bold uppercase tracking-wider text-white active:bg-[#1F6FE0]"
+        >
+          Book Free Trial <ArrowRight className="h-4 w-4 shrink-0" />
+        </button>
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event("ct:chat"))}
+          aria-label="Chat with us"
+          className="grid h-11 w-11 shrink-0 place-items-center border border-[#2E8DFF]/40 bg-[#2E8DFF]/10 text-[#2E8DFF]"
+        >
+          <MessageCircle className="h-5 w-5" />
+        </button>
+        <a
+          href={WA_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackWhatsApp("mobile_bar")}
+          aria-label="Chat on WhatsApp"
+          className="grid h-11 w-11 shrink-0 place-items-center border border-[#25D366]/40 bg-[#25D366]/10 text-[#25D366]"
+        >
+          <WhatsApp className="h-5 w-5" />
+        </a>
+        <a
+          href={CALL_LINK}
+          onClick={() => trackCall("mobile_bar")}
+          aria-label="Call us"
+          className="grid h-11 w-11 shrink-0 place-items-center border border-white/15 bg-[#131B25] text-white"
+        >
+          <Phone className="h-5 w-5" />
+        </a>
+      </div>
+
     <AnimatePresence>
       {visible && (
-        <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-3">
-          {/* Book Free Trial CTA */}
-          <motion.button
-            data-testid="floating-book-trial-btn"
-            onClick={onBookTrial}
-            custom={0}
-            variants={buttonVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover={{ scale: 1.05, boxShadow: "0 8px 30px rgba(46, 196, 182, 0.4)" }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 border border-[#2EC4B6]/40 bg-[#2EC4B6] px-5 py-3 text-xs font-bold uppercase tracking-widest text-[#001814] transition-colors duration-200 hover:bg-[#25A599]"
-          >
-            Book Free Trial
-          </motion.button>
-
+        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 hidden flex-col items-end gap-3 sm:flex">
           {/* Social buttons */}
           <div className="flex flex-col gap-2">
             {buttons.map((btn, i) => (
@@ -99,7 +130,7 @@ export default function FloatingButtons({ onBookTrial }) {
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       exit={{ opacity: 0, x: 8, scale: 0.9 }}
                       transition={{ duration: 0.18 }}
-                      className="absolute right-14 whitespace-nowrap rounded bg-[#1A1A1A] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg border border-white/10"
+                      className="absolute right-14 whitespace-nowrap rounded bg-[#1A2230] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg border border-white/10"
                     >
                       {btn.label}
                     </motion.span>
@@ -112,12 +143,13 @@ export default function FloatingButtons({ onBookTrial }) {
                   rel={btn.external ? "noopener noreferrer" : undefined}
                   data-testid={btn.testId}
                   title={btn.label}
-                  custom={i + 1}
+                  custom={i}
                   variants={buttonVariants}
                   initial="hidden"
                   animate="visible"
                   whileHover={{ scale: 1.12, y: -2 }}
                   whileTap={{ scale: 0.9 }}
+                  onClick={btn.onTrack}
                   onMouseEnter={() => setHoveredBtn(btn.id)}
                   onMouseLeave={() => setHoveredBtn(null)}
                   className={`floating-social-btn relative flex h-12 w-12 items-center justify-center rounded-full ${btn.bg || ""} ${btn.border || ""} ${btn.shadow || ""} transition-all duration-200`}
@@ -135,5 +167,6 @@ export default function FloatingButtons({ onBookTrial }) {
         </div>
       )}
     </AnimatePresence>
+    </>
   );
 }

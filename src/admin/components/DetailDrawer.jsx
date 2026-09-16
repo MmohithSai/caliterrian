@@ -10,7 +10,11 @@ export default function DetailDrawer({ record, fields, statuses, onClose, onStat
   const [notes, setNotes] = useState("");
   const [savingNotes, setSavingNotes] = useState(false);
 
-  useEffect(() => { setNotes(record?.admin_notes || ""); }, [record]);
+  useEffect(() => {
+    // Reset the editable notes field when a different record is opened.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setNotes(record?.admin_notes || "");
+  }, [record]);
 
   // Lock body scroll + close on Escape while open.
   useEffect(() => {

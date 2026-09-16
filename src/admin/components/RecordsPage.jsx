@@ -30,7 +30,10 @@ export default function RecordsPage({ title, statuses, api, columns, detailField
   }, [search]);
 
   // Reset to first page whenever filters change.
-  useEffect(() => { setPage(0); }, [debounced, status]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPage(0);
+  }, [debounced, status]);
 
   // Keep ?status= in the URL so dashboard deep-links + refresh persist.
   useEffect(() => {
@@ -48,6 +51,7 @@ export default function RecordsPage({ title, statuses, api, columns, detailField
     firstLoad.current = false;
   }, [api, debounced, status, page]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { load(); }, [load]);
 
   // Optimistic status update with revert on failure.
@@ -73,6 +77,9 @@ export default function RecordsPage({ title, statuses, api, columns, detailField
   };
 
   const totalPages = Math.max(1, Math.ceil(count / PAGE_SIZE));
+  // Show the full-page spinner only on the very first load (not on filter refetches).
+  // eslint-disable-next-line react-hooks/refs
+  const isFirstLoad = firstLoad.current;
 
   return (
     <div>
@@ -109,7 +116,7 @@ export default function RecordsPage({ title, statuses, api, columns, detailField
         </div>
       )}
 
-      {loading && firstLoad.current ? (
+      {loading && isFirstLoad ? (
         <div className="flex items-center justify-center py-20 text-zinc-500">
           <Loader2 className="w-5 h-5 animate-spin mr-2" /> Loading...
         </div>

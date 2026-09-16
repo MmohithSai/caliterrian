@@ -1,0 +1,25 @@
+/* React Bits SpotlightCard — glow layer only; surface styles come from the
+   caller (.ct-card, tier card, etc). ::after keeps the glow above content
+   backgrounds without fighting their stacking contexts. */
+.card-spotlight {
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight-color: rgba(46, 141, 255, 0.14);
+}
+
+.card-spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(420px circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.card-spotlight:hover::after,
+.card-spotlight:focus-within::after {
+  opacity: 1;
+}
