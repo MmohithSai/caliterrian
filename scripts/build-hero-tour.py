@@ -16,7 +16,7 @@ dissolves back into the entrance shot so the loop seam is invisible.
 
 Outputs (public/hero/): tour-landscape.mp4 (1920x1080), tour-portrait.mp4
 (1080x1920, its own 9:16 window per zone so phones still see each zone), one
-JPG poster per orientation, and src/data/tourCues.js (caption timings).
+full-res WebP poster per orientation, and src/data/tourCues.js (caption timings).
 
 Usage: python scripts/build-hero-tour.py
 """
@@ -45,7 +45,11 @@ FALLBACK = {"tour": Path(r"D:\downloads 14-07-2026\IMG_4024.MOV")}
 FPS = 24
 XFADE = 0.7   # dissolve between shots (s)
 LOOP = 0.7    # tail -> head wrap dissolve; consumes shot 1's first LOOP seconds
-BUDGET = {"landscape": 10_000_000, "portrait": 6_500_000}   # bytes; two-pass ABR targets these
+# bytes; two-pass ABR targets these. Picked off the SSIM-vs-size knee against the
+# CRF-12 master: 1080p at these rates scores .967/.958, a 720p cut scores .944 —
+# doubling the budget again only buys .980, which is not worth 4 MB on a hero
+# that autoplays on every load.
+BUDGET = {"landscape": 5_300_000, "portrait": 4_200_000}
 SHARP_FLOOR = 300   # Laplacian variance at 640 px; warn below this
 JITTER_MAX = 0.25   # px rms at 640 px of high-pass frame-to-frame motion; fail above this
 
@@ -229,8 +233,11 @@ def encode(src, orientation):
     ffmpeg(*common, "-pass", "1", "-f", "null", "-")
     ffmpeg(*common, "-pass", "2", "-movflags", "+faststart", out)
     print(f"  {out}  {dur:.1f} s @ {kbps} kbps  ->  {out.stat().st_size / 1e6:.2f} MB")
-    poster = OUT / f"tour-{orientation}-poster.jpg"
-    ffmpeg("-i", out, "-frames:v", "1", "-q:v", "4", "-update", "1", poster)
+    # WebP straight from the master at full res: the poster is the LCP image and
+    # is all a low-power device ever sees, so it must not go through a JPEG step
+    # or optimize-images.mjs's 1600 px cap.
+    poster = OUT / f"tour-{orientation}-poster.webp"
+    ffmpeg("-i", src, "-frames:v", "1", "-c:v", "libwebp", "-quality", "88", "-compression_level", "6", poster)
     print(f"  {poster}  {poster.stat().st_size / 1e3:.0f} KB")
     return out
 

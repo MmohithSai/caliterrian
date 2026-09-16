@@ -6,7 +6,11 @@ saturation 0.95, blue-leaning shadows, soft vignette) and adds a haze cut +
 highlight roll-off, because the stills were shot in bright daylight and read
 washed-out against the dark navy theme (#05080D / #0B1016, accent #2E8DFF).
 
-Grades in place: public/facility/panorama.jpg + public/facility/cards/*.jpg.
+Writes public/facility/panorama.webp + public/facility/cards/*.webp straight
+from the pristine cache at native width — one encode, no JPEG middle step.
+(An earlier pipeline graded to JPEG and let optimize-images.mjs re-encode to
+WebP at a 1600 px cap; the panorama renders ~1420 CSS px wide under a 116 %
+parallax layer, so that cap left it ~1.8x short on a 2x screen.)
 Idempotent: on first run the pristine images are cached in
 scripts/facility-originals/ (gitignored); every run grades FROM that cache,
 so constants can be re-tuned and the script re-run safely.
@@ -82,21 +86,24 @@ def grade(img: np.ndarray, p: dict) -> np.ndarray:
 
 
 def main():
-    sources = [FACILITY / "panorama.jpg", *sorted((FACILITY / "cards").glob("*.jpg"))]
     CACHE.mkdir(exist_ok=True)
     (CACHE / "cards").mkdir(exist_ok=True)
-
-    for src in sources:
-        rel = src.relative_to(FACILITY)
-        cached = CACHE / rel
+    # Seed the cache from public/ the first time; after that it is the only source.
+    for src in [FACILITY / "panorama.jpg", *sorted((FACILITY / "cards").glob("*.jpg"))]:
+        cached = CACHE / src.relative_to(FACILITY)
         if not cached.exists():
-            shutil.copy2(src, cached)  # seed cache with the pristine original
-        params = PANORAMA_GRADE if src.name == "panorama.jpg" else CARDS_GRADE
+            shutil.copy2(src, cached)
+
+    for cached in [CACHE / "panorama.jpg", *sorted((CACHE / "cards").glob("*.jpg"))]:
+        rel = cached.relative_to(CACHE)
+        params = PANORAMA_GRADE if cached.name == "panorama.jpg" else CARDS_GRADE
         im = Image.open(cached).convert("RGB")
         arr = np.asarray(im, dtype=np.float32) / 255.0
         out = (grade(arr, params) * 255.0 + 0.5).astype(np.uint8)
-        Image.fromarray(out).save(src, quality=86, subsampling=1, optimize=True)
-        print(f"graded {rel}")
+        dest = (FACILITY / rel).with_suffix(".webp")
+        Image.fromarray(out).save(dest, quality=88, method=6)
+        print(f"graded {rel.with_suffix('.webp')}  {im.width}x{im.height}  "
+              f"{dest.stat().st_size / 1024:.0f} KB")
 
 
 if __name__ == "__main__":

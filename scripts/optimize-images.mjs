@@ -15,6 +15,11 @@ const DRY = process.argv.includes("--dry");
 const SKIP_DIRS = new Set(["muscleup-cinematic", "pushup", "running"]);
 const MAX_WIDTH = 1600;
 const PORTRAIT_MAX_WIDTH = 1200; // 4:5 story crops don't need more
+// Full-bleed media is drawn at viewport width, so a 2x screen wants ~2560 px —
+// 1600 left the panorama (which a 116 % parallax layer overscans to ~1420 CSS px)
+// and the hero poster visibly soft. Anything under these paths keeps its pixels.
+const FULL_BLEED = /[\\/](hero|facility)[\\/]/;
+const FULL_BLEED_MAX_WIDTH = 2560;
 const QUALITY = 80;
 
 function walk(dir, out = []) {
@@ -45,7 +50,9 @@ let after = 0;
 for (const src of jpegs) {
   const dest = src.replace(/\.jpe?g$/i, ".webp");
   const { width, height } = probe(src);
-  const cap = height > width ? PORTRAIT_MAX_WIDTH : MAX_WIDTH;
+  const cap = FULL_BLEED.test(src)
+    ? FULL_BLEED_MAX_WIDTH
+    : height > width ? PORTRAIT_MAX_WIDTH : MAX_WIDTH;
   const scale = width > cap ? `scale=${cap}:-2` : "scale=trunc(iw/2)*2:trunc(ih/2)*2";
 
   before += statSync(src).size;
