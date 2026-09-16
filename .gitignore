@@ -45,6 +45,7 @@ scripts/facility-originals/
 # Local capture / scratch material. Raw walkthrough footage and generator
 # source images live here; only the encoded outputs under public/ are committed.
 assetss/
+gym assets/
 page 2 assets/
 recovered-hero-videos/
 dev/
