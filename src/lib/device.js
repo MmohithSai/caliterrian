@@ -16,6 +16,13 @@ export const coarsePointer = () =>
 export const saveData = () =>
   typeof navigator !== "undefined" && navigator.connection?.saveData === true;
 
+// Autoplaying background video is decoded in hardware on any phone, so memory
+// doesn't matter — only the user's motion/data preferences and a 2G link do.
+export const posterOnly = () =>
+  reducedMotion() ||
+  saveData() ||
+  (typeof navigator !== "undefined" && /2g/.test(navigator.connection?.effectiveType ?? ""));
+
 // "Don't spin up WebGL / rAF here": the user asked for less motion, is on a
 // metered connection, or the device has little memory to spare.
 export const lowPower = () =>
