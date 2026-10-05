@@ -27,7 +27,7 @@ const FEES_FAQ = [
   },
   {
     q: "Is there a joining fee or a lock-in period?",
-    a: "No. There is no joining fee and no contract — memberships are monthly. Quarterly and half-yearly plans are available at a lower effective rate if you prefer to pay ahead.",
+    a: "No. There is no joining fee and no contract. Memberships are monthly. Quarterly and half-yearly plans are available at a lower effective rate if you prefer to pay ahead.",
   },
   {
     q: "What are the batch timings?",

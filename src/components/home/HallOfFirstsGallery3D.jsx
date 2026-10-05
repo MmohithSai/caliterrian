@@ -109,7 +109,7 @@ function makeLabelTexture(entry) {
   const nameW = ctx.measureText(name).width;
   ctx.font = "500 30px Inter, system-ui, sans-serif";
   ctx.fillStyle = "rgba(146,167,189,0.9)";
-  ctx.fillText(`— ${entry.milestone}`, 6 + nameW + 16, 30);
+  ctx.fillText(`· ${entry.milestone}`, 6 + nameW + 16, 30);
   ctx.font = "500 26px Inter, system-ui, sans-serif";
   ctx.fillStyle = "rgba(92,107,124,0.95)";
   ctx.fillText(entry.date.toUpperCase(), 6, 74);
@@ -575,7 +575,7 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {ENTRIES.slice(0, 8).map((e) => (
           <div key={e.id} className="overflow-hidden rounded-xl border border-[#1E2A38]">
-            <img src={e.img} alt={`${e.name} — ${e.milestone}`} loading="lazy" className="aspect-[16/10] w-full object-cover" />
+            <img src={e.img} alt={`${e.name}: ${e.milestone}`} loading="lazy" className="aspect-[16/10] w-full object-cover" />
             <div className="p-3">
               <h3 className="font-heading text-base text-white">{e.milestone}</h3>
               <p className="mt-0.5 text-xs text-[#9AA7B6]">{e.name} · {e.date}</p>
@@ -627,7 +627,7 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
           style={{ clipPath: "inset(100% 0% 0% 0%)" }}
         >
           <div className="absolute inset-0 overflow-hidden">
-            <img ref={detailImgRef} src={detail.img} alt={`${detail.name} — ${detail.milestone}`} className="h-full w-full scale-[1.18] object-cover" />
+            <img ref={detailImgRef} src={detail.img} alt={`${detail.name}: ${detail.milestone}`} className="h-full w-full scale-[1.18] object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#05080D] via-[#05080D]/40 to-[#05080D]/25" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#05080D]/85 via-[#05080D]/30 to-transparent" />
           </div>

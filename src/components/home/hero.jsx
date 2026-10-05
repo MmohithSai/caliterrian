@@ -92,7 +92,7 @@ export function HeroSection({ onBookTrial }) {
   const shotLength = (TOUR_CUES[cue + 1]?.at ?? TOUR_LENGTH) - zone.at;
 
   return (
-    <section className="relative isolate h-svh min-h-[640px] overflow-hidden bg-[#05080D]" aria-label="Cali Terrain — the facility">
+    <section className="relative isolate h-svh min-h-[640px] overflow-hidden bg-[#05080D]" aria-label="Cali Terrain: the facility">
       {/* Poster is the LCP image. <picture> lets the browser pick the portrait
           cut straight from the prerendered HTML — no JS, no second request. */}
       <picture>
@@ -145,7 +145,7 @@ export function HeroSection({ onBookTrial }) {
                 className="text-white"
               >
                 {zone.name}
-                <span className="hidden text-xs font-medium normal-case tracking-normal text-white/55 lg:inline"> — {zone.blurb}</span>
+                <span className="hidden text-xs font-medium normal-case tracking-normal text-white/55 lg:inline"> · {zone.blurb}</span>
               </motion.span>
               {/* One tick per shot; the current one fills over the shot's length. */}
               <span className="flex basis-full gap-1 pt-2">
