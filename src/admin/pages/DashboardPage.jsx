@@ -44,7 +44,7 @@ export default function DashboardPage() {
   return (
     <div>
       <h1 className="font-heading text-3xl text-white mb-1">Dashboard</h1>
-      <p className="text-zinc-500 text-sm mb-6">Operational overview — leads & trial bookings.</p>
+      <p className="text-zinc-500 text-sm mb-6">Operational overview: leads & trial bookings.</p>
 
       {error && <div className="border border-red-500/30 bg-red-500/5 text-red-300 text-sm p-4 rounded-sm mb-6">{error}</div>}
 

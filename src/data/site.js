@@ -64,7 +64,7 @@ export const MEMBERS_TRAINED = STATS[0].value;
 export const INTRO = {
   eyebrow: "Calisthenics Gym · Secunderabad · Est. 2021",
   tagline: ["Master Your Body.", "Redefine Your Limits."],
-  brief: "A coached calisthenics facility built for every stage — from your first pull-up to skills you'll own for life.",
+  brief: "A coached calisthenics facility built for every stage, from your first pull-up to skills you'll own for life.",
   zones: [
     { name: "Mobility Zone",    img: "/facility/cards/mobility-zone.webp?v=2" },
     { name: "Strength Lab",     img: "/facility/cards/strength-lab.webp?v=2" },

@@ -142,7 +142,7 @@ export default function RecordsPage({ title, statuses, api, columns, detailField
                   <tr key={row.id} onClick={() => setSelected(row)}
                     className="border-t border-white/5 hover:bg-white/[0.03] cursor-pointer transition-colors">
                     {columns.map((c) => (
-                      <td key={c.label} className="px-4 py-3 text-zinc-200">{c.render ? c.render(row) : (row[c.key] || "—")}</td>
+                      <td key={c.label} className="px-4 py-3 text-zinc-200">{c.render ? c.render(row) : (row[c.key] || "-")}</td>
                     ))}
                     <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                       <StatusSelect value={row.status} options={statuses} onChange={(s) => changeStatus(row.id, s)} />
@@ -172,7 +172,7 @@ export default function RecordsPage({ title, statuses, api, columns, detailField
                   <StatusBadge value={row.status} options={statuses} />
                 </div>
                 {columns.filter((c) => c.mobile).map((c) => (
-                  <p key={c.label} className="text-zinc-400 text-xs">{c.label}: <span className="text-zinc-200">{c.render ? c.render(row) : (row[c.key] || "—")}</span></p>
+                  <p key={c.label} className="text-zinc-400 text-xs">{c.label}: <span className="text-zinc-200">{c.render ? c.render(row) : (row[c.key] || "-")}</span></p>
                 ))}
                 <div className="flex gap-2 mt-3" onClick={(e) => e.stopPropagation()}>
                   <a href={telHref(row.phone)} className="flex-1 flex items-center justify-center gap-1.5 bg-[#2EC4B6]/15 text-[#2EC4B6] text-sm font-semibold py-2 rounded-sm"><Phone className="w-4 h-4" /> Call</a>

@@ -88,7 +88,7 @@ export function FacilityGallerySection({ onBookTrial }) {
       ref={ref}
       id="facility-gallery"
       className="relative isolate h-svh min-h-[600px] overflow-hidden bg-[#05080D]"
-      aria-label="Facility zones — 3D gallery"
+      aria-label="Facility zones: 3D gallery"
     >
       {near ? (
         <Suspense fallback={<GalleryPlaceholder />}>

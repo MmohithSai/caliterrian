@@ -28,7 +28,7 @@ export const HERO = {
   eyebrow: "Calisthenics Gym · Bowenpally, Secunderabad",
   // This is the page <h1>. Split so the second clause renders in accent.
   headline: ["Hyderabad's Calisthenics Gym.", "From Your First Pull-Up To Skills For Life."],
-  sub: "A clear, coached path to strength, skills, mobility and athletic performance — built in a facility designed for every stage of your journey.",
+  sub: "A clear, coached path to strength, skills, mobility and athletic performance, built in a facility designed for every stage of your journey.",
   primaryCta: "Book a Free Trial",
   secondaryCta: "Talk to a Coach",
   // Pre-filled WhatsApp message behind the secondary CTA.
@@ -67,7 +67,7 @@ export const PATH = {
     { n: "01", name: "Assessment",  tier: "Start",      icon: Gauge,        desc: "We evaluate your movement, strength, mobility and goals to create your starting point.", skills: ["Movement screen", "Mobility check", "Goal mapping"],   media: { label: "Assessment photo", hint: "Coach assessing a member", ratio: "4/3" } },
     { n: "02", name: "Foundation",  tier: "Foundation", icon: Layers,       desc: "Build movement quality, joint integrity and core control with fundamental patterns.",   skills: ["Push-up", "Hollow hold", "Scapular control"],          media: { label: "Foundation photo", hint: "Beginner drills on the floor", ratio: "4/3" } },
     { n: "03", name: "Strength",    tier: "Strength",   icon: Dumbbell,     desc: "Increase pulling, pushing and full-body strength through progressive overload.",          skills: ["Pull-up", "Dips", "Rows"],                             media: { label: "Strength photo", hint: "Pull-up / dip work at the rig", ratio: "4/3" } },
-    { n: "04", name: "Skills",      tier: "Control",    icon: Sparkles,     desc: "Unlock your first real skills — handstands, levers and controlled progressions.",         skills: ["L-sit", "Handstand", "Tuck lever"],                    media: { label: "Skills photo", hint: "Handstand / L-sit on parallettes", ratio: "4/3" } },
+    { n: "04", name: "Skills",      tier: "Control",    icon: Sparkles,     desc: "Unlock your first real skills: handstands, levers and controlled progressions.",         skills: ["L-sit", "Handstand", "Tuck lever"],                    media: { label: "Skills photo", hint: "Handstand / L-sit on parallettes", ratio: "4/3" } },
     { n: "05", name: "Performance", tier: "Performance",icon: Activity,     desc: "Sharpen athletic performance with conditioning, speed and endurance training.",           skills: ["Sprints", "Conditioning", "Power"],                    media: { label: "Performance photo", hint: "Sprint / sled on the performance lane", ratio: "4/3" } },
     { n: "06", name: "Mastery",     tier: "Mastery",    icon: Trophy,       desc: "Refine advanced skills, explore freestyle and own movement for life.",                    skills: ["Muscle-up", "Front lever", "Freestyle"],               media: { label: "Mastery photo", hint: "Advanced skill / muscle-up", ratio: "4/3" } },
   ],
@@ -116,7 +116,7 @@ export const JOURNEY = {
 export const SKILLS = {
   eyebrow: "Skill Tree",
   title: ["See The Journey.", "Chase The Skills."],
-  sub: "Every skill is connected. Click any node to see what it requires, what it leads to and how long it typically takes. This is the general blueprint — your personal roadmap is built with a coach at the gym.",
+  sub: "Every skill is connected. Click any node to see what it requires, what it leads to and how long it typically takes. This is the general blueprint. Your personal roadmap is built with a coach at the gym.",
   legend: [
     { level: "Beginner",     label: "Beginner" },
     { level: "Intermediate", label: "Intermediate" },
@@ -124,15 +124,15 @@ export const SKILLS = {
   ],
   blueprint: {
     title: "The Blueprint",
-    note: "A simplified map of the calisthenics journey. Your full roadmap — tailored to your level and goals — is built with a coach at the gym.",
+    note: "A simplified map of the calisthenics journey. Your full roadmap, tailored to your level and goals, is built with a coach at the gym.",
   },
   nodes: [
-    { id: "push-up",     name: "Push-Up",     tier: "Foundation", difficulty: "Beginner",      time: "Week 1–4",    prereq: [],                   pos: { x: 8,  y: 50 }, img: "/skills/push-up-demo-poster.webp?v=1", video: "/skills/push-up-demo.mp4?v=1", poster: "/skills/push-up-demo-poster.webp?v=1", desc: "Build a strong pressing foundation — the entry point to every pushing skill.",          insight: "Own full range before chasing volume — depth is what builds the press." },
+    { id: "push-up",     name: "Push-Up",     tier: "Foundation", difficulty: "Beginner",      time: "Week 1–4",    prereq: [],                   pos: { x: 8,  y: 50 }, img: "/skills/push-up-demo-poster.webp?v=1", video: "/skills/push-up-demo.mp4?v=1", poster: "/skills/push-up-demo-poster.webp?v=1", desc: "Build a strong pressing foundation: the entry point to every pushing skill.",          insight: "Own full range before chasing volume. Depth is what builds the press." },
     { id: "pull-up",     name: "Pull-Up",     tier: "Strength",   difficulty: "Beginner",      time: "6–12 Weeks",  prereq: ["push-up"],          pos: { x: 37, y: 26 }, img: "/skills/pull-up-demo-poster.webp?v=4", video: "/skills/pull-up-demo.mp4?v=4", poster: "/skills/pull-up-demo-poster.webp?v=4", desc: "Unlock pulling strength. The single most important calisthenics milestone.",            insight: "Band-assisted reps and slow negatives get you to your first rep fastest." },
-    { id: "l-sit",       name: "L-Sit",       tier: "Control",    difficulty: "Intermediate",  time: "2–4 Months",  prereq: ["push-up"],          pos: { x: 37, y: 74 }, img: "/skills/l-sit-demo-poster.webp?v=1", video: "/skills/l-sit-demo.mp4?v=1", poster: "/skills/l-sit-demo-poster.webp?v=1", desc: "Core compression and straight-arm strength. The gateway to every static hold.",         insight: "Start tucked, then one leg. Straight legs are the last 10% — earn the compression." },
+    { id: "l-sit",       name: "L-Sit",       tier: "Control",    difficulty: "Intermediate",  time: "2–4 Months",  prereq: ["push-up"],          pos: { x: 37, y: 74 }, img: "/skills/l-sit-demo-poster.webp?v=1", video: "/skills/l-sit-demo.mp4?v=1", poster: "/skills/l-sit-demo-poster.webp?v=1", desc: "Core compression and straight-arm strength. The gateway to every static hold.",         insight: "Start tucked, then one leg. Straight legs are the last 10%. Earn the compression." },
     { id: "muscle-up",   name: "Muscle-Up",   tier: "Advanced",   difficulty: "Advanced",      time: "4–12 Months", prereq: ["pull-up"],          pos: { x: 68, y: 14 }, img: "/skills/muscle-up-demo-poster.webp?v=3", video: "/skills/muscle-up-demo.mp4?v=3", poster: "/skills/muscle-up-demo-poster.webp?v=3", desc: "Explosive pulling into a transition above the bar. The classic ultimate goal.",         insight: "Explosive high pull-ups + straight-bar dips unlock the transition over the bar." },
-    { id: "handstand",   name: "Handstand",   tier: "Skill",      difficulty: "Intermediate",  time: "4–8 Months",  prereq: ["l-sit"],            pos: { x: 68, y: 86 }, img: "/skills/handstand-pushup-demo-poster.webp?v=1", video: "/skills/handstand-pushup-demo.mp4?v=1", poster: "/skills/handstand-pushup-demo-poster.webp?v=1", desc: "Balance, shoulder strength and body awareness — full inverted control.",                insight: "Wall time builds the shoulders; balance is the final layer once you're strong." },
-    { id: "front-lever", name: "Front Lever", tier: "Mastery",    difficulty: "Advanced",      time: "8+ Months",   prereq: ["pull-up", "l-sit"], pos: { x: 68, y: 50 }, img: "/skills/front-lever-demo-poster.webp?v=1", video: "/skills/front-lever-demo.mp4?v=1", poster: "/skills/front-lever-demo-poster.webp?v=1", desc: "Total-body tension and pulling mastery — an elite straight-arm hold.",                  insight: "Tuck → advanced tuck → straddle. Patience on the straight-arm scapular strength." },
+    { id: "handstand",   name: "Handstand",   tier: "Skill",      difficulty: "Intermediate",  time: "4–8 Months",  prereq: ["l-sit"],            pos: { x: 68, y: 86 }, img: "/skills/handstand-pushup-demo-poster.webp?v=1", video: "/skills/handstand-pushup-demo.mp4?v=1", poster: "/skills/handstand-pushup-demo-poster.webp?v=1", desc: "Balance, shoulder strength and body awareness for full inverted control.",                insight: "Wall time builds the shoulders; balance is the final layer once you're strong." },
+    { id: "front-lever", name: "Front Lever", tier: "Mastery",    difficulty: "Advanced",      time: "8+ Months",   prereq: ["pull-up", "l-sit"], pos: { x: 68, y: 50 }, img: "/skills/front-lever-demo-poster.webp?v=1", video: "/skills/front-lever-demo.mp4?v=1", poster: "/skills/front-lever-demo-poster.webp?v=1", desc: "Total-body tension and pulling mastery: an elite straight-arm hold.",                  insight: "Tuck → advanced tuck → straddle. Patience on the straight-arm scapular strength." },
   ],
 };
 
@@ -148,7 +148,7 @@ const FIRST_TYPE = {
 export const HALL_OF_FIRSTS = {
   eyebrow: "Hall of Firsts",
   title: ["Real People.", "Real Milestones."],
-  sub: "Every first is held. Every breakthrough. These are the moments that change everything — a living feed of members hitting skills they once thought impossible.",
+  sub: "Every first is held. Every breakthrough. These are the moments that change everything: a living feed of members hitting skills they once thought impossible.",
   items: TRANSFORMATIONS.map((t, i) => ({
     id: t.id,
     name: t.member_name,
@@ -157,7 +157,7 @@ export const HALL_OF_FIRSTS = {
     quote: t.testimonial,
     // Social cheer count for the feed (community reactions, not a business metric).
     reactions: [128, 94, 156, 73, 112, 88][i % 6],
-    media: { label: "Member photo", hint: `${t.member_name} — replace with real member photo`, ratio: "4/5" },
+    media: { label: "Member photo", hint: `${t.member_name}: replace with real member photo`, ratio: "4/5" },
   })),
 };
 
@@ -165,14 +165,14 @@ export const HALL_OF_FIRSTS = {
 export const JOURNEYS = {
   eyebrow: "Member Journeys",
   title: ["Every Master", "Was Once A Beginner."],
-  sub: "Real transformation timelines — from the first nervous session to skills they now own.",
+  sub: "Real transformation timelines, from the first nervous session to skills they now own.",
   // Built from real transformation summaries, expanded into a timeline shape.
   timelines: [
     {
       id: "rahul",
       name: TRANSFORMATIONS[0].member_name,
       headline: TRANSFORMATIONS[0].summary,
-      media: { img: "/transformations/rahul-weightloss.webp", label: "Member transformation", hint: "Rahul — before/after or training shot", ratio: "1/1" },
+      media: { img: "/transformations/rahul-weightloss.webp", label: "Member transformation", hint: "Rahul: before/after or training shot", ratio: "1/1" },
       steps: [
         { when: "Month 0", text: "Walked in unable to do a single pull-up." },
         { when: "Month 2", text: "Consistent training, first body-weight milestones." },
@@ -184,7 +184,7 @@ export const JOURNEYS = {
       id: "arjun",
       name: TRANSFORMATIONS[2].member_name,
       headline: TRANSFORMATIONS[2].summary,
-      media: { img: "/transformations/arjun-handstand.webp", label: "Member transformation", hint: "Arjun — skill / training shot", ratio: "1/1" },
+      media: { img: "/transformations/arjun-handstand.webp", label: "Member transformation", hint: "Arjun: skill / training shot", ratio: "1/1" },
       steps: [
         { when: "Month 0", text: "No skill background, building foundations." },
         { when: "Month 2", text: "Wall handstand holds and straight-line shape." },
@@ -199,18 +199,18 @@ export const JOURNEYS = {
 export const DISCIPLINES = {
   eyebrow: "Training Disciplines",
   title: ["One Facility.", "Every Discipline."],
-  sub: "Whatever your goal — strength, skills, performance or mobility — we have a training path built for you.",
+  sub: "Whatever your goal (strength, skills, performance or mobility), we have a training path built for you.",
   // `featured` tiles span 2 columns/rows in the bento mosaic so the section has
   // a clear visual hierarchy instead of nine identical cards.
   items: [
-    { name: "Calisthenics",       icon: Dumbbell,   featured: true,  desc: "Build strength and control using only your bodyweight — the heart of everything we do.", media: { img: "/disciplines/calisthenics.webp", label: "Calisthenics photo", hint: "Hero bar work on the blue rig", ratio: "4/5" } },
+    { name: "Calisthenics",       icon: Dumbbell,   featured: true,  desc: "Build strength and control using only your bodyweight, the heart of everything we do.", media: { img: "/disciplines/calisthenics.webp", label: "Calisthenics photo", hint: "Hero bar work on the blue rig", ratio: "4/5" } },
     { name: "Strength Training",  icon: ChevronsUp, desc: "Progressive overload with free weights and machines.",                  media: { img: "/disciplines/strength.webp", label: "Strength photo", hint: "Free weights", ratio: "4/5" } },
     { name: "Hybrid Athlete",     icon: Zap,        desc: "Blend strength, skill and conditioning into complete athleticism.",     media: { img: "/disciplines/hybrid.webp", label: "Hybrid athlete photo", hint: "Mixed-modal training", ratio: "4/5" } },
     { name: "HYROX Preparation",  icon: Flame,      featured: true,  desc: "Race-ready endurance, strength and functional performance for the HYROX format.", media: { img: "/disciplines/hyrox.webp", label: "HYROX photo", hint: "Sled push / ski-erg on the lane", ratio: "4/5" } },
     { name: "Mobility",           icon: Move,       desc: "Improve range, restore movement and bulletproof your joints.",          media: { img: "/disciplines/mobility.webp", label: "Mobility photo", hint: "Mobility drills", ratio: "4/5" } },
     { name: "Flexibility",        icon: Wind,       desc: "Active and passive flexibility for deeper, stronger positions.",        media: { img: "/disciplines/flexibility.webp", label: "Flexibility photo", hint: "Split / stretch", ratio: "4/5" } },
     { name: "Gymnastics Strength",icon: Sparkles,   desc: "Rings, levers and static holds built on gymnastics strength.",         media: { img: "/disciplines/gymnastics.webp", label: "Gymnastics photo", hint: "Rings / levers", ratio: "4/5" } },
-    { name: "Freestyle",          icon: Waypoints,  desc: "Express yourself — train creative movement and bar flow.",             media: { img: "/disciplines/freestyle.webp", label: "Freestyle photo", hint: "Bar flow", ratio: "4/5" } },
+    { name: "Freestyle",          icon: Waypoints,  desc: "Express yourself. Train creative movement and bar flow.",             media: { img: "/disciplines/freestyle.webp", label: "Freestyle photo", hint: "Bar flow", ratio: "4/5" } },
     { name: "Functional Fitness", icon: Activity,   desc: "Real-world training for strength, conditioning and balance.",          media: { img: "/disciplines/functional.webp", label: "Functional photo", hint: "Functional circuit", ratio: "4/5" } },
   ],
 };
@@ -233,7 +233,7 @@ export const COACHES = {
     {
       name: "Lakpa",
       role: "Coach & Competitive Athlete",
-      outcomes: ["Yodha Race Winner — Chennai", "All India Finalist", "300+ Members Trained"],
+      outcomes: ["Yodha Race Winner, Chennai", "All India Finalist", "300+ Members Trained"],
       tag: "Advanced Skills & Performance",
       media: { img: "/coaches/lakpa.webp", label: "Coach portrait", hint: "Lakpa", ratio: "3/4" },
       memberQuote: { text: "From zero pull-ups to muscle-ups. The progression system just works.", name: "Deepak R.", achieved: "First Muscle-Up" },
@@ -278,7 +278,7 @@ export const FACILITY = {
     { name: "Running Lane",        icon: Footprints, desc: "Sprint and movement work down the turf lane.",              media: { img: "/disciplines/hyrox.webp", label: "Running lane photo", hint: "Turf sprint lane", ratio: "4/3" } },
     { name: "Turf Area",           icon: Compass,    desc: "Versatile turf for sleds, carries and functional training.",media: { img: "/disciplines/functional.webp", label: "Turf area photo", hint: "Green turf zone", ratio: "4/3" } },
   ],
-  panorama: { img: "/facility/panorama.webp?v=4", label: "Wide Facility Panorama", hint: "Single wide shot showing all zones — used for the interactive hotspot map", ratio: "21/9" },
+  panorama: { img: "/facility/panorama.webp?v=4", label: "Wide Facility Panorama", hint: "Single wide shot showing all zones, used for the interactive hotspot map", ratio: "21/9" },
 };
 
 // ── SECTION 11 · Why Members Stay ─────────────────────────────────────────
@@ -327,7 +327,7 @@ export const RESULTS = {
     { id: "priya",  name: "Priya S.",  achieved: "First Pull-Up",   quote: "I never thought I could do a pull-up. The coaches made it possible!",        media: { img: "/stories/priya-pullup.webp", label: "Video story still", hint: "Priya S.", ratio: "4/5" } },
     { id: "arjun",  name: "Arjun M.",  achieved: "First Handstand", quote: "The skill progressions here are incredible. Methodical and effective.",        media: { img: "/stories/arjun-handstand.webp", label: "Video story still", hint: "Arjun M.", ratio: "4/5" } },
     { id: "deepak", name: "Deepak R.", achieved: "First Muscle-Up", quote: "From zero pull-ups to muscle-ups. The progressive training system works.",     media: { img: "/stories/deepak-muscleup.webp", label: "Video story still", hint: "Deepak R.", ratio: "4/5" } },
-    { id: "advika", name: "Advika",    achieved: "National Medalist", quote: "Calisthenics improved my strength, balance and flexibility — and my skating jumps and spins. I'm a national medalist now. It wouldn't have been possible without my coaches' support.", video: "/stories/advika-skating.mp4", media: { img: "/stories/advika-skating.webp", label: "Video story", hint: "Advika", ratio: "4/5" } },
+    { id: "advika", name: "Advika",    achieved: "National Medalist", quote: "Calisthenics improved my strength, balance and flexibility, and my skating jumps and spins. I'm a national medalist now. It wouldn't have been possible without my coaches' support.", video: "/stories/advika-skating.mp4", media: { img: "/stories/advika-skating.webp", label: "Video story", hint: "Advika", ratio: "4/5" } },
   ],
 };
 
@@ -342,7 +342,7 @@ export const TESTIMONIAL_BLOCK = {
     name: t.name,
     role: t.role,
     quote: t.content,
-    media: { label: "Video testimonial thumbnail", hint: `${t.name} — replace with video still`, ratio: "9/16" },
+    media: { label: "Video testimonial thumbnail", hint: `${t.name}: replace with video still`, ratio: "9/16" },
   })),
   textItems: TESTIMONIALS,
 };
@@ -419,9 +419,9 @@ export const FAQ = {
 export const LOCAL = {
   heading: "Calisthenics Gym in Bowenpally, Secunderabad",
   paragraphs: [
-    "Cali Terrain is a dedicated calisthenics and bodyweight training gym in Bowenpally, Secunderabad — not a corner of a general fitness centre. The facility is built as ten zones: a mobility runway, a strength lab, a skill arena with bars at eight heights and gymnastic rings, a performance lane, a freestyle area and conditioning space, so every stage of training has somewhere to happen.",
+    "Cali Terrain is a dedicated calisthenics and bodyweight training gym in Bowenpally, Secunderabad, not a corner of a general fitness centre. The facility is built as ten zones: a mobility runway, a strength lab, a skill arena with bars at eight heights and gymnastic rings, a performance lane, a freestyle area and conditioning space, so every stage of training has somewhere to happen.",
     "We coach complete beginners who have never done a pull-up, parents bringing children aged 6 to 16, people training for weight loss, and athletes chasing handstands, muscle-ups and HYROX conditioning. Every batch has a coach on the floor, and every new member starts with a free movement assessment rather than a sales pitch.",
-    "Batches run Monday to Friday, 5:00 AM to 11:00 AM and 5:00 PM to 10:00 PM. Group memberships start at ₹3,000 per month, personal coaching at ₹10,000, and drop-in sessions are ₹400. We are on Sikh Road near DPS School at Diamond Point — about five minutes from Paradise Circle.",
+    "Batches run Monday to Friday, 5:00 AM to 11:00 AM and 5:00 PM to 10:00 PM. Group memberships start at ₹3,000 per month, personal coaching at ₹10,000, and drop-in sessions are ₹400. We are on Sikh Road near DPS School at Diamond Point, about five minutes from Paradise Circle.",
   ],
   areasLabel: "Areas we serve",
   areas: [

@@ -69,7 +69,7 @@ export default function Transformations({ onBookTrial }) {
                   {item.image ? (
                     <img
                       src={item.image}
-                      alt={`${item.member_name} — ${item.achievement_type}`}
+                      alt={`${item.member_name}: ${item.achievement_type}`}
                       loading="lazy"
                       decoding="async"
                       width="800"

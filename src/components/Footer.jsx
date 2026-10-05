@@ -15,7 +15,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <h2 className="font-heading text-3xl text-white tracking-wider mb-4">CALI TERRAIN</h2>
             <p className="text-[#8A99AB] text-sm leading-relaxed max-w-md mb-4">
-              Calisthenics gym in Bowenpally, Secunderabad, Hyderabad — a 10-zone indoor
+              Calisthenics gym in Bowenpally, Secunderabad, Hyderabad, a 10-zone indoor
               facility for coached bodyweight training. Kids and adult batches, skill
               coaching and personal training, Monday to Friday.
             </p>

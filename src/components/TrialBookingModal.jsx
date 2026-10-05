@@ -86,7 +86,7 @@ export default function TrialBookingModal({ open, onClose }) {
             </div>
             <h2 className="font-heading text-3xl text-white mb-2">YOU'RE BOOKED!</h2>
             <p className="text-[#9AA7B6] text-sm max-w-sm mx-auto mb-1">
-              Thanks{form.name ? `, ${form.name.split(" ")[0]}` : ""} — we've received your free trial request.
+              Thanks{form.name ? `, ${form.name.split(" ")[0]}` : ""}! We've received your free trial request.
             </p>
             <p className="text-[#8A99AB] text-sm max-w-sm mx-auto mb-7">
               Our team will reach out shortly to confirm your slot. Want a faster response? Send us the details on WhatsApp.

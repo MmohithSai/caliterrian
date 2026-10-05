@@ -54,7 +54,7 @@ export default function Contact({ onBookTrial }) {
       borderColor: "border-[#25D366]/30 hover:border-[#25D366]",
       bgStyle: { background: "linear-gradient(135deg, rgba(37,211,102,0.08), rgba(37,211,102,0.02))" },
       title: "Chat on WhatsApp",
-      subtitle: "Fastest response — we reply within minutes",
+      subtitle: "Fastest response: we reply within minutes",
       glow: "rgba(37,211,102,0.15)",
       onTrack: () => trackWhatsApp("contact"),
     },
@@ -86,7 +86,7 @@ export default function Contact({ onBookTrial }) {
 
   return (
     <div className="relative isolate pt-24 min-h-screen bg-obsidian">
-      <SEO type="gym" title="Contact Cali Terrain — Calisthenics Gym in Bowenpally" description="Visit our calisthenics gym on Sikh Road near DPS School, Diamond Point, Bowenpally, Secunderabad. Call +91 86884 58907. Batches Mon–Fri, 5 AM–11 AM and 5 PM–10 PM." path="/contact" />
+      <SEO type="gym" title="Contact Cali Terrain: Calisthenics Gym in Bowenpally" description="Visit our calisthenics gym on Sikh Road near DPS School, Diamond Point, Bowenpally, Secunderabad. Call +91 86884 58907. Batches Mon–Fri, 5 AM–11 AM and 5 PM–10 PM." path="/contact" />
       <PageBackdrop />
 
       <PageHero
@@ -108,7 +108,7 @@ export default function Contact({ onBookTrial }) {
             <motion.h2 variants={fadeUp} className="font-heading text-3xl text-white tracking-wide mb-3">FIND US</motion.h2>
             <motion.p variants={fadeUp} className="text-[#9AA7B6] text-sm leading-relaxed mb-8 max-w-prose">
               Our calisthenics gym is on Sikh Road near DPS School at Diamond Point,
-              Bowenpally — about five minutes from Paradise Circle and easy to reach from
+              Bowenpally, about five minutes from Paradise Circle and easy to reach from
               Trimulgherry, Marredpally, Alwal, Karkhana and Begumpet. Batches run Monday
               to Friday, 5:00&nbsp;AM–11:00&nbsp;AM and 5:00&nbsp;PM–10:00&nbsp;PM.
             </motion.p>

@@ -40,7 +40,7 @@ function StageFigure({ stage }) {
     return (
       <img
         src={stage.img}
-        alt={`${stage.title} — coaching session at Cali Terrain`}
+        alt={`${stage.title}: coaching session at Cali Terrain`}
         loading="lazy"
         className={`journey-figure journey-figure--photo ${stage.gold ? "journey-figure--gold" : ""}`}
       />
@@ -50,7 +50,7 @@ function StageFigure({ stage }) {
     <AthleteSilhouette
       pose={stage.pose}
       tone={stage.gold ? "gold" : "blue"}
-      title={`${stage.title} — ${stage.pose} silhouette`}
+      title={`${stage.title}: ${stage.pose} silhouette`}
       className={`journey-figure ${stage.gold ? "journey-figure--gold" : ""}`}
     />
   );

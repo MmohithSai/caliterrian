@@ -11,7 +11,7 @@ const COACHES = [
     bio: "With 9 years of experience in fitness and calisthenics, Coach Vidya Sagar founded Cali Terrain to bring world-class bodyweight training to Secunderabad.",
     specialties: ["Skills Progress Specialist", "Kids Calisthenics", "Beginner Transformations", "Weight Loss"],
     certifications: ["Personal Training Certification", "Special Population Certification", "Kids Fitness Instructor"],
-    philosophy: "Calisthenics is not just exercise — it's building a relationship with your own body.",
+    philosophy: "Calisthenics is not just exercise. It's building a relationship with your own body.",
     experience: "9 Years", members: "500+ Trained",
     image: "/coaches/vidya-sagar.webp",
   },
@@ -19,7 +19,7 @@ const COACHES = [
     name: "Lakpa", role: "Coach & Competitive Athlete",
     bio: "Coach Lakpa is a champion-level calisthenics athlete. A Yodha Race winner in Chennai and All India Finalist, he brings competitive edge to his coaching.",
     specialties: ["Competitive Calisthenics", "Advanced Skill Training", "Strength & Conditioning", "Athletic Performance"],
-    certifications: ["Yodha Race Winner — Chennai", "All India Finalist", "Calisthenics Strength Coach"],
+    certifications: ["Yodha Race Winner, Chennai", "All India Finalist", "Calisthenics Strength Coach"],
     philosophy: "Strength, discipline, results. The bar doesn't care about your excuses. Show up and put in the work.",
     experience: "5+ Years", members: "300+ Trained",
     image: "/coaches/lakpa.webp",
@@ -48,7 +48,7 @@ export default function Coaches({ onBookTrial }) {
   useScrollReveal();
   return (
     <div className="relative isolate pt-24 min-h-screen bg-obsidian">
-      <SEO title="Calisthenics Coaches in Hyderabad" description="Meet the Cali Terrain coaching team in Bowenpally, Secunderabad — national-level athletes with 9+ years of experience and 500+ members trained." path="/coaches" />
+      <SEO title="Calisthenics Coaches in Hyderabad" description="Meet the Cali Terrain coaching team in Bowenpally, Secunderabad: national-level athletes with 9+ years of experience and 500+ members trained." path="/coaches" />
       <PageBackdrop />
       <PageHero
         eyebrow="The Team"

@@ -17,7 +17,7 @@ export default function Gallery() {
 
   return (
     <div className="relative isolate pt-24 min-h-screen bg-obsidian">
-      <SEO title="Calisthenics Gym Photos — Bowenpally, Secunderabad" description="Inside Cali Terrain: the 10-zone indoor calisthenics facility in Bowenpally — rig, rings, skill arena, kids batches and coached group sessions." path="/gallery" />
+      <SEO title="Calisthenics Gym Photos in Bowenpally, Secunderabad" description="Inside Cali Terrain: the 10-zone indoor calisthenics facility in Bowenpally: rig, rings, skill arena, kids batches and coached group sessions." path="/gallery" />
       <PageBackdrop />
       <PageHero
         eyebrow="Visual Stories"
@@ -48,7 +48,7 @@ export default function Gallery() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {filtered.map((img, i) => (
               <div key={img.id} className="aspect-square overflow-hidden bg-[#131B25] cursor-pointer group relative scroll-fade" style={{ transitionDelay: `${(i % 4) * 0.05}s` }} onClick={() => setLightbox(img)}>
-                <img src={img.url} alt={`${img.caption || "Cali Terrain"} — calisthenics gym in Bowenpally, Secunderabad`} loading="lazy" decoding="async" width="600" height="600" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#1A2230"; }} />
+                <img src={img.url} alt={`${img.caption || "Cali Terrain"}: calisthenics gym in Bowenpally, Secunderabad`} loading="lazy" decoding="async" width="600" height="600" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#1A2230"; }} />
                 {img.caption && (
                   <div className="absolute inset-0 bg-obsidian/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                     <p className="text-white text-xs font-medium">{img.caption}</p>

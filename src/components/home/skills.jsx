@@ -145,7 +145,7 @@ export function SkillTreeSection({ onBookTrial }) {
                 <p className="text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6]">Requirements</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {active.prereq.length === 0 ? (
-                    <span className="border border-[#2E8DFF]/30 bg-[#2E8DFF]/10 px-2.5 py-1 text-xs text-[#2E8DFF]">No prerequisites — start here</span>
+                    <span className="border border-[#2E8DFF]/30 bg-[#2E8DFF]/10 px-2.5 py-1 text-xs text-[#2E8DFF]">No prerequisites: start here</span>
                   ) : (
                     active.prereq.map((p) => (
                       <button
@@ -361,7 +361,7 @@ export function HallOfFirstsSection({ onBookTrial }) {
         <ol className="ct-scroll-x gap-3 px-6 pb-2 scroll-pl-6">
           {FIRSTS.map((e) => (
             <li key={e.id} className="ct-card w-[72vw] max-w-[300px] overflow-hidden">
-              <img src={e.img} alt={`${e.name} — ${e.milestone}`} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+              <img src={e.img} alt={`${e.name}: ${e.milestone}`} loading="lazy" className="aspect-[4/3] w-full object-cover" />
               <div className="p-4">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-[#2E8DFF]">{e.date}</p>
                 <h3 className="mt-1 font-heading text-2xl leading-none tracking-wide text-white">{e.milestone}</h3>

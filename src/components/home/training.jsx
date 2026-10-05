@@ -129,7 +129,7 @@ export function CoachesSection() {
                 </figure>
               ) : (
                 <p className="mt-auto border-t border-[#1E2A38] pt-3 text-xs italic text-[#5C6B7C]">
-                  We're growing our coaching team — this profile is on the way.
+                  We're growing our coaching team. This profile is on the way.
                 </p>
               )}
             </div>
