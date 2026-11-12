@@ -93,7 +93,7 @@ Browse the [beginner and adult programs](/programs), or [get in touch](/contact)
     category: "Training Tips",
     excerpt:
       "The pull-up trains more muscle, transfers to more skills and reveals more about your training than any other single movement. Here is why we build everything around it.",
-    cover_image: "/transformations/priya-pullup.webp",
+    cover_image: "/stories/umang-pullups.webp",
     created_at: "2025-02-20",
     updated_at: "2026-08-20",
     author: "Cali Terrain Coaching Team",

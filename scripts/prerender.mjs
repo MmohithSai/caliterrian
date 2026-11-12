@@ -3,8 +3,7 @@
 // right title / meta / JSON-LD / body copy without executing any JS. The same
 // markup is what the browser hydrates (src/main.jsx).
 //
-// Also emits dist/sitemap.xml, dist/404.html and dist/200.html (the empty SPA
-// shell /admin/* rewrites to).
+// Also emits dist/sitemap.xml and dist/404.html.
 process.env.NODE_ENV ??= "production";
 
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
@@ -24,10 +23,6 @@ const { ROUTES, SITE_URL, render } = await import(
 const template = readFileSync(join(DIST, "index.html"), "utf8");
 if (!SEO_RE.test(template)) throw new Error("index.html: <!--seo--> markers missing");
 if (!ROOT_RE.test(template)) throw new Error('index.html: <div id="root"></div> missing or not empty');
-
-// Clean SPA shell for /admin/* — no prerendered content, just the marker
-// comments removed so the fallback meta stays.
-writeFileSync(join(DIST, "200.html"), template.replace("<!--seo-->", "").replace("<!--/seo-->", ""));
 
 const outFile = (path) => (path === "/" ? "index.html" : `${path.slice(1)}/index.html`);
 
@@ -73,5 +68,5 @@ console.log(`sitemap.xml  ${ROUTES.length} urls`);
 
 rmSync(join(DIST, "server"), { recursive: true, force: true });
 
-// supabase-js leaves a token-refresh interval running in Node.
+// Don't let a stray timer from an imported module keep Node alive.
 process.exit(0);

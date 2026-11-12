@@ -4,10 +4,41 @@ import { Image as ImageIcon } from "lucide-react";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import PageBackdrop from "@/components/PageBackdrop";
-import { GALLERY } from "@/data/mockData";
 import { useScrollReveal } from "@/lib/useScrollReveal";
 
-const CATEGORIES = ["All", "skills", "training", "kids", "group", "workshop", "transformation", "facility"];
+const CATEGORIES = ["All", "facility", "members", "skills", "training", "group", "workshop"];
+
+// Facility stills are frames from our own walkthrough footage (gym assets/);
+// member shots are the real Hall of Fame clips' posters.
+const GALLERY = [
+  { id: 1,  url: "/gallery/rig-and-mats.webp",     caption: "Main Rig & Crash Mats",           category: "facility" },
+  { id: 2,  url: "/hall-of-fame/umang-back-lever.webp", caption: "Umang: Back Lever Unlocked", category: "members" },
+  { id: 3,  url: "/gallery/strength-floor.webp",   caption: "Strength Floor & Rings",          category: "facility" },
+  { id: 4,  url: "/hall-of-fame/probin-muscle-up.webp", caption: "Probin: Muscle-Up Unlocked",  category: "members" },
+  { id: 5,  url: "/gallery/turf-lane.webp",        caption: "Turf Lane: Sled & Rope Work",     category: "facility" },
+  { id: 6,  url: "/gallery/overhead-floor.webp",   caption: "Bars, Turf & Mats From Above",    category: "facility" },
+  { id: 7,  url: "/stories/prerana-weightloss.webp", caption: "Prerana: 10 kg Down",           category: "members" },
+  { id: 8,  url: "/gallery/plates-and-rig.webp",   caption: "Rings, Plates & Air Bikes",       category: "facility" },
+  { id: 9,  url: "/gallery/bar-zone.webp",         caption: "Bar Zone & Wall Ladder",          category: "facility" },
+  { id: 10, url: "/stories/umang-pullups.webp",    caption: "Umang: 4 to 15+ Pull-Ups",        category: "members" },
+  { id: 11, url: "/gallery/racks-by-windows.webp", caption: "Power Racks by the Windows",      category: "facility" },
+  { id: 12, url: "/gallery/rig-and-fan.webp",      caption: "Pull-Up Rig & Boxes",             category: "facility" },
+  { id: 13, url: "/stories/advika-skating.webp",   caption: "Advika: National Medalist",       category: "members" },
+  { id: 14, url: "/disciplines/calisthenics.webp", caption: "Calisthenics Training Session",   category: "training" },
+  { id: 15, url: "/community/events.webp",         caption: "Group Community Workout",         category: "group" },
+  { id: 16, url: "/skills/handstand-demo-poster.webp", caption: "Handstand Practice & Alignment", category: "skills" },
+  { id: 17, url: "/disciplines/strength.webp",     caption: "Heavy Strength Training",         category: "training" },
+  { id: 18, url: "/journey/foundation.webp",       caption: "Beginner Movement Session",       category: "training" },
+  { id: 19, url: "/disciplines/mobility.webp",     caption: "Joint Mobility & Active Recovery", category: "training" },
+  { id: 20, url: "/disciplines/functional.webp",   caption: "Functional Fitness Circuit",      category: "group" },
+  { id: 21, url: "/coaches/vidya-sagar.webp",      caption: "1-on-1 Personal Coaching",        category: "training" },
+  { id: 22, url: "/facility/panorama.webp",        caption: "Facility Panorama & Rig",         category: "facility" },
+  { id: 23, url: "/community/workshops.webp",      caption: "Pull-Up Clinic & Workshop Day",   category: "workshop" },
+  { id: 24, url: "/disciplines/freestyle.webp",    caption: "Freestyle Bar Flow",              category: "skills" },
+  { id: 25, url: "/disciplines/gymnastics.webp",   caption: "Gymnastics Rings Support",        category: "skills" },
+  { id: 26, url: "/disciplines/hyrox.webp",        caption: "HYROX Sled Push Conditioning",    category: "training" },
+  { id: 27, url: "/community/meetups.webp",        caption: "Community Meetup & Bonding",      category: "group" },
+];
 
 export default function Gallery() {
   const [filter, setFilter] = useState("All");

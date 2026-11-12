@@ -112,7 +112,7 @@ function makeLabelTexture(entry) {
   ctx.fillText(`· ${entry.milestone}`, 6 + nameW + 16, 30);
   ctx.font = "500 26px Inter, system-ui, sans-serif";
   ctx.fillStyle = "rgba(92,107,124,0.95)";
-  ctx.fillText(entry.date.toUpperCase(), 6, 74);
+  if (entry.date) ctx.fillText(entry.date.toUpperCase(), 6, 74);
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
   t.anisotropy = 4;
@@ -578,7 +578,7 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
             <img src={e.img} alt={`${e.name}: ${e.milestone}`} loading="lazy" className="aspect-[16/10] w-full object-cover" />
             <div className="p-3">
               <h3 className="font-heading text-base text-white">{e.milestone}</h3>
-              <p className="mt-0.5 text-xs text-[#9AA7B6]">{e.name} · {e.date}</p>
+              <p className="mt-0.5 text-xs text-[#9AA7B6]">{e.name}{e.date && ` · ${e.date}`}</p>
             </div>
           </div>
         ))}
@@ -627,7 +627,13 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
           style={{ clipPath: "inset(100% 0% 0% 0%)" }}
         >
           <div className="absolute inset-0 overflow-hidden">
-            <img ref={detailImgRef} src={detail.img} alt={`${detail.name}: ${detail.milestone}`} className="h-full w-full scale-[1.18] object-cover" />
+            {detail.video ? (
+              // Contain, not cover: a 4:5 clip in this wide stage would lose the head.
+              // React doesn't set the `muted` attribute, so Chrome blocks autoplay: force it.
+              <video ref={(el) => { detailImgRef.current = el; if (el) { el.muted = true; el.play().catch(() => {}); } }} src={detail.video} poster={detail.img} autoPlay muted loop playsInline aria-label={`${detail.name}: ${detail.milestone}`} className="h-full w-full scale-[1.18] object-contain sm:object-right" />
+            ) : (
+              <img ref={detailImgRef} src={detail.img} alt={`${detail.name}: ${detail.milestone}`} className="h-full w-full scale-[1.18] object-cover" />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#05080D] via-[#05080D]/40 to-[#05080D]/25" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#05080D]/85 via-[#05080D]/30 to-transparent" />
           </div>
@@ -644,13 +650,15 @@ export default function HallOfFirstsGallery3D({ onBookTrial }) {
 
           <div ref={detailContentRef} className="absolute bottom-8 left-5 right-5 z-10 max-w-2xl sm:bottom-14 sm:left-12">
             <p className="inline-flex items-center gap-2 rounded-full border border-[#2E8DFF]/40 bg-[#2E8DFF]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#2E8DFF]">
-              Hall of Firsts · {detail.date}
+              Hall of Firsts{detail.date && ` · ${detail.date}`}
             </p>
             <h3 className="mt-4 font-heading text-4xl uppercase leading-[0.95] tracking-wide text-white sm:text-7xl">{detail.milestone}</h3>
             <p className="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#9AA7B6]">{detail.name}</p>
-            <blockquote className="mt-5 max-w-xl border-l-2 border-[#2E8DFF] pl-4 text-sm italic leading-relaxed text-[#C6D2DF] sm:text-base">
-              “{detail.quote}”
-            </blockquote>
+            {detail.quote && (
+              <blockquote className="mt-5 max-w-xl border-l-2 border-[#2E8DFF] pl-4 text-sm italic leading-relaxed text-[#C6D2DF] sm:text-base">
+                “{detail.quote}”
+              </blockquote>
+            )}
             <div className="mt-7 flex flex-wrap items-center gap-4">
               <button type="button" onClick={onBookTrial} className="btn-primary text-xs">
                 Start Your First <ArrowRight className="h-3.5 w-3.5" />

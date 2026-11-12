@@ -363,12 +363,12 @@ export function HallOfFirstsSection({ onBookTrial }) {
         <ol className="ct-scroll-x gap-3 px-6 pb-2 scroll-pl-6">
           {FIRSTS.map((e) => (
             <li key={e.id} className="ct-card w-[72vw] max-w-[300px] overflow-hidden">
-              <img src={e.img} alt={`${e.name}: ${e.milestone}`} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+              <MediaSlot media={{ img: e.img, label: e.milestone, ratio: "4/3" }} video={e.video} showLabel={false} />
               <div className="p-4">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[#2E8DFF]">{e.date}</p>
+                {e.date && <p className="text-[10px] font-bold uppercase tracking-widest text-[#2E8DFF]">{e.date}</p>}
                 <h3 className="mt-1 font-heading text-2xl leading-none tracking-wide text-white">{e.milestone}</h3>
                 <p className="mt-1 text-xs font-semibold text-[#9AA7B6]">{e.name}</p>
-                <p className="mt-3 text-sm italic leading-relaxed text-[#C6D2DF]">“{e.quote}”</p>
+                {e.quote && <p className="mt-3 text-sm italic leading-relaxed text-[#C6D2DF]">“{e.quote}”</p>}
               </div>
             </li>
           ))}
@@ -389,7 +389,7 @@ export function HallOfFirstsSection({ onBookTrial }) {
       >
         <p className="text-sm text-white">
           <span className="font-semibold">Your story could be next.</span>{" "}
-          <span className="text-[#9AA7B6]">Hundreds of members achieve their firsts every month.</span>
+          <span className="text-[#9AA7B6]">Every first on this wall happened on our floor.</span>
         </p>
         <button onClick={onBookTrial} className="btn-primary shrink-0 text-xs">
           Book Your Trial Session <ArrowRight className="h-4 w-4" />

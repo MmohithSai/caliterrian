@@ -1,30 +1,29 @@
-import { useState } from "react";
 import { ChevronRight, Trophy, Zap, Users } from "lucide-react";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import CountUp from "@/components/reactbits/CountUp";
 import DotGrid from "@/components/reactbits/DotGrid";
 import PageBackdrop from "@/components/PageBackdrop";
-import { TRANSFORMATIONS } from "@/data/mockData";
+import { UNLOCKS, FIRSTS } from "@/data/firsts";
+import { MediaSlot } from "@/components/home/ui";
+import { MemberStories } from "@/components/home/proof";
 import { useScrollReveal } from "@/lib/useScrollReveal";
 import { MEMBERS_TRAINED } from "@/data/site";
 
-const TYPES = ["All", "Weight Loss", "First Pull-Up", "Handstand", "Kids Achievement", "Athletic Conditioning"];
-
 export default function Transformations({ onBookTrial }) {
-  const [filter, setFilter] = useState("All");
   useScrollReveal();
-  const filtered = filter === "All" ? TRANSFORMATIONS : TRANSFORMATIONS.filter((i) => i.achievement_type === filter);
+  // Photo-only firsts (no clip, not a video story) get their own grid.
+  const photos = FIRSTS.filter((f) => !f.video);
 
   return (
     <div className="relative isolate pt-24 min-h-screen bg-obsidian">
-      <SEO title="Calisthenics Transformations & Member Results" description="First pull-ups, first handstands and weight-loss stories from Cali Terrain members in Secunderabad and across Hyderabad." path="/transformations" />
+      <SEO title="Hall of Fame: Member Skill Unlocks & Results" description="Muscle-ups, back levers, first pull-ups and weight-loss stories from real Cali Terrain members in Secunderabad, Hyderabad." path="/transformations" />
       <PageBackdrop />
       <PageHero
-        eyebrow="Real Results"
-        lines={["MEMBER", "TRANSFORMATIONS"]}
+        eyebrow="Real Members"
+        lines={["HALL OF", "FAME"]}
         ghost="PROOF"
-        sub="Real members, real results. From weight loss to first pull-ups to handstands."
+        sub="Every skill here was unlocked on our floor. Muscle-ups, levers, first pull-ups and kilos gone."
       />
 
       <div className="bg-[#1F6FE0] py-12 px-6">
@@ -47,56 +46,43 @@ export default function Transformations({ onBookTrial }) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 pt-12 pb-4">
-        <div className="flex flex-wrap gap-2">
-          {TYPES.map((type) => (
-            <button key={type} onClick={() => setFilter(type)} className={`text-xs font-bold uppercase tracking-widest px-4 py-2 border transition-colors duration-200 ${filter === type ? "bg-[#2E8DFF] border-[#2E8DFF] text-white shadow-[0_0_18px_rgba(46,141,255,0.35)]" : "bg-transparent border-white/20 text-[#9AA7B6] hover:border-[#2E8DFF]/60 hover:text-white"}`}>{type}</button>
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <p className="section-tag">Latest Unlocks</p>
+        <h2 className="font-heading text-3xl md:text-4xl text-white tracking-wide mb-8">Skills unlocked at our Secunderabad gym</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+          {UNLOCKS.map((u, i) => (
+            <figure key={u.id} className={`group bg-[#131B25] border border-white/5 hover:border-[#2E8DFF]/30 overflow-hidden scroll-fade card-glow ${u.ratio === "16/9" ? "lg:col-span-2" : ""}`} style={{ transitionDelay: `${i * 0.1}s` }}>
+              <MediaSlot media={{ img: u.img, label: u.milestone, ratio: u.ratio }} video={u.video} showLabel={false} />
+              <figcaption className="p-6">
+                <span className="inline-block bg-[#2E8DFF]/10 border border-[#2E8DFF]/30 text-[#2E8DFF] text-xs font-bold uppercase tracking-wider px-3 py-1 mb-3">{u.milestone}</span>
+                <h3 className="font-heading text-2xl text-white tracking-wide">{u.name}</h3>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <h2 className="font-heading text-2xl text-white tracking-wide mb-6">
-          {filter === "All" ? "Member results from our Secunderabad gym" : `${filter} results`}
-        </h2>
-        {filtered.length === 0 ? (
-          <div className="text-center py-20"><p className="text-[#8A99AB] text-sm">No transformations found for this category.</p></div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((item, i) => (
-              <div key={item.id} className="group bg-[#131B25] border border-white/5 hover:border-[#2E8DFF]/30 overflow-hidden scroll-fade card-glow" style={{ transitionDelay: `${(i % 3) * 0.1}s` }}>
-                <div className="aspect-[16/9] bg-[#1A2230] border-b border-white/5 overflow-hidden relative">
-                  {item.image ? (
-                    <img
-                      src={item.image}
-                      alt={`${item.member_name}: ${item.achievement_type}`}
-                      loading="lazy"
-                      decoding="async"
-                      width="800"
-                      height="450"
-                      className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                        if (e.target.nextElementSibling) e.target.nextElementSibling.style.display = "flex";
-                      }}
-                    />
-                  ) : null}
-                  <div className={`w-full h-full items-center justify-center ${item.image ? "hidden" : "flex"}`}>
-                    <Trophy className="w-12 h-12 text-[#2E8DFF]/30" />
-                  </div>
-                </div>
-                <div className="p-6">
-                  <span className="inline-block bg-[#2E8DFF]/10 border border-[#2E8DFF]/30 text-[#2E8DFF] text-xs font-bold uppercase tracking-wider px-3 py-1 mb-4">{item.achievement_type}</span>
-                  <h3 className="font-heading text-2xl text-white tracking-wide mb-2">{item.member_name}</h3>
-                  <p className="text-[#C9D5E3] font-semibold text-sm mb-4">{item.summary}</p>
-                  {item.testimonial && <p className="text-[#8A99AB] text-sm italic leading-relaxed mb-4"><span aria-hidden="true" className="font-heading text-xl text-[#2E8DFF] mr-1.5 align-[-0.12em]">"</span>{item.testimonial}"</p>}
-                  {item.date && <p className="text-[#5C6B7C] text-xs uppercase tracking-wider">{item.date}</p>}
-                </div>
-              </div>
+      <div className="max-w-7xl mx-auto px-6 pb-16">
+        <MemberStories />
+      </div>
+
+      {photos.length > 0 && (
+        <div className="max-w-7xl mx-auto px-6 pb-20">
+          <p className="section-tag">Hall of Firsts</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {photos.map((f) => (
+              <figure key={f.id} className="bg-[#131B25] border border-white/5 overflow-hidden scroll-fade">
+                <img src={f.img} alt={`${f.name}: ${f.milestone}`} loading="lazy" decoding="async" className="aspect-[4/5] w-full object-cover" />
+                <figcaption className="p-4">
+                  <p className="text-[#2E8DFF] text-xs font-bold uppercase tracking-wider">{f.milestone}</p>
+                  <p className="font-heading text-xl text-white tracking-wide">{f.name}</p>
+                  {f.quote && <p className="mt-2 text-[#8A99AB] text-sm italic">“{f.quote}”</p>}
+                </figcaption>
+              </figure>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="relative overflow-hidden bg-[#0E141C] border-y border-white/5 py-20 px-6">
         {/* React Bits DotGrid: interactive blueprint dots behind the closing CTA */}

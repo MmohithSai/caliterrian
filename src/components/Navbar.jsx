@@ -8,7 +8,7 @@ const NAV_LINKS = [
   { to: "/", label: "Home" },
   { to: "/programs", label: "Programs" },
   { to: "/coaches", label: "Coaches" },
-  { to: "/transformations", label: "Transformations" },
+  { to: "/transformations", label: "Hall of Fame" },
   { to: "/blog", label: "Blog" },
   { to: "/gallery", label: "Gallery" },
   { to: "/pricing", label: "Pricing" },

@@ -21,11 +21,6 @@ const MuscleUp3D = lazy(() => import("@/components/home/MuscleUp3D"));
 // ── SECTION 10 · Results — outcome rings + member video stories ────────────
 // Consolidates the old Why-Stay, Member-Journeys and Testimonials sections.
 export function ResultsSection() {
-  // The story card's play badge used to be pure decoration — the inline clip is
-  // muted/looped (and never even loads on low-power devices), so clicking it did
-  // nothing. It now opens the reel with sound in a native <dialog>: Esc, focus
-  // trap and backdrop come free.
-  const [reel, setReel] = useState(null);
   return (
     <Section id="results" className="bg-[#0E141C]">
       <Header eyebrow={RESULTS.eyebrow} lines={RESULTS.title} sub={RESULTS.sub} maxSub="max-w-2xl" />
@@ -59,6 +54,19 @@ export function ResultsSection() {
 
       {/* Member video stories — "I thought I couldn't." */}
       <div className="mt-14 border-t border-[#1E2A38] pt-10">
+        <MemberStories />
+      </div>
+    </Section>
+  );
+}
+
+// Real member video stories. Used by the home Results section and the Hall of
+// Fame page. The play badge opens the reel with sound in a native <dialog>
+// (Esc, focus trap and backdrop come free); the inline clip stays muted.
+export function MemberStories() {
+  const [reel, setReel] = useState(null);
+  return (
+    <>
         <div className="mb-6">
           <Eyebrow>{RESULTS.storiesEyebrow}</Eyebrow>
           <h3 className="ct-display mt-3 text-3xl sm:text-4xl">
@@ -132,8 +140,7 @@ export function ResultsSection() {
             </button>
           </dialog>
         )}
-      </div>
-    </Section>
+    </>
   );
 }
 

@@ -3,7 +3,7 @@
 //
 // Rules baked in here:
 //  • Real data is reused verbatim (prices from Pricing.jsx, coaches from
-//    Coaches.jsx, transformations/testimonials from mockData, stats from
+//    Coaches.jsx, member stories in RESULTS (and data/firsts.js), stats from
 //    site.js). No invented prices, no invented hard percentages.
 //  • Every section that needs a real photo we don't have yet carries a
 //    `media` slot: { label, hint, ratio }. The label names the intended
@@ -20,7 +20,6 @@ import {
   Users, Waypoints, Wind, Zap,
 } from "lucide-react";
 
-import { TRANSFORMATIONS, TESTIMONIALS } from "@/data/mockData";
 import { STATS, RATING, MEMBERS_TRAINED } from "@/data/site";
 
 // ── SECTION 1 · Hero ──────────────────────────────────────────────────────
@@ -138,62 +137,10 @@ export const SKILLS = {
 };
 
 // ── SECTION 5 · Hall of Firsts ────────────────────────────────────────────
-// Reshaped from real TRANSFORMATIONS — each becomes a "first".
-const FIRST_TYPE = {
-  "First Pull-Up": "First Pull-Up",
-  Handstand: "First Handstand",
-  "Weight Loss": "First Goal Hit",
-  "Kids Achievement": "First 10 Pull-Ups",
-  "Athletic Conditioning": "First 5K PR",
-};
 export const HALL_OF_FIRSTS = {
   eyebrow: "Hall of Firsts",
   title: ["Real People.", "Real Milestones."],
   sub: "Every first is held. Every breakthrough. These are the moments that change everything: a living feed of members hitting skills they once thought impossible.",
-  items: TRANSFORMATIONS.map((t, i) => ({
-    id: t.id,
-    name: t.member_name,
-    milestone: FIRST_TYPE[t.achievement_type] || t.achievement_type,
-    date: t.date,
-    quote: t.testimonial,
-    // Social cheer count for the feed (community reactions, not a business metric).
-    reactions: [128, 94, 156, 73, 112, 88][i % 6],
-    media: { label: "Member photo", hint: `${t.member_name}: replace with real member photo`, ratio: "4/5" },
-  })),
-};
-
-// ── SECTION 6 · Member Journeys ───────────────────────────────────────────
-export const JOURNEYS = {
-  eyebrow: "Member Journeys",
-  title: ["Every Master", "Was Once A Beginner."],
-  sub: "Real transformation timelines, from the first nervous session to skills they now own.",
-  // Built from real transformation summaries, expanded into a timeline shape.
-  timelines: [
-    {
-      id: "rahul",
-      name: TRANSFORMATIONS[0].member_name,
-      headline: TRANSFORMATIONS[0].summary,
-      media: { img: "/transformations/rahul-weightloss.webp", label: "Member transformation", hint: "Rahul: before/after or training shot", ratio: "1/1" },
-      steps: [
-        { when: "Month 0", text: "Walked in unable to do a single pull-up." },
-        { when: "Month 2", text: "Consistent training, first body-weight milestones." },
-        { when: "Month 5", text: TRANSFORMATIONS[0].summary + "." },
-      ],
-      quote: TRANSFORMATIONS[0].testimonial,
-    },
-    {
-      id: "arjun",
-      name: TRANSFORMATIONS[2].member_name,
-      headline: TRANSFORMATIONS[2].summary,
-      media: { img: "/transformations/arjun-handstand.webp", label: "Member transformation", hint: "Arjun: skill / training shot", ratio: "1/1" },
-      steps: [
-        { when: "Month 0", text: "No skill background, building foundations." },
-        { when: "Month 2", text: "Wall handstand holds and straight-line shape." },
-        { when: "Month 4", text: TRANSFORMATIONS[2].summary + "." },
-      ],
-      quote: TRANSFORMATIONS[2].testimonial,
-    },
-  ],
 };
 
 // ── SECTION 7 · Training Disciplines ──────────────────────────────────────
@@ -329,22 +276,6 @@ export const RESULTS = {
     { id: "umang",  name: "Umang",     achieved: "4 to 15+ Pull-Ups", quote: "I couldn't do more than 4 or 5 pull-ups when I joined, but now I'm able to do more than 15. There is something in calisthenics which will surprise you about yourself.", video: "/stories/umang-pullups.mp4", media: { img: "/stories/umang-pullups.webp", label: "Video story", hint: "Umang", ratio: "4/5" } },
     { id: "advika", name: "Advika",    achieved: "National Medalist", quote: "Calisthenics improved my strength, balance and flexibility, and my skating jumps and spins. I'm a national medalist now. It wouldn't have been possible without my coaches' support.", video: "/stories/advika-skating.mp4", media: { img: "/stories/advika-skating.webp", label: "Video story", hint: "Advika", ratio: "4/5" } },
   ],
-};
-
-// ── SECTION 12 · Testimonials (video-first) ───────────────────────────────
-export const TESTIMONIAL_BLOCK = {
-  eyebrow: "Testimonials",
-  title: ["I Thought", "I Couldn't."],
-  sub: "Real members. Real journeys. Real proof that you're more capable than you think.",
-  // Real testimonial copy from mockData; each gets a video thumbnail slot.
-  items: TESTIMONIALS.slice(0, 3).map((t) => ({
-    id: t.id,
-    name: t.name,
-    role: t.role,
-    quote: t.content,
-    media: { label: "Video testimonial thumbnail", hint: `${t.name}: replace with video still`, ratio: "9/16" },
-  })),
-  textItems: TESTIMONIALS,
 };
 
 // ── SECTION 13 · Memberships ──────────────────────────────────────────────

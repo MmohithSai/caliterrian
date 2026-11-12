@@ -25,11 +25,7 @@ const Contact = lazy(() => import("@/pages/Contact"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
-// Admin is code-split out of the public bundle.
-const AdminApp = lazy(() => import("@/admin/AdminApp"));
-
-// The booking modal pulls in supabase-js (~120 KB). Nobody needs it until the
-// first "Book Trial" click, so it stays out of the entry chunk entirely.
+// Nobody needs the booking modal until the first "Book Trial" click.
 const TrialBookingModal = lazy(() => import("@/components/TrialBookingModal"));
 
 // Shown while a route chunk loads — a quiet brand-colored screen, no flash.
@@ -49,18 +45,6 @@ function AppContent({ bookingOpen, setBookingOpen }) {
     trackBookTrial(location.pathname);
     setBookingOpen(true);
   };
-
-  // The /admin area is a self-contained app: no public Navbar/Footer/ChatBot.
-  if (location.pathname.startsWith("/admin")) {
-    return (
-      <Suspense fallback={<div className="min-h-screen bg-[#0B1016]" />}>
-        <Routes>
-          <Route path="/admin/*" element={<AdminApp />} />
-        </Routes>
-        <Toaster position="top-right" />
-      </Suspense>
-    );
-  }
 
   return (
     <>
