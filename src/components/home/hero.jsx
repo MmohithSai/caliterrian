@@ -3,7 +3,7 @@
 // floating over it. Both cuts (landscape / portrait) come from
 // scripts/build-hero-tour.py.
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { ArrowRight, MapPin, MessageCircle } from "lucide-react";
 import { Eyebrow } from "./ui";
 import { reveal, stagger } from "./anim";
@@ -18,27 +18,40 @@ import { posterOnly, useClientValue } from "@/lib/device";
 const portraitPhone = () =>
   window.matchMedia?.("(orientation: portrait) and (max-width: 767px)").matches ?? false;
 
-// Which file: orientation → codec. AV1 is ~half the bytes, but software AV1
-// stutters on low-end devices, so it is only used where the browser says it
-// decodes smoothly and power-efficiently (i.e. in hardware). Everything else
-// gets the H.264 file, which plays anywhere.
-async function pickSrc(portrait) {
-  const cut = portrait ? HERO.videoPortrait : HERO.video;
+// A link that can't stream the full-quality file in real time. Only Chromium
+// reports this; everywhere else the stall fallback below covers it.
+const slowLink = () => {
+  const c = navigator.connection;
+  return !!c && (/(^|-)[23]g$/.test(c.effectiveType ?? "") || (c.downlink > 0 && c.downlink < 6));
+};
+
+// Software AV1/HEVC stutters on low-end devices, so they are only used where
+// the browser says they decode smoothly and power-efficiently (i.e. in hardware).
+async function hwDecodes(codec, portrait) {
   try {
     const info = await navigator.mediaCapabilities?.decodingInfo({
       type: "file",
       video: {
-        contentType: 'video/mp4; codecs="av01.0.08M.08"',
+        contentType: `video/mp4; codecs="${codec}"`,
         width: portrait ? 720 : 1920,
         height: portrait ? 1280 : 1080,
-        bitrate: portrait ? 1_000_000 : 2_000_000,
+        bitrate: portrait ? 2_700_000 : 5_000_000,
         framerate: 30,
       },
     });
-    if (info?.supported && info.smooth && info.powerEfficient) return cut.av1;
+    return !!(info?.supported && info.smooth && info.powerEfficient);
   } catch {
-    // no MediaCapabilities (older Safari/WebViews) → H.264
+    return false; // no MediaCapabilities (older Safari/WebViews) → H.264
   }
+}
+
+// Which file: orientation → link speed → codec. AV1 and HEVC are the same
+// picture as the H.264 file at about half the bytes; H.264 plays anywhere.
+async function pickSrc(portrait) {
+  const cut = portrait ? HERO.videoPortrait : HERO.video;
+  if (slowLink()) return cut.lite;
+  if (await hwDecodes("av01.0.08M.08", portrait)) return cut.av1;
+  if (await hwDecodes("hvc1.1.6.L120.90", portrait)) return cut.hevc;
   return cut.h264;
 }
 
@@ -51,6 +64,10 @@ export function HeroSection({ onBookTrial }) {
   const still = useClientValue(posterOnly, true);
   const [src, setSrc] = useState(null);
   const videoRef = useRef(null);
+  const sectionRef = useRef(null);
+  const onScreen = useInView(sectionRef);
+  const stall = useRef(null);
+  const resumeAt = useRef(0);
   const [cue, setCue] = useState(0);
 
   // One decision, one download: the <video> only mounts once the file is known.
@@ -65,9 +82,15 @@ export function HeroSection({ onBookTrial }) {
 
   // React doesn't reliably set the `muted` *attribute*, so Chrome's autoplay
   // gate can leave the element on its poster — same kick as MediaSlot.
+  // Scrolled past the hero → pause, so its decoder isn't competing with the
+  // rest of the page for the phone's CPU/GPU.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+    if (!onScreen) {
+      v.pause();
+      return;
+    }
     const play = () => {
       v.muted = true;
       v.defaultMuted = true;
@@ -79,7 +102,25 @@ export function HeroSection({ onBookTrial }) {
     const onVisible = () => document.visibilityState === "visible" && v.paused && play();
     document.addEventListener("visibilitychange", onVisible);
     return () => document.removeEventListener("visibilitychange", onVisible);
-  }, [src]);
+  }, [src, onScreen]);
+
+  // Poor man's adaptive streaming: if the link can't keep up (no first frame
+  // within 5 s, or a mid-loop stall over 1.5 s), drop to the lite tier at the
+  // same timestamp instead of leaving a frozen frame on screen.
+  const lite = (portrait ? HERO.videoPortrait : HERO.video).lite;
+  const toLite = () => {
+    if (src === lite || videoRef.current?.paused) return; // paused = off-screen or autoplay blocked, not a slow link
+    resumeAt.current = videoRef.current?.currentTime ?? 0;
+    setSrc(lite);
+  };
+  const armStall = (ms) => {
+    clearTimeout(stall.current);
+    if (src !== lite) stall.current = setTimeout(toLite, ms);
+  };
+  useEffect(() => {
+    if (src) armStall(5000);
+    return () => clearTimeout(stall.current);
+  }, [src]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // timeupdate fires ~4 Hz; dissolves are 0.7 s, so the caption never lags visibly.
   const onTime = (e) => {
@@ -92,7 +133,7 @@ export function HeroSection({ onBookTrial }) {
   const shotLength = (TOUR_CUES[cue + 1]?.at ?? TOUR_LENGTH) - zone.at;
 
   return (
-    <section className="relative isolate h-svh min-h-[640px] overflow-hidden bg-[#05080D]" aria-label="Cali Terrain: the facility">
+    <section ref={sectionRef} className="relative isolate h-svh min-h-[640px] overflow-hidden bg-[#05080D]" aria-label="Cali Terrain: the facility">
       {/* Poster is the LCP image. <picture> lets the browser pick the portrait
           cut straight from the prerendered HTML — no JS, no second request. */}
       <picture>
@@ -110,6 +151,12 @@ export function HeroSection({ onBookTrial }) {
           preload="auto"
           poster={portrait ? HERO.imgPortrait : HERO.img}
           onTimeUpdate={onTime}
+          onPlaying={() => clearTimeout(stall.current)}
+          onWaiting={(e) => !e.currentTarget.paused && armStall(1500)}
+          onLoadedMetadata={(e) => {
+            if (resumeAt.current) e.currentTarget.currentTime = resumeAt.current;
+            resumeAt.current = 0;
+          }}
           aria-hidden="true"
           src={src}
         />

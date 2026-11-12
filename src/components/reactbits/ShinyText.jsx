@@ -3,7 +3,7 @@
 // Respects prefers-reduced-motion: the sweep parks off-screen, leaving
 // plain colored text.
 import { useState, useCallback, useEffect, useRef } from "react";
-import { motion, useMotionValue, useAnimationFrame, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useInView, useMotionValue, useAnimationFrame, useTransform, useReducedMotion } from "framer-motion";
 import "./ShinyText.css";
 
 export default function ShinyText({
@@ -24,12 +24,16 @@ export default function ShinyText({
   const elapsedRef = useRef(0);
   const lastTimeRef = useRef(null);
   const directionRef = useRef(direction === "left" ? 1 : -1);
+  // Background-position isn't GPU-animatable: every frame is a repaint, which
+  // makes Chrome re-layerize the whole page. Only run while it can be seen.
+  const ref = useRef(null);
+  const inView = useInView(ref);
 
   const animationDuration = speed * 1000;
   const delayDuration = delay * 1000;
 
   useAnimationFrame((time) => {
-    if (isDisabled || isPaused) {
+    if (isDisabled || isPaused || !inView) {
       lastTimeRef.current = null;
       return;
     }
@@ -76,6 +80,7 @@ export default function ShinyText({
 
   return (
     <motion.span
+      ref={ref}
       className={`shiny-text ${className}`}
       style={{ ...gradientStyle, backgroundPosition }}
       onMouseEnter={noop}

@@ -151,7 +151,9 @@ export function MediaSlot({
   // the viewport and the device isn't on reduced motion / save-data / low RAM.
   // (Before this, a below-the-fold story video pulled 1.6 MB on every homepage
   // load, whatever the device.)
+  // Off-screen clips pause, so a phone never decodes more videos than it shows.
   const near = useInView(ref, { once: true, margin: "300px 0px" });
+  const onScreen = useInView(ref);
   useEffect(() => {
     const v = videoRef.current;
     if (!v || !near || lowPower()) return;
@@ -159,9 +161,14 @@ export function MediaSlot({
     v.defaultMuted = true;
     v.preload = "auto";
     v.load();
+  }, [videoSrc, videoWebm, near]);
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || !near || lowPower()) return;
+    if (!onScreen) return void v.pause();
     const p = v.play();
     if (p && typeof p.catch === "function") p.catch(() => {});
-  }, [videoSrc, videoWebm, near]);
+  }, [videoSrc, videoWebm, near, onScreen]);
   const Layer = parallax ? motion.div : "div";
   const layerProps = parallax ? { style: { y } } : {};
 

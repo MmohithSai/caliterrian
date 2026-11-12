@@ -10,7 +10,7 @@ import SplitText from "@/components/reactbits/SplitText";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
 import GlareHover from "@/components/reactbits/GlareHover";
 import Magnet from "@/components/reactbits/Magnet";
-import { lowPower, useClientValue } from "@/lib/device";
+import { coarsePointer, lowPower, useClientValue } from "@/lib/device";
 
 // three.js is ~520 KB — it must not sit on the homepage's critical path for a
 // decorative backdrop near the very bottom of the page. Loaded only once the
@@ -70,9 +70,9 @@ export function ResultsSection() {
           whileInView="visible"
           viewport={vpOnce}
           variants={stagger}
-          className="ct-scroll-x -mx-6 gap-4 px-6 pb-2 scroll-pl-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
+          className="ct-scroll-x -mx-6 gap-4 px-6 pb-2 scroll-pl-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3"
         >
-          {/* Phone: swipe through stories instead of four stacked 4:5 cards */}
+          {/* Phone: swipe through stories instead of three stacked 4:5 cards */}
           {RESULTS.stories.map((s) => (
             <motion.figure key={s.id} variants={reveal} className="ct-card group w-[78vw] max-w-[320px] overflow-hidden sm:w-auto sm:max-w-none">
               <div className="group/v relative overflow-hidden">
@@ -253,7 +253,9 @@ export function FaqSection({ onBookTrial }) {
 export function FinalCtaSection({ onBookTrial }) {
   const ref = useRef(null);
   const near = useInView(ref, { once: true, margin: "400px 0px" });
-  const heavy = useClientValue(() => !lowPower(), false);
+  // Touch devices get the gradient alone, like the other WebGL scenes: on a phone the
+  // context spin-up hitches the scroll and the per-frame skeleton costs battery.
+  const heavy = useClientValue(() => !lowPower() && !coarsePointer(), false);
 
   return (
     <section ref={ref} id="final-cta" className="relative isolate flex min-h-[70vh] items-center overflow-hidden bg-[#0B1016] px-6 py-28">

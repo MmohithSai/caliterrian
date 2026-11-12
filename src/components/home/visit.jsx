@@ -3,7 +3,7 @@
 // info before the final ask. All facts sourced from site.js; CTAs fire the
 // existing analytics events (no new event names).
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight, Clock, MapPin, MessageCircle, Phone, Tag } from "lucide-react";
 import { Eyebrow, Heading, Section } from "./ui";
@@ -11,12 +11,18 @@ import { reveal, stagger, vpOnce } from "./anim";
 import { LOCAL } from "@/data/home";
 import { NAP, HOURS, telLink, waLink } from "@/data/site";
 import { trackWhatsApp, trackCall } from "@/lib/analytics";
+import { coarsePointer, useClientValue } from "@/lib/device";
 
 export function VisitSection({ onBookTrial }) {
   // The Maps embed is ~250 KB of third-party JS. It stays unmounted (poster-ish
   // placeholder in its place) until the section is close to the viewport.
+  // On phones/tablets the embed runs in the page's own process, and its script
+  // froze scrolling for up to a second, so there it only loads on a tap.
   const mapRef = useRef(null);
-  const mapNear = useInView(mapRef, { once: true, margin: "300px 0px" });
+  const near = useInView(mapRef, { once: true, margin: "300px 0px" });
+  const touch = useClientValue(coarsePointer, true);
+  const [tapped, setTapped] = useState(false);
+  const mapNear = tapped || (near && !touch);
 
   return (
     <Section id="visit">
@@ -45,13 +51,15 @@ export function VisitSection({ onBookTrial }) {
               style={{ minHeight: "20rem" }}
             />
           ) : (
-            <div
-              aria-hidden="true"
-              className="flex h-72 w-full items-center justify-center bg-[#0E141C] text-[10px] uppercase tracking-[0.3em] text-white/70 lg:h-full"
+            <button
+              type="button"
+              onClick={() => setTapped(true)}
+              className="flex h-72 w-full flex-col items-center justify-center gap-3 bg-[#0E141C] text-[10px] uppercase tracking-[0.3em] text-white/70 lg:h-full"
               style={{ minHeight: "20rem" }}
             >
-              Map
-            </div>
+              <MapPin className="h-6 w-6 text-[#2E8DFF]" aria-hidden="true" />
+              Tap to load map
+            </button>
           )}
         </motion.div>
 

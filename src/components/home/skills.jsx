@@ -280,7 +280,9 @@ function SkillVideoOverlay({ skill, onClose }) {
         <video
           ref={videoRef}
           className="h-full w-full bg-black object-contain"
-          src={skill.video}
+          // Phones show the clip at most ~1170 px wide, so they get the 720p file:
+          // same picture there at half the bitrate, so it streams on 4G without stalling.
+          src={(window.matchMedia("(max-width: 767px)").matches && skill.videoSm) || skill.video}
           poster={skill.poster || skill.img}
           controls
           autoPlay

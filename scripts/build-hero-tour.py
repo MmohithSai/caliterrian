@@ -20,11 +20,12 @@ the last one dissolves back into the first, so the loop has no seam. Masters
 stay near-lossless (CRF 8) until the final encode.
 
 Outputs (public/hero/), each encoded to a quality target, not a byte budget:
-  tour-landscape[.av1].mp4       1920x1080 (no 1440p tier: the source is 1080p)
-  tour-portrait[.av1].mp4        720x1280, portrait phones (a 9:16 window of
+  tour-landscape[.hevc|.av1].mp4 1920x1080 (no 1440p tier: the source is 1080p)
+  tour-portrait[.hevc|.av1].mp4  720x1280, portrait phones (a 9:16 window of
                                  1080p is 608 px wide, so more pixels add nothing)
-H.264 plays on every browser/phone; the .av1 twin is roughly half the size and
-is served only where AV1 decodes in hardware. Plus one WebP poster per
+  tour-{landscape,portrait}-lite.mp4  1280x720 / 540x960 H.264, slow links
+H.264 plays on every browser/phone; the .hevc / .av1 twins are roughly half the
+size and are served only where they decode in hardware. Plus one WebP poster per
 orientation and src/data/tourCues.js (caption timings).
 
 Usage: python scripts/build-hero-tour.py            full build
@@ -51,11 +52,16 @@ CUES_JS = Path("src/data/tourCues.js")
 FPS = 30
 XFADE = 0.6   # dissolve between shots (s); pans match, so it reads as one glide
 LOOP = 0.6    # tail -> head wrap dissolve; consumes shot 1's first LOOP seconds
-# Rendition -> (master, output size or None for the master's own, H.264 level, VBV cap kbps).
-# Level 4.0 so the oldest phones still decode it in hardware.
+# Rendition -> (master, output size or None for the master's own, H.264 level, VBV cap kbps, codecs).
+# Level 4.0 so the oldest phones still decode it in hardware. HEVC is the same
+# picture at ~half the H.264 bytes for the many phones/Macs that decode it in
+# hardware but not AV1. The -lite tiers are what the page falls back to on a
+# slow link (or after a stall): softer, but a moving picture beats a frozen one.
 RENDITIONS = {
-    "landscape": ("landscape", None, "4.0", 10000),
-    "portrait": ("portrait", None, "4.0", 6000),
+    "landscape": ("landscape", None, "4.0", 10000, ("h264", "hevc", "av1")),
+    "portrait": ("portrait", None, "4.0", 6000, ("h264", "hevc", "av1")),
+    "landscape-lite": ("landscape", (1280, 720), "4.0", 3500, ("h264",)),
+    "portrait-lite": ("portrait", (540, 960), "3.1", 2500, ("h264",)),
 }
 # Quality targets, not byte budgets (the script prints VMAF against the master).
 # The footage is dense (turf, ribbed sheet metal, rubber tiles) and sharpened,
@@ -63,6 +69,7 @@ RENDITIONS = {
 # measured VMAF ~97 but visibly flattened fine detail. A ~5 MB byte budget (an
 # earlier cut) scored in the low 80s and looked soft.
 H264_CRF = 20
+HEVC_CRF = 22   # matches the H.264 file's VMAF
 AV1_CRF = 28
 # Laplacian variance at 640 px (dissolves excluded). The 9:16 windows of 1080p
 # hold less detail; in-focus frames of bare wall + terrace tile there measure ~130.
@@ -447,8 +454,8 @@ def vmaf(ref, dist, size):
 
 
 def encode(name, h264_crf=H264_CRF, av1_crf=AV1_CRF, out_dir=OUT):
-    """One rendition: H.264 CRF (plays anywhere) + AV1 CRF (hardware-decode devices only)."""
-    src_name, size, level, cap = RENDITIONS[name]
+    """One rendition: H.264 CRF (plays anywhere) + HEVC / AV1 CRF (hardware-decode devices only)."""
+    src_name, size, level, cap, codecs = RENDITIONS[name]
     src = master(src_name)
     size = size or SIZE[src_name]
     vf = ["-vf", f"scale={size[0]}:{size[1]}:flags=lanczos"] if size != SIZE[src_name] else []
@@ -457,11 +464,22 @@ def encode(name, h264_crf=H264_CRF, av1_crf=AV1_CRF, out_dir=OUT):
     ffmpeg("-i", src, *vf, "-c:v", "libx264", "-profile:v", "high", "-level", level, "-pix_fmt", "yuv420p",
            "-preset", "slower", "-tune", "film", "-crf", str(h264_crf), "-maxrate", f"{cap}k", "-bufsize", f"{cap * 2}k",
            "-g", str(FPS * 2), "-keyint_min", str(FPS), *TAGS, h264)
-    av1 = out_dir / f"tour-{name}.av1.mp4"
-    ffmpeg("-i", src, *vf, "-c:v", "libsvtav1", "-preset", "4", "-crf", str(av1_crf), "-pix_fmt", "yuv420p",
-           "-g", str(FPS * 2), "-svtav1-params", "tune=0:film-grain=0", *TAGS, av1)
+    outs = [h264]
+    if "hevc" in codecs:
+        # hvc1 tag or Safari won't play it; closed GOPs so the loop restart is clean.
+        hevc = out_dir / f"tour-{name}.hevc.mp4"
+        ffmpeg("-i", src, *vf, "-c:v", "libx265", "-profile:v", "main", "-pix_fmt", "yuv420p", "-preset", "slow",
+               "-crf", str(HEVC_CRF), "-tag:v", "hvc1", "-x265-params",
+               f"keyint={FPS * 2}:min-keyint={FPS}:open-gop=0:vbv-maxrate={cap // 2}:vbv-bufsize={cap}:log-level=error",
+               *TAGS, hevc)
+        outs.append(hevc)
+    if "av1" in codecs:
+        av1 = out_dir / f"tour-{name}.av1.mp4"
+        ffmpeg("-i", src, *vf, "-c:v", "libsvtav1", "-preset", "4", "-crf", str(av1_crf), "-pix_fmt", "yuv420p",
+               "-g", str(FPS * 2), "-svtav1-params", "tune=0:film-grain=0", *TAGS, av1)
+        outs.append(av1)
     dur = probe_duration(h264)
-    for p in (h264, av1):
+    for p in outs:
         mb = p.stat().st_size / 1e6
         print(f"  {p}  {mb:.2f} MB  {mb * 8 / dur:.1f} Mbps  VMAF {vmaf(src, p, size):.1f}")
     return h264
@@ -558,8 +576,9 @@ def main():
     for name in RENDITIONS:
         print(f">> {name}: encode")
         out = encode(name)
-        print(f">> {name}: QA")
-        ok &= qa(out, name, cues)
+        if name in SIZE:   # the -lite tiers are downscales of an already-QA'd master
+            print(f">> {name}: QA")
+            ok &= qa(out, name, cues)
     for orientation in SIZE:
         poster(orientation)
     write_cues(cues, probe_duration(master("landscape")))
