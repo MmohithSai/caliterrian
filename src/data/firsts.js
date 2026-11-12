@@ -1,5 +1,5 @@
-// Real member "firsts" on the Hall of Firsts wall. Shared by the desktop 3D
-// sphere (HallOfFirstsGallery3D), the phone swipe cards (skills.jsx) and the
+// Real member "firsts". Shared by the
+// home Hall of Firsts grid (skills.jsx, UNLOCKS only) and the
 // Hall of Fame page (pages/Transformations.jsx).
 // Add a member: drop a photo in public/hall-of-fame/ and add a row here.
 // `date` and `quote` are optional; `video` plays muted in the detail view.

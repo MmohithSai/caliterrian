@@ -1,15 +1,13 @@
-// Sections 4–6: Skill Tree · Hall of Firsts · Member Journeys  (image-first)
+// Sections 4–5: Skill Tree · Hall of Firsts
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
 import { ArrowRight, Circle, CircleDot, Clock, Compass, Flame, Gauge, Map, Maximize2, Play, Quote, X } from "lucide-react";
 import { Chip, ChipStrip, Header, MediaSlot, Section } from "./ui";
 import { reveal, stagger, vpOnce, fade } from "./anim";
 import { SKILLS, HALL_OF_FIRSTS } from "@/data/home";
-import { FIRSTS } from "@/data/firsts";
+import { UNLOCKS } from "@/data/firsts";
 
-// Three.js + GSAP land in their own chunk, fetched only when the section nears
-// the viewport.
-const HallOfFirstsGallery3D = lazy(() => import("./HallOfFirstsGallery3D"));
+// Three.js lands in its own chunk, fetched only when the section nears the viewport.
 const SkillTree3D = lazy(() => import("./SkillTree3D"));
 
 // Difficulty → presentation map for the skill graph (icon + modifier class).
@@ -346,39 +344,37 @@ function Meta({ icon: Icon, label, value }) {
   );
 }
 
-// ── SECTION 5 · Hall of Firsts — live achievement feed ────────────────────
+// ── SECTION 5 · Hall of Firsts — three real skill clips ──────────────────
+const frontLever = SKILLS.nodes.find((n) => n.id === "front-lever");
+const HALL = [
+  ...UNLOCKS,
+  { id: "vidya-front-lever", name: "Vidya Sagar", milestone: "Front Lever", img: frontLever.poster, video: frontLever.videoSm },
+];
+
 export function HallOfFirstsSection({ onBookTrial }) {
   return (
     <Section id="hall-of-firsts">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <Header eyebrow={HALL_OF_FIRSTS.eyebrow} lines={HALL_OF_FIRSTS.title} sub={HALL_OF_FIRSTS.sub} maxSub="max-w-2xl" />
-        <span className="mb-12 hidden items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#9AA7B6] sm:inline-flex">
-          Drag to explore
-        </span>
-      </div>
+      <Header eyebrow={HALL_OF_FIRSTS.eyebrow} lines={HALL_OF_FIRSTS.title} sub={HALL_OF_FIRSTS.sub} maxSub="max-w-2xl" />
 
-      {/* Phone: swipeable milestone cards. The spherical wall needs a pointer and
-          a wide viewport — on a 375px screen it was a jumble of unreadable tiles. */}
-      <div className="-mx-6 sm:hidden">
-        <ol className="ct-scroll-x gap-3 px-6 pb-2 scroll-pl-6">
-          {FIRSTS.map((e) => (
-            <li key={e.id} className="ct-card w-[72vw] max-w-[300px] overflow-hidden">
-              <MediaSlot media={{ img: e.img, label: e.milestone, ratio: "4/3" }} video={e.video} showLabel={false} />
-              <div className="p-4">
-                {e.date && <p className="text-[10px] font-bold uppercase tracking-widest text-[#2E8DFF]">{e.date}</p>}
-                <h3 className="mt-1 font-heading text-2xl leading-none tracking-wide text-white">{e.milestone}</h3>
-                <p className="mt-1 text-xs font-semibold text-[#9AA7B6]">{e.name}</p>
-                {e.quote && <p className="mt-3 text-sm italic leading-relaxed text-[#C6D2DF]">“{e.quote}”</p>}
+      {/* Bento: the portrait muscle-up fills the left column, the two landscape
+          lever holds stack on the right, so no clip gets its body cropped. */}
+      <ul className="grid gap-4 sm:grid-cols-[9fr_10fr]">
+        {HALL.map((e, i) => (
+          <li key={e.id} className={`ct-card overflow-hidden ${i === 0 ? "sm:row-span-2" : ""}`}>
+            <MediaSlot
+              media={{ img: e.img, label: e.milestone, ratio: i === 0 ? "4/5" : "16/9" }}
+              video={e.video}
+              showLabel={false}
+              className={i === 0 ? "sm:h-full sm:!aspect-auto" : ""}
+            >
+              <div>
+                <h3 className="font-heading text-2xl leading-none tracking-wide text-white sm:text-3xl">{e.milestone}</h3>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-[#C6D2DF]">{e.name}</p>
               </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      {/* Spherical milestone wall — drag to look around, click a first to open it */}
-      <div className="hidden sm:block">
-        <HallGalleryMount onBookTrial={onBookTrial} />
-      </div>
+            </MediaSlot>
+          </li>
+        ))}
+      </ul>
 
       <motion.div
         initial="hidden"
@@ -398,30 +394,3 @@ export function HallOfFirstsSection({ onBookTrial }) {
     </Section>
   );
 }
-
-// Defers the WebGL chunk until the section is close to the viewport, then
-// keeps a sized placeholder so the page never jumps while it loads.
-function HallGalleryMount({ onBookTrial }) {
-  const ref = useRef(null);
-  const near = useInView(ref, { once: true, margin: "600px 0px" });
-  return (
-    <div ref={ref}>
-      {near ? (
-        <Suspense fallback={<HallGalleryPlaceholder />}>
-          <HallOfFirstsGallery3D onBookTrial={onBookTrial} />
-        </Suspense>
-      ) : (
-        <HallGalleryPlaceholder />
-      )}
-    </div>
-  );
-}
-
-function HallGalleryPlaceholder() {
-  return (
-    <div className="flex h-[80svh] min-h-[560px] w-full items-center justify-center rounded-lg border border-[#1E2A38] bg-[#05080D] sm:h-[88svh]">
-      <span className="text-[10px] uppercase tracking-[0.3em] text-white/70">Loading experience…</span>
-    </div>
-  );
-}
-
