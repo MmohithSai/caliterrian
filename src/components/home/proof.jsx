@@ -10,7 +10,7 @@ import SplitText from "@/components/reactbits/SplitText";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
 import GlareHover from "@/components/reactbits/GlareHover";
 import Magnet from "@/components/reactbits/Magnet";
-import { lowPower, useClientValue } from "@/lib/device";
+import { coarsePointer, lowPower, useClientValue } from "@/lib/device";
 
 // three.js is ~520 KB — it must not sit on the homepage's critical path for a
 // decorative backdrop near the very bottom of the page. Loaded only once the
@@ -21,11 +21,6 @@ const MuscleUp3D = lazy(() => import("@/components/home/MuscleUp3D"));
 // ── SECTION 10 · Results — outcome rings + member video stories ────────────
 // Consolidates the old Why-Stay, Member-Journeys and Testimonials sections.
 export function ResultsSection() {
-  // The story card's play badge used to be pure decoration — the inline clip is
-  // muted/looped (and never even loads on low-power devices), so clicking it did
-  // nothing. It now opens the reel with sound in a native <dialog>: Esc, focus
-  // trap and backdrop come free.
-  const [reel, setReel] = useState(null);
   return (
     <Section id="results" className="bg-[#0E141C]">
       <Header eyebrow={RESULTS.eyebrow} lines={RESULTS.title} sub={RESULTS.sub} maxSub="max-w-2xl" />
@@ -59,6 +54,19 @@ export function ResultsSection() {
 
       {/* Member video stories — "I thought I couldn't." */}
       <div className="mt-14 border-t border-[#1E2A38] pt-10">
+        <MemberStories />
+      </div>
+    </Section>
+  );
+}
+
+// Real member video stories. Used by the home Results section and the Hall of
+// Fame page. The play badge opens the reel with sound in a native <dialog>
+// (Esc, focus trap and backdrop come free); the inline clip stays muted.
+export function MemberStories() {
+  const [reel, setReel] = useState(null);
+  return (
+    <>
         <div className="mb-6">
           <Eyebrow>{RESULTS.storiesEyebrow}</Eyebrow>
           <h3 className="ct-display mt-3 text-3xl sm:text-4xl">
@@ -70,9 +78,9 @@ export function ResultsSection() {
           whileInView="visible"
           viewport={vpOnce}
           variants={stagger}
-          className="ct-scroll-x -mx-6 gap-4 px-6 pb-2 scroll-pl-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
+          className="ct-scroll-x -mx-6 gap-4 px-6 pb-2 scroll-pl-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3"
         >
-          {/* Phone: swipe through stories instead of four stacked 4:5 cards */}
+          {/* Phone: swipe through stories instead of three stacked 4:5 cards */}
           {RESULTS.stories.map((s) => (
             <motion.figure key={s.id} variants={reveal} className="ct-card group w-[78vw] max-w-[320px] overflow-hidden sm:w-auto sm:max-w-none">
               <div className="group/v relative overflow-hidden">
@@ -132,8 +140,7 @@ export function ResultsSection() {
             </button>
           </dialog>
         )}
-      </div>
-    </Section>
+    </>
   );
 }
 
@@ -253,7 +260,9 @@ export function FaqSection({ onBookTrial }) {
 export function FinalCtaSection({ onBookTrial }) {
   const ref = useRef(null);
   const near = useInView(ref, { once: true, margin: "400px 0px" });
-  const heavy = useClientValue(() => !lowPower(), false);
+  // Touch devices get the gradient alone, like the other WebGL scenes: on a phone the
+  // context spin-up hitches the scroll and the per-frame skeleton costs battery.
+  const heavy = useClientValue(() => !lowPower() && !coarsePointer(), false);
 
   return (
     <section ref={ref} id="final-cta" className="relative isolate flex min-h-[70vh] items-center overflow-hidden bg-[#0B1016] px-6 py-28">

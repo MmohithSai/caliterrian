@@ -1,64 +1,65 @@
-# Cali Terrain — Backend Setup (what's done + your remaining steps)
+# Cali Terrain: form backend (Google Sheet)
 
-This session stood up the Supabase backend, the secure write path for the public
-forms, and the `/admin` operational dashboard. Below is what exists and the few
-**manual steps only you can do** (Supabase Auth config can't be done over the API).
+Both forms on the site (the **Book Free Trial** pop-up and the **Contact** page)
+append one row to a Google Sheet, then send the visitor to WhatsApp with their
+details pre-filled. If the Sheet is down, the visitor still lands on WhatsApp,
+so no lead is lost.
 
-## ✅ Done in this session
+Code: `src/lib/leads.js` posts to the URL in `VITE_SHEET_URL`.
 
-**Database** (`public` schema, all via migrations):
-- `lead_status` / `booking_status` enums.
-- `leads`, `bookings` tables (indexes, `updated_at` triggers, `admin_notes`, `archived` soft-delete; `bookings.lead_id → leads.id`).
-- `profiles` table (1:1 with `auth.users`, auto-created on signup via trigger; `is_admin` flag).
-- `is_admin()` helper + `get_admin_stats()` RPC (admin-gated).
-- **RLS**: public has *no* direct table access. Reads/updates only for admins; `is_admin` is server-only (no self-escalation possible).
+## One-time setup (about 5 minutes)
 
-**Edge Functions** (the ONLY public write path):
-- `submit-lead`, `submit-booking` — validate + normalize, honeypot, per-IP rate limit, service-role insert, Telegram notify hook. Booking dedupes/links to a lead by phone.
+1. Create a Google Sheet, e.g. **Cali Terrain Leads**.
+2. In the Sheet: **Extensions → Apps Script**. Delete what's there and paste the
+   script below. Save.
+3. **Deploy → New deployment** → type **Web app**.
+   - Execute as: **Me**
+   - Who has access: **Anyone**
+   - Deploy, approve the Google permission prompt, copy the **Web app URL**
+     (ends in `/exec`).
+4. Put the URL in `.env.local` for local dev:
+   `VITE_SHEET_URL=https://script.google.com/macros/s/…/exec`
+   and in Vercel: **Project → Settings → Environment Variables →
+   `VITE_SHEET_URL`** (Production + Preview), then redeploy.
+5. Optional alert: in the Sheet, **Tools → Notification settings → Edit
+   notifications** → "Any changes are made" → email right away.
 
-**Frontend**:
-- `src/lib/supabase.js` client + `submitForm()` helper.
-- Contact form → `submit-lead`; Trial modal → `submit-booking` (persists first, then WhatsApp redirect). Honeypot field added to both.
-- Full `/admin` app (code-split): login + forgot-password, protected routes, dashboard (KPIs, uncontacted/pending deep-links, recent activity), Leads & Bookings (search, status filter, inline status, notes, archive, tap-to-call/WhatsApp, detail drawer, pagination, mobile cards).
+If you edit the script later, use **Deploy → Manage deployments → Edit →
+New version** so the URL stays the same.
 
-Verified end-to-end: valid submissions persist, honeypot/invalid rejected, booking links to lead, anon is blocked from reading/inserting (RLS `42501`).
+## Apps Script (`Code.gs`)
 
----
+```js
+const HEADERS = ["Timestamp", "Source", "Name", "Phone", "Age", "Program", "Goal", "Preferred time", "Message"];
 
-## 🔧 Your remaining steps (5 minutes, in the Supabase dashboard)
+function doPost(e) {
+  let d;
+  try { d = JSON.parse(e.postData.contents); } catch (_) { return out({ ok: false, error: "Invalid request" }); }
 
-### 1. Create the owner account
-Dashboard → **Authentication → Users → Add user** → enter the owner's email + a
-password (check "Auto Confirm User"). Then make them admin — SQL Editor:
+  const s = (v, max) => String(v == null ? "" : v).trim().slice(0, max || 500);
+  // Leading = + - @ would run as a formula in Sheets; the ' keeps it as text.
+  const cell = (v, max) => { const t = s(v, max); return /^[=+\-@]/.test(t) ? "'" + t : t; };
 
-```sql
-update profiles set is_admin = true where email = 'OWNER_EMAIL_HERE';
+  const name = s(d.name, 120);
+  const phone = s(d.phone, 20).replace(/[^\d+]/g, "");
+  if (d.company || !name || phone.length < 7) return out({ ok: false, error: "Name and a valid phone are required." });
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
+    sheet.appendRow([
+      new Date(), cell(d.source, 20), cell(name), "'" + phone, cell(d.age, 3),
+      cell(d.program, 120), cell(d.goal), cell(d.preferred_time, 60), cell(d.message, 2000),
+    ]);
+  } finally {
+    lock.releaseLock();
+  }
+  return out({ ok: true });
+}
+
+function out(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
 ```
-
-Log in at `/admin/login`. (To add more admins later, repeat this one line.)
-
-### 2. Disable public sign-ups (important)
-Dashboard → **Authentication → Sign In / Providers → Email** → turn **off**
-"Allow new users to sign up". Admins are provisioned manually (step 1), so no one
-can self-register and get a `profiles` row.
-
-### 3. (Optional) Owner notifications via Telegram
-The Edge Functions stay silent until you add the secrets:
-```bash
-supabase secrets set TELEGRAM_BOT_TOKEN=xxx TELEGRAM_CHAT_ID=xxx
-```
-(Create a bot with @BotFather; get your chat id from @userinfobot.) Or wire email/Resend in `notifyOwner()`.
-
-### 4. (Recommended before launch) Custom SMTP + backups
-- Auth emails (password reset) are rate-limited on Supabase's built-in sender →
-  configure a custom SMTP (Resend/SES) under **Auth → Emails → SMTP**.
-- Free tier has **no automatic backups**. For real lead data, enable Pro (daily
-  backup + PITR) or schedule a `pg_dump`.
-
----
-
-## Notes / deferred (from the plan, not done this session)
-- **Turnstile/hCaptcha**: honeypot + rate limit are in; add a CAPTCHA token check in the Edge Functions if spam appears.
-- **Sanity CMS**: marketing content is still hardcoded — that's a separate phase.
-- **Consent checkbox / privacy policy** on forms (India DPDP) — add before launch.
-- Two security advisor warnings remain on `is_admin()` / `get_admin_stats()` — these are **intentional**: a `SECURITY DEFINER` helper used inside RLS must be executable by the `authenticated` role.

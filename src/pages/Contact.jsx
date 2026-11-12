@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import PageBackdrop from "@/components/PageBackdrop";
-import { submitForm } from "@/lib/supabase";
+import { submitAndOpenWhatsApp } from "@/lib/leads";
 import { NAP, SOCIAL, telLink, waLink } from "@/data/site";
 import { trackFormSubmit, trackWhatsApp, trackCall } from "@/lib/analytics";
 
@@ -34,15 +34,23 @@ export default function Contact({ onBookTrial }) {
     e.preventDefault();
     if (!form.name || !form.phone) { toast.error("Please fill your name and phone"); return; }
     setSubmitting(true);
-    const { ok, error } = await submitForm("submit-lead", form);
-    if (ok) {
-      trackFormSubmit("contact");
-      toast.success("Message sent! We'll contact you shortly.");
-      setForm({ name: "", phone: "", age: "", fitness_goal: "", interested_program: "", message: "", company: "" });
-    } else {
-      toast.error(error || "Could not send. Please try WhatsApp or call us.");
-    }
-    setSubmitting(false);
+    trackFormSubmit("contact");
+    trackWhatsApp("contact_form");
+    const { company, fitness_goal, interested_program, ...rest } = form;
+    if (company) return; // honeypot: bots fill the hidden field
+    await submitAndOpenWhatsApp(
+      "Contact",
+      { ...rest, goal: fitness_goal, program: interested_program },
+      [
+        "Hi Cali Terrain! I have a question.\n",
+        `Name: ${form.name}`,
+        `Phone: ${form.phone}`,
+        interested_program && `Program: ${interested_program}`,
+        fitness_goal && `Goal: ${fitness_goal}`,
+        form.message && `\n${form.message}`,
+      ].filter(Boolean).join("\n"),
+    );
+    setSubmitting(false); // back button may restore this page from bfcache
   };
 
   const contactCards = [
@@ -263,7 +271,7 @@ export default function Contact({ onBookTrial }) {
                 whileHover={{ scale: 1.02, boxShadow: "0 0 35px rgba(46,141,255,0.4)" }}
                 whileTap={{ scale: 0.97 }}
               >
-                {submitting ? "Sending..." : "Send Message"} {!submitting && <Send className="w-4 h-4" />}
+                {submitting ? "Opening WhatsApp..." : "Send Message"} {!submitting && <Send className="w-4 h-4" />}
               </motion.button>
             </form>
           </motion.div>

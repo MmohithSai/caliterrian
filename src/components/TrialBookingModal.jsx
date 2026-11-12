@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { X, ChevronRight, CheckCircle2 } from "lucide-react";
-import { WhatsAppIcon as WhatsApp } from "@/components/icons";
+import { X, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { submitForm } from "@/lib/supabase";
+import { submitAndOpenWhatsApp } from "@/lib/leads";
 import { trackFormSubmit, trackWhatsApp } from "@/lib/analytics";
 
-const WA_NUMBER = "918688458907";
 const PROGRAMS = [
   "Adult Calisthenics", "Kids Calisthenics", "Weight Loss", "Bodyweight Strength",
   "Functional Fitness", "Mobility & Flexibility", "Beginner Program",
@@ -16,23 +14,24 @@ const TIME_SLOTS = ["Morning (5AM - 11AM)", "Evening (5PM - 10PM)", "Flexible"];
 
 const emptyForm = { name: "", phone: "", age: "", program: "", goal: "", preferred_time: "", company: "" };
 
-const buildWaLink = (form) => {
-  const msg = `Hi Cali Terrain! I'd like to book a free trial.\n\nName: ${form.name}\nPhone: ${form.phone}\nAge: ${form.age || "Not specified"}\nProgram: ${form.program || "Not specified"}\nGoal: ${form.goal || "Not specified"}\nPreferred Time: ${form.preferred_time || "Flexible"}`;
-  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
-};
+const waMessage = (form) =>
+  `Hi Cali Terrain! I'd like to book a free trial.
+
+Name: ${form.name}
+Phone: ${form.phone}
+Age: ${form.age || "Not specified"}
+Program: ${form.program || "Not specified"}
+Goal: ${form.goal || "Not specified"}
+Preferred Time: ${form.preferred_time || "Flexible"}`;
 
 export default function TrialBookingModal({ open, onClose }) {
   const [form, setForm] = useState(emptyForm);
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  // Always reset state when the modal closes, so reopening shows a fresh form.
   const handleClose = () => {
     setForm(emptyForm);
-    setSubmitting(false);
-    setSubmitted(false);
     onClose();
   };
 
@@ -43,24 +42,12 @@ export default function TrialBookingModal({ open, onClose }) {
       return;
     }
     setSubmitting(true);
-
-    // Persist the booking first (the lead must never be lost), then show the
-    // success screen. The WhatsApp redirect happens on an explicit click there,
-    // which keeps it inside a user gesture (no popup-blocker issues).
-    const { ok, error } = await submitForm("submit-booking", form);
-    setSubmitting(false);
-    if (!ok) {
-      toast.error(error || "Could not book. Please try WhatsApp or call us.");
-      return;
-    }
     trackFormSubmit("trial_booking");
-    setSubmitted(true);
-  };
-
-  const goToWhatsApp = () => {
     trackWhatsApp("trial_booking");
-    window.open(buildWaLink(form), "_blank", "noopener,noreferrer");
-    handleClose();
+    const { company, ...fields } = form;
+    if (company) return; // honeypot: bots fill the hidden field
+    await submitAndOpenWhatsApp("Trial", fields, waMessage(form));
+    setSubmitting(false); // back button may restore this page from bfcache
   };
 
   if (!open) return null;
@@ -78,41 +65,12 @@ export default function TrialBookingModal({ open, onClose }) {
           <X className="w-5 h-5" />
         </button>
 
-        {submitted ? (
-          /* ---------- Success screen ---------- */
-          <div className="text-center py-6">
-            <div className="mx-auto w-16 h-16 rounded-full bg-[#2E8DFF]/15 flex items-center justify-center mb-5">
-              <CheckCircle2 className="w-9 h-9 text-[#2E8DFF]" />
-            </div>
-            <h2 className="font-heading text-3xl text-white mb-2">YOU'RE BOOKED!</h2>
-            <p className="text-[#9AA7B6] text-sm max-w-sm mx-auto mb-1">
-              Thanks{form.name ? `, ${form.name.split(" ")[0]}` : ""}! We've received your free trial request.
-            </p>
-            <p className="text-[#8A99AB] text-sm max-w-sm mx-auto mb-7">
-              Our team will reach out shortly to confirm your slot. Want a faster response? Send us the details on WhatsApp.
-            </p>
-
-            <button
-              onClick={goToWhatsApp}
-              className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#22c35e] text-black font-bold text-sm py-3.5 rounded-sm transition-colors"
-            >
-              <WhatsApp className="w-5 h-5" /> Continue on WhatsApp
-            </button>
-            <button
-              onClick={handleClose}
-              className="mt-3 text-sm text-[#8A99AB] hover:text-white transition-colors"
-            >
-              Done
-            </button>
-          </div>
-        ) : (
-          /* ---------- Booking form ---------- */
-          <>
+        <>
             <p className="section-tag">Start Your Journey</p>
             <h2 className="font-heading text-3xl text-white mb-6">BOOK YOUR FREE TRIAL</h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Honeypot: bots fill it → silently rejected server-side */}
+              {/* Honeypot: bots fill it → dropped before submit */}
               <input
                 type="text" name="company" value={form.company} onChange={handleChange}
                 tabIndex={-1} autoComplete="off" aria-hidden="true"
@@ -185,12 +143,11 @@ export default function TrialBookingModal({ open, onClose }) {
                 disabled={submitting}
                 className="btn-primary text-sm w-full justify-center"
               >
-                {submitting ? "Booking..." : "Book Free Trial"}
+                {submitting ? "Opening WhatsApp..." : "Book Free Trial"}
                 {!submitting && <ChevronRight className="w-4 h-4" />}
               </button>
             </form>
-          </>
-        )}
+        </>
       </div>
     </div>
   );

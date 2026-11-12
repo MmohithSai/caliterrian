@@ -100,7 +100,7 @@ export default function Footer() {
               {[
                 { label: "Programs", to: "/programs" },
                 { label: "Our Coaches", to: "/coaches" },
-                { label: "Transformations", to: "/transformations" },
+                { label: "Hall of Fame", to: "/transformations" },
                 { label: "Pricing", to: "/pricing" },
                 { label: "Gallery", to: "/gallery" },
                 { label: "Blog", to: "/blog" },
